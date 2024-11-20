@@ -622,7 +622,7 @@
 | 11      | NAID        | relation.relatedIdentifier | identifierType=NAID    |
 | 12      | ichushi     | relation.relatedIdentifier | identifierType=ICHUSHI |
 
-> 表 1-2-3の追加検索用のキーの「\*」はワイルドカードとして検索する。
+> 表 1-2-3の追加検索用のキーが「\*」の場合、キーと対応する値が存在していればよいものとして検索する。
 
 > 検索項目がタイトル、著者名、内容記述、出版者、寄与者、ID、雑誌名、学位名、学位授与機関、テキストX (Xは1~10の整数) のいずれかで、検索文字列に「△OR△」または「△|△」(△は半角または全角スペース)が含まれる場合
 
