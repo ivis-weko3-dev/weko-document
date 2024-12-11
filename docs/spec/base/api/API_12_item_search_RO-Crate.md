@@ -72,8 +72,14 @@
   - パラメータがq, title, creator, des, publisher, cname, id, srctitle, degreename, dgname, text1~text10の場合
     - 文字列をスペースで区切った場合はAND検索として検索する。
     - 文字列を「OR」(大文字、前後にスペースが必要)、「\|」(パイプ、前後にスペースが必要)で区切った場合、OR検索として検索する。前後一方でもスペースが無い場合や、「or」(小文字)で区切った場合は通常通り検索する。「OR」、「|」で区切ったことによるOR検索よりも、スペースで区切ったことによるAND検索の方を優先して処理する。
-  - パラメータのうちsbjscheme, fd_attr, id_attr, type, lang, version, licenseは使用可能な値が事前に定義されている。使用可能な値と、値を指定した際に検索に用いられる値はDBのsearch_managementテーブルのsearch_conditions列(DBにデータがない場合はmodules/weko-admin/weko_admin/config.pyのdetail_condition) を参照する。使用できない値を指定したパラメータは無視される。複数の値を指定する場合は「,」(カンマ)で区切って指定する。
+  - パラメータ sbjscheme, fd_attr, id_attr, type, lang, version, license について
+    - 使用可能な値が事前に定義されている  
+    - 使用可能な値と、値を指定した際に検索に用いられる値はDBのsearch_managementテーブルのsearch_conditions列(DBにデータがない場合はmodules/weko-admin/weko_admin/config.pyのdetail_condition) を参照する
+    - 使用できない値を指定したパラメータは無視される
+    - 複数の値を指定する場合は「,」(カンマ)で区切って指定する
   
+  - (subject, sbjscheme), (fd_attr, filedate_from, filedate_to), (id, id_attr), (dategranted_from, dategranted_to), (integer_rangeX_from, integer_rangeX_to), (float_rangeX_from, float_rangeX_to), (date_rangeX_from, date_rangeX_to) は括弧内のパラメータを全て指定した場合のみ検索条件として使用される
+
   - ファセット検索
     - 検索結果をファセット検索項目の値ごとに集計しアイテム数を返却する機能と、ファセット検索項目の値を指定して検索結果の絞り込みを行う機能の2つの機能を持つ。
     - 集計機能
@@ -406,7 +412,7 @@
 - 異常系  
   1ページに表示する値がElasticsearchの表示上限の設定値より大きい場合、エラーコードと対応するエラーメッセージをJSON形式で返す。
 
-- 検索文字列とヒットする文字列の例  
+- 検索文字列とマッチする文字列の例  
   ◯: マッチする、 ✕: マッチしない  
   ただし、括弧による優先度の操作は現在未実装
 
