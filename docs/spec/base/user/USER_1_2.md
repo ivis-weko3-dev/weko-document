@@ -61,6 +61,7 @@
   - テキストボックスに入力して検索を行う場合、文字間に空白を入れることでAND検索を行うことができる。
 
   - テキストボックスに入力して検索を行う場合、文字列を「△OR△」または「△|△」 (△は半角または全角スペース)で区切ることでOR検索を行うことができる。
+    - 「OR」、「|」で区切ることによるOR検索よりも、スペースで区切ることによるAND検索の方を優先して処理する。
 
   - 以下の特殊な意味をもつ英字のみでは検索を行うことができない。  
     a, an, and, are, as, at, be, but, by, for, if, in, into, is, it, no, not, of, on, or, such, that, the, their, then, there, these, they, this, to, was, will, with
