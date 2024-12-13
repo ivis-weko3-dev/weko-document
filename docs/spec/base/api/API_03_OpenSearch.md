@@ -124,6 +124,7 @@ query.opensearch_factory※</td>
     - その中で呼び出すOpenSearchSerializer.serialize_searchメソッドの中でformatを確認して、内容によって異なるレスポンス作成処理を呼び出す
       - formatの指定が「rss」「atom」「jpcoar」「それ以外」で分岐する
       - 「rss」「atom」の場合は、weko_records.serializers.utils. OpenSearchDetailDataクラスのインスタンスをoutput_type=（指定したformatを表す値）として作成して、output_open_search_detail_dataメソッドによってレスポンスを作成する
+      - 「jpcoar」の場合は、jpcoar形式のレスポンスを作成する
       - 「それ以外」の場合は、json形式のレスポンスを作成する
 
 - クエリパラメータ
