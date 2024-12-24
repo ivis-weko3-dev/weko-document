@@ -152,14 +152,18 @@ query.opensearch_factory※</td>
   <tr class="even">
   <td>format</td>
   <td></td>
-  <td><ul>
-  <li>atom</li>
-  <li>rss</li>
-  <li>jpcoar</li>
-  <li>json</li>
-  </ul></td>
-  <td><p>レスポンス結果のフォーマット</p>
-  <p>デフォルトはjson形式</p></td>
+  <td>string</td>
+  <td>
+  レスポンス結果のフォーマット<br>
+  以下から選択する<br>
+  <ul>
+    <li>atom</li>
+    <li>rss</li>
+    <li>jpcoar</li>
+    <li>json</li>
+  </ul>
+  デフォルトはjson形式
+  </td>
   </tr>
   <tr class="odd">
   <td>size</td>
