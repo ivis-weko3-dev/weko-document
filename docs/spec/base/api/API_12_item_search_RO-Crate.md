@@ -135,191 +135,234 @@
     <thead>
     <tr>
     <th>パラメータ</th>
-    <th>値</th>
+    <th>型</th>
+    <th>説明</th>
     </tr>
     </thead>
     <tbody>
     <tr>
     <td>q</td>
+    <td>string</td>
     <td>検索するキーワード</td>
     </tr>
     <tr>
     <td>search_type</td>
-    <td>検索する形式</td>
+    <td>int</td>
+    <td>検索形式 (0: 全文検索、1: キーワード検索)</td>
     </tr>
     <tr>
     <td>pretty</td>
-    <td>レスポンスの整形の有無</td>
+    <td>bool</td>
+    <td>レスポンスの整形の有無 (デフォルト: false)</td>
     </tr>
     <tr>
     <td>page</td>
+    <td>int</td>
     <td>取得するページ番号</td>
     </tr>
     <tr>
     <td>cursor</td>
+    <td>int</td>
     <td>ページネーションのカーソル</td>
     </tr>
     <tr>
     <td>size</td>
+    <td>int</td>
     <td>取得する検索結果の最大数</td>
     </tr>
     <tr>
     <td>sort</td>
+    <td>string</td>
     <td>ソートキー</td>
     </tr>
     <tr>
-    <td colspan="2">以下、メタデータ項目</td>
+    <td colspan="3">以下、メタデータ項目</td>
     </tr>
     <tr>
     <td>title</td>
+    <td>string</td>
     <td>タイトル</td>
     </tr>
     <tr>
     <td>exact_title_match</td>
-    <td>タイトル完全一致検索フラグ<br>
-    true: 完全一致、false: 部分一致</td>
+    <td>bool</td>
+    <td>タイトル完全一致検索を指定する (デフォルト: false)</td>
     </tr>
     <tr>
     <td>creator</td>
+    <td>string</td>
     <td>著者名</td>
     </tr>
     <tr>
     <td>subject</td>
+    <td>string</td>
     <td>件名</td>
     </tr>
     <tr>
     <td>sbjscheme</td>
-    <td>件名種別 (候補から選択)</td>
+    <td>int (候補から選択)</td>
+    <td>件名種別</td>
     </tr>
     <tr>
     <td>spatial</td>
+    <td>string</td>
     <td>地域</td>
     </tr>
     <tr>
     <td>des</td>
+    <td>string</td>
     <td>内容記述</td>
     </tr>
     <tr>
     <td>publisher</td>
+    <td>string</td>
     <td>出版者</td>
     </tr>
     <tr>
     <td>cname</td>
+    <td>string</td>
     <td>寄与者</td>
     </tr>
     <tr>
     <td>fd_attr</td>
-    <td>日付種別 (候補から選択)</td>
+    <td>string (候補から選択)</td>
+    <td>日付種別</td>
     </tr>
     <tr>
     <td>filedate_from</td>
-    <td>日付下限 (YYYYMMDD形式)</td>
+    <td>date (YYYYMMDD形式)</td>
+    <td>日付下限を指定</td>
     </tr>
     <tr>
     <td>filedate_to</td>
-    <td>日付上限 (YYYYMMDD形式)</td>
+    <td>date (YYYYMMDD形式)</td>
+    <td>日付上限を指定</td>
     </tr>
     <tr>
     <td>mimetype</td>
+    <td>string</td>
     <td>フォーマット</td>
     </tr>
     <tr>
     <td>id</td>
+    <td>string</td>
     <td>識別子</td>
     </tr>
     <tr>
     <td>id_attr</td>
-    <td>識別子種別 (候補から選択)</td>
+    <td>string (候補から選択)</td>
+    <td>識別子種別</td>
     </tr>
     <tr>
     <td>srctitle</td>
+    <td>string</td>
     <td>雑誌名</td>
     </tr>
     <tr>
     <td>type</td>
-    <td>資源タイプ (候補から選択)</td>
+    <td>int (候補から選択)</td>
+    <td>資源タイプ</td>
     </tr>
     <tr>
     <td>lang</td>
-    <td>言語 (候補から選択)</td>
+    <td>string (候補から選択)</td>
+    <td>言語</td>
     </tr>
     <tr>
     <td>temporal</td>
+    <td>string</td>
     <td>期間</td>
     </tr>
     <tr>
     <td>dategranted_from</td>
-    <td>学位取得日下限 (YYYYMMDD形式)</td>
+    <td>date (YYYYMMDD形式)</td>
+    <td>学位取得日下限を指定</td>
     </tr>
     <tr>
     <td>dategranted_to</td>
-    <td>学位取得日上限 (YYYYMMDD形式)</td>
+    <td>date (YYYYMMDD形式)</td>
+    <td>学位取得日上限を指定</td>
     </tr>
     <tr>
     <td>version</td>
-    <td>著者版フラグ (候補から選択)</td>
+    <td>string (候補から選択)</td>
+    <td>著者版フラグ</td>
     </tr>
     <tr>
     <td>dissno</td>
+    <td>string</td>
     <td>学位番号</td>
     </tr>
     <tr>
     <td>degreename</td>
+    <td>string</td>
     <td>学位名</td>
     </tr>
     <tr>
     <td>dgname</td>
+    <td>string</td>
     <td>学位授与機関</td>
     </tr>
     <tr>
     <td>wid</td>
-    <td>著者ID</td>
+    <td>int</td>
+    <td>作成者識別子</td>
     </tr>
     <tr>
     <td>iid</td>
+    <td>int</td>
     <td>インデックスID</td>
     </tr>
     <tr>
     <td>license</td>
-    <td>ライセンス (候補から選択)</td>
+    <td>string (候補から選択)</td>
+    <td>ライセンス</td>
     </tr>
     <tr>
     <td>textX<br>
     (Xは1~10の整数)</td>
+    <td>string</td>
     <td>詳細検索条件設定でtextXに割り当てた項目の値</td>
     </tr>
     <tr>
     <td>integer_rangeX_from<br>
     (Xは1~5の整数)</td>
+    <td>int</td>
     <td>詳細検索条件設定でinteger_rangeXに割り当てた項目の値の下限</td>
     </tr>
     <tr>
     <td>integer_rangeX_to<br>
     (Xは1~5の整数)</td>
+    <td>int</td>
     <td>詳細検索条件設定でinteger_rangeXに割り当てた項目の値の上限</td>
     </tr>
     <tr>
     <td>float_rangeX_from<br>
     (Xは1~5の整数)</td>
+    <td>float</td>
     <td>詳細検索条件設定でfloat_rangeXに割り当てた項目の値の下限</td>
     </tr>
     <tr>
     <td>float_rangeX_to<br>
     (Xは1~5の整数)</td>
+    <td>float</td>
     <td>詳細検索条件設定でfloat_rangeXに割り当てた項目の値の上限</td>
     </tr>
     <tr>
     <td>date_rangeX_from<br>
     (Xは1~5の整数)</td>
+    <td>date</td>
     <td>詳細検索条件設定でdate_rangeXに割り当てた項目の値の下限 (YYYYMMDD形式)</td>
     </tr>
     <tr>
     <td>date_rangeX_to<br>
     (Xは1=5の整数)</td>
+    <td>date</td>
     <td>詳細検索条件設定でdate_rangeXに割り当てた項目の値の上限 (YYYYMMDD形式)</td>
     </tr>
     <tr>
     <td >ファセット検索項目</td>
+    <td ></td>
     <td >ファセット検索の設定でActiveとした項目</td>
     </tr>
     </tbody>

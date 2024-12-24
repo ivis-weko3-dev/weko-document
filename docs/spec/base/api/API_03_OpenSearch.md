@@ -146,7 +146,7 @@ query.opensearch_factory※</td>
   <tr class="odd">
   <td>パラメータ</td>
   <td>必須</td>
-  <td>値</td>
+  <td>型</td>
   <td>説明</td>
   </tr>
   <tr class="even">
