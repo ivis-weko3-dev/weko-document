@@ -70,6 +70,30 @@
           - 「メールアドレス」（Email address）
         
           - 「メールアドレスの再入力」（Re-enter email address）
+
+※以下、管理者画面のプロフィール設定編集画面の操作により表示される項目
+| 項目名         | 初期ラベル名        | 初期表示設定 |
+| -------------- | ------------------- | ------------ |
+| fullname       | 氏名                | True         |
+| university     | 大学・機関         | True         |
+| department     | 所属部局・部署      | True         |
+| position       | 役職                | True         |
+| item1          | 役職（その他）      | True         |
+| item2          | 電話番号            | True         |
+| item3          | 所属学会名          | True         |
+| item4          | 所属学会役職        | True         |
+| item5          | 所属学会名          | True         |
+| item6          | 所属学会役職        | True         |
+| item7          | 所属学会名          | True         |
+| item8          | 所属学会役職        | True         |
+| item9          | 所属学会名          | True         |
+| item10         | 所属学会役職        | True         |
+| item11         | 所属学会名          | True         |
+| item12         | 所属学会役職        | True         |
+| item13         | item13              | False        |
+| item14         | item14              | False        |
+| item15         | item15              | False        |
+| item16         | item16              | False        |
     
       - ［Update Profile］ボタンを押すと、設定内容をチェックし、エラーがない場合、設定内容を保存する
         
@@ -96,6 +120,23 @@
             > メッセージ：  
             > 　日本語：「ユーザー名は3文字以上を指定してください(英数字, ハイフン, アンダーバーのみ使用可能)」  
             > 　英語：「Username must start with a letter, be at least three characters long and only contain alphanumeric characters, dashes and underscores.」
+
+          
+          - > 管理者画面にて入力方法が「phoneNumber」に設定されている項目のフォーマットが以下の条件の場合、エラーメッセージを項目エリアの下に表示する。
+
+              > 条件：入力文字数が15文字を超える場合。
+              > メッセージ：
+              > 英語：「Phone number must be less than 15 characters.」
+
+          - >管理者画面にて入力方法が「position(other)」に設定されている項目のフォーマットが以下の条件の場合、エラーメッセージを項目エリアの下に表示する。
+
+              > 項目「position」の値が「その他」もしくは「Others」以外の時に「item1」項目に入力し保存を行った場合
+              > メッセージ：
+              > 日本語「役職が入力されています（「その他」選択時のみ入力可能）」
+              > 英語：「Position is being inputted (Only input when selecting 'Others')」
+
+          - >管理者画面にて入力方法が「identifier」に設定されている項目のフォーマットが不正の場合、エラーメッセージを項目エリアの下に表示する。
+          メッセージ：Only digits are allowed.
     
       - 「キャンセル」（Cancel）ボタンを押すと、プロフィール画面に再度遷移することで設定内容をリセットする
     
@@ -132,6 +173,46 @@
 
   - > 言語（Language）はlanguageカラムに保存される。
 
+  - > fullnameはfullnameカラムに保存される。
+
+  - > universityはuniversityカラムに保存される。
+
+  - > departmentはdepartmentカラムに保存される。
+
+  - > positionはpositionカラムに保存される。
+
+  - > item1はotherPositionカラムに保存される。
+
+  - > item2はphoneNoumberカラムに保存される。
+
+  - > item3はinstituteNameカラムに保存される。
+
+  - > item4はinstitutePositionカラムに保存される。
+
+  - > item5はinstituteName2カラムに保存される。
+
+  - > item6はinstitutePosition2カラムに保存される。
+
+  - > item7はinstituteName3カラムに保存される。
+
+  - > item8はinstitutePosition3カラムに保存される。
+
+  - > item9はinstituteName4カラムに保存される。
+
+  - > item10はinstitutePosition4カラムに保存される。
+
+  - > item11はinstituteName5カラムに保存される。
+
+  - > item12はinstitutePosition5カラムに保存される。
+
+  - > item13はitem13カラムに保存される。
+
+  - > item14はitem14カラムに保存される。
+
+  - > item15はitem15カラムに保存される。
+
+  - > item16はitem16カラムに保存される。
+
 > メールアドレスの変更は、flask\_loginのグローバル変数current\_user.emailを更新することで保存される。
 
   - > 更新履歴
@@ -151,6 +232,13 @@
 </blockquote></td>
 <td>353ba1deb094af5056a58bb40f07596b8e95a562</td>
 <td>初版作成</td>
+</tr>
+<tr class="even">
+<td><blockquote>
+<p>2024/10/18</p>
+</blockquote></td>
+<td>6bf785b2956fb19773f22681db7080425c5544f2</td>
+<td>プロフィール設定編集機能追加</td>
 </tr>
 </tbody>
 </table>

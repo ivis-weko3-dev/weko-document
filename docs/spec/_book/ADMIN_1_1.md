@@ -455,6 +455,22 @@
     
       - ［Execute Import］ボタンを押すと、「Item Type」テキストボックスに入力したアイテムタイプ名でアイテムタイプが取り込まれる。
 
+        - ファイルが選択されていない場合はエラーメッセージ「Please select Zipfile.」を表示し、インポートを中断する。
+
+        - アイテムタイプ名が入力されていない場合はエラーメッセージ「Please input Type Name.」を表示し、インポートを中断する。
+
+        - 入力が不正な場合、エラーメッセージ「Error: Failed to import Item type.」に続けて原因を示すメッセージを表示し、インポートを中断する。
+
+        - インポート中のアイテムタイプが使用しているプロパティのIDの中で、item_type_propertyテーブルに存在していないものがある場合
+        
+          - Configで強制インポート機能がオフになっている場合は、エラーメッセージ「Property ID does not exist.」を表示し、インポートを中断する。
+
+          - Configで強制インポート機能がオンになっている場合は、入力されたファイルからプロパティを取得し、IDを含めてそのままitem_type_propertyテーブルに登録する。
+
+        - インポート中のアイテムタイプが使用しているプロパティのIDを持つレコードが全てitem_type_propertyテーブルに登録された後、アイテムタイプを登録する。
+
+        - アイテムタイプの登録に成功した場合、メッセージ「Successfully import Item type.」を表示する。
+
 <!-- end list -->
 
   - > 関連モジュール
@@ -524,6 +540,15 @@
             """Enable Upgrade Version."""  
             True: バージョンアップを有効にする.  
             False: バージョンアップを無効にする
+
+  - アイテムタイプの強制インポート機能を有効にする・しない設定
+    
+      - パス: <https://github.com/RCOSDP/weko/blob/hfix/modules/weko-itemtypes-ui/weko_itemtypes_ui/config.py#L69-L70>
+        
+          - 設定キー: =  
+            """Enable Forced Import."""  
+            True: 強制インポートを有効にする.  
+            False: 強制インポートを無効にする
 
 <!-- end list -->
 
