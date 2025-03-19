@@ -2631,18 +2631,6 @@ zu050590.tif![](media/media/image172.png)
 
 This section explains how to configure the Feedback Mail Destination setting.
 
-![](media/media/image264.png)
-
-Get policy information
-
-This section describes the procedure for obtaining policy information.
-
-1.  On the Item Registration screen that appears, select the record identifier “ISSN, eISSN” or enter the journal name.
-
-2.  [![](media/media/image265.png)]Click on the button to display a link to policy information.
-
-3.  [![](media/media/image266.png)]Click on the link to view policy information in a separate tab. *Also displayed by separately registering papers in the workspace for registrants.
-
 1.  In the Item Registration screen, click the icon050110.tif![](media/media/image154.png) button for the recipient of the feedback mail.  
     The creator search screen appears.
 
