@@ -20,15 +20,15 @@
 
   - 基本監査ログが出力された際に、どのような操作によって出力したか併せて保存。
 
-  - 出力したログの操作分類毎に機能IDが設定される。
+    - 出力したログの操作分類毎に機能IDが設定される。
 
-      - 現状設定されている機能IDについては、[機能ID](#機能ID) 参照
+        - 現状設定されている機能IDについては、[機能ID](#機能ID) 参照
 
-  - 機能に対する具体的な操作を処理IDとして設定する。
+    - 機能に対する具体的な操作を処理IDとして設定する。
 
-      - 現状設定されている処理IDについては、[処理ID](#処理ID) 参照
+        - 現状設定されている処理IDについては、[処理ID](#処理ID) 参照
 
-      - 具体的なイメージについては[マスタイメージ](#マスタイメージ) を参照
+        - 具体的なイメージについては[マスタイメージ](#マスタイメージ) を参照
 
 
 ### マスタイメージ
@@ -243,20 +243,20 @@ WEKO_LOGGING_OPERATION_MASTER = {
 サンプル
 ```json
 {
-    "id": 5,
-    "log_level": "ERROR",
-    "date":"2025/02/21 7:38:19.201",
-    "user_id": 1,
-    "eppn": null,
-    "ip_address":"192.168.56.1",
-    "client_id":"Z6DWfNWrrGwEYvh5Dcf81SSkrH6BiqIja17Cu2Hs",
-    "community_id": "ccp",
-    "source": "/sword/service-document",
-    "log_group_id": 2,
-    "operation_type_id": 10,
-    "operation_id": 2,
-    "target":"item",
-    "target_key":"2000001"
+    "id": 5,
+    "log_level": "ERROR",
+    "date":"2025/02/21 7:38:19.201",
+    "user_id": 1,
+    "eppn": null,
+    "ip_address":"192.168.56.1",
+    "client_id":"Z6DWfNWrrGwEYvh5Dcf81SSkrH6BiqIja17Cu2Hs",
+    "community_id": "ccp",
+    "source": "/sword/service-document",
+    "log_group_id": 2,
+    "operation_type_id": 10,
+    "operation_id": 2,
+    "target":"item",
+    "target_key":"2000001"
 }
 ```
 
@@ -289,4 +289,4 @@ WEKO_LOGGING_OPERATION_MASTER = {
 
 | 日付       | GitHubコミットID | 更新内容 |
 | ---------- | ---------------- | -------- |
-| 2025/06/06 |                  | 初版作成 |
+| 2025/06/06 | 14bf9df1e19f14eebd08c450ece452d12b26d68f | 初版作成 |

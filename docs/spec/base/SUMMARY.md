@@ -167,6 +167,7 @@
 * [6 celery タスク 342](./other/CELERY_01.md)
 * [7 ログ 345](./other/LOG.md)
 * [利用統計ログ](./other/USAGE_LOG.md)
+* [基本監査ログ](./other/USER_ACTIVITY_LOG.md)
 * [8 セッション管理 357](./other/SESSION_01.md)
 * [9 API Endpoint 358](./api/API_ENDPOINT_01.md)
 * [10 Shibboleth対応 359](./other/SHIBBOLETH_01.md)

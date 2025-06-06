@@ -30,7 +30,7 @@
 
           - 他のユーザーがエクスポート実行中の場合、Exportボタンを非活性化する。
 
-          - Celeryが起動していない場合は「実行」ボタンを非活性化する．「Celery is not running.」のエラーメッセージを表示する．(v0.9.22)
+          - Celeryが起動していない場合は「実行」ボタンを非活性化する．「Celery is not running.」のエラーメッセージを表示する．
 
       - 「キャンセル」ボタン
 
@@ -61,8 +61,6 @@
 
       - weko\_logging.admin.ExportLogAdminView.index メソッドが呼び出され画面を表示する。
 
-> これらの取得した情報から一括出力画面を表示する。
-
   - 一括出力（一括エクスポート）画面
 
       - 一括出力画面を表示している間、３秒ごとに weko\_logging.static.js.weko\_logging.export.js の checkExportStatus メソッドが呼び出される。このメソッド下でcheck\_export\_statusメソッドが呼び出され、これによってceleryが起動しているか、エクスポートできるかを確認する。
@@ -83,4 +81,4 @@
 
 | 日付 | GitHubコミットID | 更新内容 |
 | --- | --- | --- |
-| 2025/06/06 |  | 初版作成 |
+| 2025/06/06 | 14bf9df1e19f14eebd08c450ece452d12b26d68f | 初版作成 |
