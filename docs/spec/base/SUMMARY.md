@@ -139,8 +139,10 @@
 * [ADMIN-14-19: Shibboleth 410](./admin/ADMIN_14_19.md)
 * [ADMIN-14-20: 制限公開 412](./admin/ADMIN_14_20.md)
 * [ADMIN-14-21: その他 422](./admin/ADMIN_14_21.md)
-## 15 メンテナンス
-* [ADMIN-15-1: Elasticsearchインデックス 423](./admin/ADMIN_15_1.md)
+## 15 ログ管理
+* [ADMIN-15-1: エクスポート 423](./admin/ADMIN_15_1.md)
+## 16 メンテナンス
+* [ADMIN-15-1: Elasticsearchインデックス 424](./admin/ADMIN_16_1.md)
 ## [WebAPI](./api/README.md)
 * [API-1: OAuth2 425](./api/API_01_Oauth2.md)
 * [API-2: OAI-PMH 429](./api/API_02_OAIPMH.md)
