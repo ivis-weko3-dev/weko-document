@@ -73,7 +73,7 @@
 
   - 利用申請③：ワークフロー終了後の挙動
     
-      - アイテム詳細画面の「申請」ボタンから起動したワークフローが「作業済み(Done)」となった際にダウンロード用のURIをメールで通知する。リンクの有効期限とダウンロード回数は【Administration \> Setting \> Restricted Access画面】での「コンテンツファイルのダウンロード」(Content File Download)エリアで設定される
+      - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True かつアイテム詳細画面の「申請」ボタンから起動したワークフローが「作業済み(Done)」となった際にダウンロード用のURIをメールで通知する。リンクの有効期限とダウンロード回数は【Administration \> Setting \> Restricted Access画面】での「コンテンツファイルのダウンロード」(Content File Download)エリアで設定される
     
       - ダウンロードのリンクへアクセスする時、リンクの有効期限とダウンロード回数が超えない場合、コンテンツファイルがダウンロードできる。ダウンロード回数（残り回数）がカウントダウンされる
         

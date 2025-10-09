@@ -351,6 +351,8 @@
       - 1.対象のコンテンツ（＝ファイル）のアクセスロールが「制限公開」（open\_restricted)である。
     
       - 2.該当コンテンツをダウンロードする権限が、画面表示しているユーザ（未ログイン含む）に無い。
+
+      - 3.WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True である。
     
       - 　※アイテム登録者やリポジトリ管理者のみならず、申請によって権限を得ているログインユーザもダウンロード権限があるとみなす。
         
@@ -441,6 +443,8 @@
                   - 権限がないユーザーには該当コンテンツファイルを表示しない
             
               - コンテンツのアクセスが「制限公開」とした場合、以下のように制限する
+
+                  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が False の場合は「公開しない」と同様の制限を行う
                 
                   - 管理者またはアイテム登録者には該当コンテンツファイルを表示する
                 
@@ -490,6 +494,8 @@
       - アクセスが「制限公開」（Restricted Access）と設定されているコンテンツに対して
         
           - weko\_records\_ui.permissions.check\_file\_download\_permissionでcheck\_open\_restricted\_permissionを呼び出して使用する。
+
+          - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が False の場合は「公開しない」と同様の制限となる
         
           - 管理者または登録者に対して、アイテム詳細画面、ファイル詳細画面に、ファイルの情報を取得し、ダウンロードできる
         
