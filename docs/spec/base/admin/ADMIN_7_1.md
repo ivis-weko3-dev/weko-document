@@ -136,7 +136,7 @@
                           - 「承認却下通知メール」（Approval Rejection Notification Email）  
                             登録者に承認者が却下された旨を通知するメールを送信する。
                           
-                          - 「承認通知メール」（Approval Notification Email」
+                          - 「承認通知メール」（Approval Notification Email）
                             登録者に承認者が承認された旨を通知するメールを送信する。
                     
                       - メール本文については、下記の「メール本文について」を参照。

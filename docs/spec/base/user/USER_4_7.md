@@ -116,7 +116,7 @@ Item Registrationの一部として、画面上の設定エリアで代理投稿
         Cannot read properties of null (reading 'username')」
     
       - WEKO_ITEMS_UI_PROXY_POSTING が False かつ入力ユーザがアイテム登録ユーザーであれば、メッセージを表示する  
-        メッセージ：「You cannot specify yourself in "Other users" setting.」
+        メッセージ：「You cannot specify yourself in "Other user" setting.」
 
       - \[Other user\]のユーザーで Owner が選択されていない場合、以下のエラーメッセージを表示し、保存をキャンセルする。  
       メッセージ：  
