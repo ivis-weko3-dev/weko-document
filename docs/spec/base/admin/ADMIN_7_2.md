@@ -122,7 +122,7 @@
         
           - ワークフローの編集画面で、\[戻る（Back）\]ボタンを押すと、ワークフロー一覧画面に移動する。
 
-  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True かつシステム管理者でない（リポジトリ管理者、サブリポジトリ管理者）の場合、利用申請に関するワークフローは閲覧・編集ができない。また利用申請に関するワークフローを追加できない。（利用申請フラグが非表示であり、登録時に利用申請フラグがFalseとして登録される）。利用申請フラグの編集はWEKO_ADMIN_DISPLAY_RESTRICTED_SETTINGS が True かつシステム管理者の場合のみ可能。
+  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True かつシステム管理者でない（リポジトリ管理者、サブリポジトリ管理者）の場合、利用申請に関するワークフローは閲覧・編集ができない。また利用申請に関するワークフローを追加できない。（利用申請フラグが非表示であり、登録時に利用申請フラグがFalseとして登録される）。利用申請フラグの編集は WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG と WEKO_ADMIN_DISPLAY_RESTRICTED_SETTINGS が True かつシステム管理者の場合のみ可能。
 
   - 戻るボタンをクリックすると、一つ前のアクションに戻ることが可能(v1.0.7追加)。
 
