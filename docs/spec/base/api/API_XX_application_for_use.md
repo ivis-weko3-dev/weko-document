@@ -93,6 +93,18 @@ WEKO_RECORDS_UI_RESTRICTED_API が True の状態で API を実行する。
 
       - API 仕様書を参照
 
+  - 設定値
+
+      - WEKO_RECORDS_UI_RESTRICTED_API
+
+          - パス: <https://github.com/RCOSDP/weko/blob/develop_v2.0.0/modules/weko-records-ui/weko_records_ui/config.py>
+
+          - 初期値: False
+
+          - 利用申請APIの有効無効を切り替える。
+
+          - scripts/instance.cfg で定義されている場合は、そちらの設定を優先する。
+
 
 ## 利用申請開始API
 
@@ -217,6 +229,18 @@ WEKO_RECORDS_UI_RESTRICTED_API が True の状態で API を実行する。
 
       - API 仕様書を参照
 
+  - 設定値
+
+      - WEKO_RECORDS_UI_RESTRICTED_API
+
+          - パス: <https://github.com/RCOSDP/weko/blob/develop_v2.0.0/modules/weko-records-ui/weko_records_ui/config.py>
+
+          - 初期値: False
+
+          - 利用申請APIの有効無効を切り替える。
+
+          - scripts/instance.cfg で定義されている場合は、そちらの設定を優先する。
+
 
 ## 利用申請API
 
@@ -318,6 +342,18 @@ WEKO_RECORDS_UI_RESTRICTED_API が True の状態で API を実行する。
   - レスポンス
 
       - API仕様書を参照
+
+  - 設定値
+
+      - WEKO_RECORDS_UI_RESTRICTED_API
+
+          - パス: <https://github.com/RCOSDP/weko/blob/develop_v2.0.0/modules/weko-records-ui/weko_records_ui/config.py>
+
+          - 初期値: False
+
+          - 利用申請APIの有効無効を切り替える。
+
+          - scripts/instance.cfg で定義されている場合は、そちらの設定を優先する。
 
 ## 更新履歴
 

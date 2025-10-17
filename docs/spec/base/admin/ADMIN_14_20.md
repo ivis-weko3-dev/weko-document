@@ -45,7 +45,9 @@
 
 １. コンテンツ未登録アイテムの利用申請について設定する
 
-  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True の場合のみ使用可能
+  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True の場合のみ表示
+
+  - 機能の有効無効はこの画面上で行うか、admin_settings テーブルの name が restricted_access であるレコードの settings 内の item_application.item_application_enable で設定可能
 
   - 「コンテンツ未登録アイテムの利用申請」(Application for use of terms without content)エリアで機能有効化および、コンテンツ未登録状態で利用申請可能なアイテムタイプを設定する
 
@@ -73,7 +75,17 @@
 
 ２. 各種制限公開機能の有効化、無効化について設定する。
 
-  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True の場合のみ使用可能
+  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True の場合のみ表示
+
+  - 機能の有効無効はこの画面上で行うか、admin_settings テーブルの name が restricted_access であるレコードの settings 内のそれぞれ以下の項目で設定可能
+
+      - 承認アクションにおけるファイルプレビュー： preview_workflow_approval_enable
+
+      - メールテンプレート編集： edit_mail_templates_enable
+
+      - リクエストフォーム： display_request_form
+
+      - 非ログインユーザーのDLにおけるパスワードチェック機能： password_enable
 
   - 各エリアで機能有効化を設定する。
 
@@ -84,6 +96,8 @@
           - 「メールテンプレート編集」エリア
 
           - 「リクエストフォーム」エリア
+
+          - 「非ログインユーザーのDLにおけるパスワードチェック機能」エリア
 
       - 各設定項目の設定内容は以下とする。
 
@@ -173,7 +187,7 @@
 
 ４. コンテンツファイルのダウンロードについて設定する
 
-  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True の場合のみ使用可能
+  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True の場合のみ表示
 
   - 「コンテンツファイルのダウンロード」(Content File Download)エリアに、有効期限日数とダウンロード回数を設定する
     
@@ -217,7 +231,7 @@
 
 ５. 利用報告ワークフローへのアクセスについて設定する
 
-  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True の場合のみ使用可能
+  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True の場合のみ表示
 
   - 「利用報告ワークフローへのアクセス」(Usage Report Workflow Access)エリアに、有効期限日数を設定する
     
@@ -253,7 +267,7 @@
 
 ６. 利用規約について設定する
 
-  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True の場合のみ使用可能
+  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True の場合のみ表示
 
   - 設定内容は以下の通りです。
     
@@ -303,7 +317,7 @@
 
 ７. 利用報告督促メールを送付する
 
-  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True の場合のみ使用可能
+  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True の場合のみ表示
 
   - 「利用報告督促メール」（Usage Report Reminder Email）エリアには、利用報告督促メールの送信対象となるアクティビティの情報を一覧で表示する
 
@@ -564,7 +578,7 @@
 
 ８. 制限公開アイテムに非対象ユーザーがアクセスを試みた際に表示されるエラーメッセージについて設定する
 
-  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True の場合のみ使用可能
+  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True の場合のみ表示
 
   - 「エラーメッセージ」（Error Message）テキストエリアで、日本語と英語それぞれのエラーメッセージを編集できる。テキストエリアには初期状態として以下のエラーメッセージが記載されている。  
      エラーメッセージ  
@@ -594,6 +608,18 @@
   - ゲストユーザーに対して、アクティビティ画面を表示する関数（"display_guest_activity"）には"record_after_update"変数を設定する
 
   - データベース内に"error_msg"というキーを持たない場合は、weko_admin.utils.get_restricted_access で初期状態のものが作成される。その後、設定が変更されるたび値が更新される。
+
+  - > 設定値
+
+      - > WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG
+
+          - > パス：<https://github.com/RCOSDP/weko/blob/develop_v2.0.0/modules/weko-admin/weko_admin/config.py#L1298>
+
+          - > 初期値：False
+
+          - > 制限公開機能の設定画面表示非表示および利用申請系機能と制限公開コンテンツ機能の有効無効を切り替える。
+
+          - > scripts/instance.cfg で定義されている場合は、そちらの設定を優先する。
 
   - > 更新履歴
 

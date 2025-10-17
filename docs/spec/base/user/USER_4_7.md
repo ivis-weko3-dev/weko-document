@@ -163,6 +163,18 @@ Item Registrationの一部として、画面上の設定エリアで代理投稿
 
 <!-- end list -->
 
+  - > 設定値
+
+      - > WEKO_ITEMS_UI_PROXY_POSTING
+
+          - > パス：<https://github.com/RCOSDP/weko/blob/develop_v2.0.0/modules/weko-items-ui/weko_items_ui/config.py>
+
+          - > 初期値： False
+
+          - > 代理投稿を複数登録可能な機能の有効無効を切り替える。
+
+          - > scripts/instance.cfg で定義されている場合は、そちらの設定を優先する。
+
   - > 更新履歴
 
 <table>

@@ -459,7 +459,7 @@
   - ファイルをプレビュー表示するため、ファイルからPDF形式に変換し、テンポラリーフォルダーに書き込む処理を行う
 
   - テンポラリーフォルダーの初期値は「/var/tmp」であり、以下のConfigファイルで設定できる  
-    <https://github.com/RCOSDP/weko/blob/v0.9.22/modules/invenio-files-rest/invenio_files_rest/config.py#L128>
+    <https://github.com/RCOSDP/weko/blob/develop_v2.0.0/modules/invenio-files-rest/invenio_files_rest/config.py#L132>
     
       - 設定キー：「FILES\_REST\_DEFAULT\_PDF\_SAVE\_PATH」
     
@@ -610,6 +610,12 @@
                   - ワンタイムURLの有効期限及びダウンロード回数上限は、【Administration \> 設定 (Setting) \> 制限公開 (Restricted Access)画面】での「コンテンツファイルのダウンロード」(Content File Download)エリアで設定される
 
                   - 作成されたワンタイムURLはテーブルfile_onetime_downloadに保存される
+
+                  - ワンタイムURLは以下のロジックにより生成される
+
+                      - 「シークレットキー」「URL発行日」「URLのID」「アイテムID」「ファイル名」「有効期限」「ダウンロード上限回数」を足し合わせたバイト列から、SHA-256アルゴリズムでハッシュ値を作成
+
+                      - 上記「ハッシュ値」と「デリミタ(アンダースコア)」,「URLのID」を連結しbase64形式でエンコードし、これをトークンとする
 
                   - アイテム登録者と管理者には、ファイルのInformamation画面に現在「有効」であるワンタイムURLの一覧が表示される
 
