@@ -64,7 +64,7 @@
     
       - 編集（Edit）
         
-          - > 一覧（List）タブ選択中は非表示
+          - 一覧（List）タブ選択中は非表示
         
           - 一覧（List）タブの操作によって表示される
         
@@ -72,7 +72,7 @@
     
       - 詳細（Details）
         
-          - > 一覧（List）タブ選択中は非表示
+          - 一覧（List）タブ選択中は非表示
         
           - 一覧（List）タブの操作によって表示される
         
@@ -119,21 +119,21 @@
         
           - フィルター名
             
-              - > 「Default」
+              - 「Default」
             
-              - > フィルター方式の選択肢：等しい（equals）、等しくない（not equal）
+              - フィルター方式の選択肢：等しい（equals）、等しくない（not equal）
                 
                   - 選択したフィルター方式に対して「はい」「いいえ」
             
               - 「Created」
             
-              - > フィルター方式の選択肢：等しい（equals）、等しくない（not equal）、より大きい（greater than）、より小さい（smaller than）、間（between）、間ではなく（not between）、空（empty）
+              - フィルター方式の選択肢：等しい（equals）、等しくない（not equal）、より大きい（greater than）、より小さい（smaller than）、間（between）、間ではなく（not between）、空（empty）
                 
                   - 入力された文字列を使い、選択したフィルター方式で絞り込む
             
               - 「Updated」
             
-              - > フィルター方式の選択肢：「Created」と同じである
+              - フィルター方式の選択肢：「Created」と同じである
                 
                   - 入力された文字列を使い、選択したフィルター方式で絞り込む
         
@@ -180,6 +180,14 @@
         メッセージ：  
         　日本語：「レコード数＋レコードが正常に削除されました。」  
         　英語：「Record was successfully deleted.」
+
+      - デフォルトに設定されたロケーションが0件または2件以上存在する場合に警告メッセージを表示する。
+          - 0件の場合：
+              - 日本語：「デフォルトに設定されたロケーションが存在しません。いずれか1つのロケーションをデフォルトに設定してください。」
+              - 英語：「No default location is set. Please configure one location as default.」
+          - 2件以上の場合：
+              - 日本語：「複数のロケーションがデフォルトに設定されています。デフォルトのロケーションは1つのみ設定可能です。設定を修正してください。」
+              - 英語：「Multiple locations are set as default. Only one default location can be configured. Please correct the settings.」
     
       - 「一覧」（List）から「作成」（Create）タブを押すと、「編集」(edit)タブに移動しロケーションを新規作成できる
         
@@ -203,33 +211,34 @@
                 「Type」に「S3 Path」を選択する時表示する  
                  保存時、入力内容の末尾に'/'が無い場合、補完する
             
-              - > 「send\_file\_directrly」  
-                > 「Type」に「S3 Path」、「S3 Virtual Host」を選択する時表示するチェックボックス  
-                > デフォルト：チェックあり
+              - 「send\_file\_directrly」  
+                「Type」に「S3 Path」、「S3 Virtual Host」を選択する時表示するチェックボックス  
+                デフォルト：チェックあり
 
-              - > 「default\_block\_size」  
-                > 「Type」に「S3 Path」、「S3 Virtual Host」を選択する時表示する  
-                > デフォルト：5242880
+              - 「default\_block\_size」  
+                「Type」に「S3 Path」、「S3 Virtual Host」を選択する時表示する  
+                デフォルト：5242880
 
-              - > 「maximum\_number\_of\_parts」  
-                > 「Type」に「S3 Path」、「S3 Virtual Host」を選択する時表示する  
-                > デフォルト：10000
+              - 「maximum\_number\_of\_parts」  
+                「Type」に「S3 Path」、「S3 Virtual Host」を選択する時表示する  
+                デフォルト：10000
 
-              - > 「region\_name」  
-                > 「Type」に「S3 Path」、「S3 Virtual Host」を選択する時表示する  
-                >  保存時に入力されていない場合、endpoint_urlを元に生成
+              - 「region\_name」  
+                「Type」に「S3 Path」、「S3 Virtual Host」を選択する時表示する  
+                「Type」に「S3 Path」、「S3 Virtual Host」を選択している場合、必須項目
 
-              - > 「signature\_version」  
-                > 「Type」に「S3 Path」、「S3 Virtual Host」を選択する時表示する  
-                > 選択肢：s3、s3v4
+              - 「signature\_version」  
+                「Type」に「S3 Path」、「S3 Virtual Host」を選択する時表示する  
+                選択肢：s3、s3v4
 
-              - > 「url\_expiration」  
-                > 「Type」に「S3 Path」、「S3 Virtual Host」を選択する時表示する  
-                > デフォルト：60
+              - 「url\_expiration」  
+                「Type」に「S3 Path」、「S3 Virtual Host」を選択する時表示する  
+                デフォルト：60
 
               - 「Quote Size」：使用上限
             
               - 「Default」  
+                既にデフォルト設定されたロケーションが存在する場合は非活性で表示する  
                 デフォルト：チェックなし
         
           - 「保存」（Save）ボタンを押すと、設定内容をバリデーションチェックし、エラーがない場合、設定されたロケーション内容をロケーション一覧に追加させ、メッセージをロケーション一覧に表示させる  
@@ -269,6 +278,14 @@
             
               - 「Name」のフォーマットが不正の場合、エラーメッセージを「Name」テキストボックスの下に表示する  
                 メッセージ：「Invalid location name.」
+
+              - 「デフォルト設定 (default=True)」を有効にした場合に、他のロケーションが既にデフォルトに設定されていると、保存を中止して画面上部にエラーメッセージを表示する。  
+                メッセージ：  
+                　日本語：「他のロケーションがすでにデフォルトに設定されているため、保存できません。」
+                　英語：「Cannot save because another location is already set as default.」
+
+              - 「uri」が「https://」から始まらない場合エラーメッセージを表示する  
+                メッセージ：「Invalid URL. It should start with https://」
         
           - 「保存してもう一つ追加」（Save and Add Another）ボタンを押すと、設定されたロケーション内容をロケーション一覧に追加させ、他のロケーションを追加設定可能とする  
             メッセージを画面上部に表示させる  
@@ -347,19 +364,23 @@
 
   - ロケーション画面の処理
     
-      - ロケーション画面を表示した際に、invenio\_files\_rest.admin.LocationModelViewが継承したModelViewよりflask\_admin.model.base.index\_viewメソッドが呼び出される。このメソッドでfiles\_locationテーブルより情報を取得し、LocationModelViewのcolumn\_listにあるキーに対応する情報を画面に表示する。
+      - ロケーション画面を表示した際に、`invenio_files_rest.admin.LocationModelView`が継承した`ModelView`より`flask_admin.model.base.index_view`メソッドが呼び出される。このメソッドで`files_location`テーブルより情報を取得し、`LocationModelView`の`column_list`にあるキーに対応する情報を画面に表示する。
         
-          - 目アイコンを押下してロケーション詳細情報を表示する際に、invenio\_files\_rest.admin.LocationModelViewが継承したModelViewよりflask\_admin.model.base.details\_viewメソッドを呼び出す。このメソッド下でfiles\_locationテーブルより情報を取得し、LocationModelViewのcolumn\_details\_listにあるキーに対応する情報を画面に表示する。
+          - 目アイコンを押下してロケーション詳細情報を表示する際に、`invenio_files_rest.admin.LocationModelView`が継承した`ModelView`より`flask_admin.model.base.details_view`メソッドを呼び出す。このメソッド下で`files_location`テーブルより情報を取得し、`LocationModelView`の`column_details_list`にあるキーに対応する情報を画面に表示する。
         
-          - 鉛筆アイコンを押下して編集画面を表示する際に、invenio\_files\_rest.admin.LocationModelViewが継承したModelViewよりflask\_admin.model.base.edit\_viewメソッドをGETで呼び出す。このメソッドでidを用いて、files\_locationテーブルより情報を取得し、表示する。
+          - 鉛筆アイコンを押下して編集画面を表示する際に、`invenio_files_rest.admin.LocationModelView`が継承した`ModelView`より`flask_admin.model.base.edit_view`メソッドをGETで呼び出す。このメソッドでidを用いて、`files_location`テーブルより情報を取得し、表示する。
             
-              - 編集画面で「保存」ボタンを押下する。そうすると、flask\_admin.model.base.edit\_viewメソッドをPOSTで呼び出す。このメソッド下で、get\_save\_return\_urlメソッドが呼ばれ、編集内容をfiles\_locationテーブルに保存し、更新する。
+              - 編集画面で「保存」ボタンを押下する。そうすると、`flask_admin.model.base.edit_view`メソッドをPOSTで呼び出す。このメソッド下で、`get_save_return_url`メソッドが呼ばれ、編集内容を`files_location`テーブルに保存し、更新する。
+
+                  - 保存時には`LocationModelView.on_model_change()`メソッド内でバリデーションを実行する。保存対象のロケーションが`default=True`に設定されている場合、他に`default=True`のロケーションが存在しないかを確認する。存在する場合は`ValidationError`を発生させ、保存を中止し、画面上部にエラーメッセージを表示する。
         
-          - 削除アイコンを押下した際に、invenio\_files\_rest.admin.LocationModelViewが継承したModelViewよりflask\_admin.model.base.delete\_viewメソッドをGETで呼び出してfiles\_locationテーブルから削除する。
+          - 削除アイコンを押下した際に、`invenio_files_rest.admin.LocationModelView`が継承した`ModelView`より`flask_admin.model.base.delete_view`メソッドをGETで呼び出して`files_location`テーブルから削除する。
     
-      - 作成タブを押下した際に、invenio\_files\_rest.admin.LocationModelViewが継承したModelViewよりflask\_admin.model.base.create\_viewメソッドをGETで呼び出す。LocationModelViewのform\_columnsの項目の入力欄を表示する。
+      - 作成タブを押下した際に、`invenio_files_rest.admin.LocationModelView`が継承した`ModelView`より`flask_admin.model.base.create_view`メソッドをGETで呼び出す。`LocationModelView`の`form_columns`の項目の入力欄を表示する。
         
-          - 入力欄に入力後「保存」ボタンを押下する。そうすると、invenio\_files\_rest.admin.LocationModelViewが継承したModelViewよりflask\_admin.model.base.create\_viewメソッドをPOSTで呼び出す。このメソッド下でget\_save\_return\_urlメソッドが呼ばれ、新しいバケットの情報をfiles\_bucketテーブルに保存する。
+          - 入力欄に入力後「保存」ボタンを押下する。そうすると、`invenio_files_rest.admin.LocationModelView`が継承した`ModelView`より`flask_admin.model.base.create_view`メソッドをPOSTで呼び出す。このメソッド下で`get_save_return_url`メソッドが呼ばれ、新しいバケットの情報を`files_bucket`テーブルに保存する。
+
+              - 保存時には`LocationModelView.on_model_change()`メソッド内でバリデーションを実行する。保存対象のロケーションが`default=True`に設定されている場合、他に`default=True`のロケーションが存在しないかを確認する。存在する場合は`ValidationError`を発生させ、保存を中止し、画面上部にエラーメッセージを表示する。
 
   - ロケーションの使用量合計はコンテンツアップロード時に集計する
     

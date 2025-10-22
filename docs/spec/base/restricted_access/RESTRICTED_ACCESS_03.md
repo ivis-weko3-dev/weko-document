@@ -99,7 +99,6 @@
                 制限公開フラグ：チェックする  
                 GakuNinRDM Flag：チェックしない  
                 登録インデックスの指定：利用申請（インデックスにて登録）
-            
               - 表示/非表示  
                 　表示：System Administrator, Repository Administrator  
                 　非表示：Contributor,Community Administrator
@@ -111,6 +110,31 @@
                 制限公開フラグ：チェックする  
                 GakuNinRDM Flag：チェックしない  
                 登録インデックスの指定：利用申請（インデックスにて登録)
+              - 表示/非表示  
+                　表示：System Administrator, Repository Administrator  
+                　非表示：Contributor,Community Administrator
+              
+              - 利用登録 
+                ワークフロー: 利用登録 
+                フロー：利用登録 
+                アイテムタイプ：利用申請 
+                制限公開フラグ：チェックする 
+                GakuNinRDM Flag：チェックしない 
+                登録インデックスの指定：利用申請（インデックスにて登録
+              - 表示/非表示  
+                　表示：System Administrator, Repository Administrator  
+                　非表示：Contributor,Community Administrator
+              
+              - 利用規約のみ 
+                ワークフロー: 利用規約のみ 
+                フロー：利用規約のみ 
+                アイテムタイプ：利用申請 
+                制限公開フラグ：チェックする 
+                GakuNinRDM Flag：チェックしない 
+                登録インデックスの指定：利用申請（インデックスにて登録） 
+                表示/非表示 
+                　表示：System Administrator, Repository Administrator 
+                　非表示：Contributor,Community Administrator 
             
               - 
               - 

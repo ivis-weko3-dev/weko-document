@@ -13,7 +13,9 @@
 
 |ロール|システム<br>管理者|リポジトリ<br>管理者|コミュニティ<br>管理者|登録ユーザー|一般ユーザー|ゲスト<br>(未ログイン)|
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-|利用可否|○|○|○| | | |
+|利用可否|○|○|○※| | | |
+
+※コミュニティ管理者の場合は管理するコミュニティに紐づく著者のみ登録可能
 
   - > 機能内容
 
@@ -583,6 +585,13 @@
       <td>外部所属機関所属期間終了時期を入力する。<br/>
       形式：yyyy-MM-dd
       </tr>
+      <tr>
+      <td>21</td>
+      <td>communityIds[0...n]</td>
+      <td>コミュニティID</td>
+      <td>Community ID</td>
+      <td>著者に紐づけるコミュニティのIDを入力する。
+      </tr>
       </tbody>
       </table>
 
@@ -655,8 +664,14 @@
     <td>is_deleted</td>
     <td>削除フラグ</td>
     <td>Delete Flag</td>
-    <td>識別子を削除する場合に "D" と出力する<br />
-        エクスポートの場合は全て空欄である。</td>
+    <td>識別子を削除する場合に "D" と出力する<br />エクスポートの場合は全て空欄である。</td>
+    </tr>
+    <tr>
+    <td>5</td>
+    <td>community_ids[0...n]</td>
+    <td>コミュニティID</td>
+    <td>Community Id</td>
+    <td>識別子に関連づけるコミュニティのIDを入力する</td>
     </tr>
     </tbody>
     </table>
@@ -931,6 +946,53 @@
     <td>英語のメッセージが既存<br />
     日本語のメッセージを新規追加</td>
     </tr>
+    <tr>
+    <td>27</td>
+    <td>インポート(Import)</td>
+    <td>コミュニティIDに許可されていない記号や制御文字等を入力した</td>
+    <td>ERROR</td>
+    <td>無効なコミュニティID形式です。</td>
+    <td>Invalid community ID format.</td>
+    <td></td>
+    </tr>
+    <tr>
+    <td>28</td>
+    <td>インポート(Import)</td>
+    <td>communityIdsでDBに存在しないコミュニティのIDを入力した</td>
+    <td>ERROR</td>
+    <td>指定されたコミュニティID「{1}」は存在しません。</td>
+    <td>Community ID(s) {1} does not exist.</td>
+    <td>{1}: コミュニティID</td>
+    </tr>
+    <tr>
+    <td>29</td>
+    <td>インポート(Import)</td>
+    <td>コミュニティ管理者で管理対象外のコミュニティのIDを入力した</br>
+    または、コミュニティ管理者で管理対象外のコミュニティの紐づけを解除した
+    </td>
+    <td>ERROR</td>
+    <td>著者IDに紐づく、コミュニティ「{1}」の管理権限がありません。</td>
+    <td>You do not have permission for this Author’s communities: {1}.</td>
+    <td>{1}: コミュニティID</td>
+    </tr>
+    <tr>
+    <td>30</td>
+    <td>インポート(Import)</td>
+    <td>コミュニティ管理者で管理対象外のコミュニティのみに紐づく著者のpk_idを入力した</td>
+    <td>ERROR</td>
+    <td>このレコードを操作することはできません。</td>
+    <td>You cannot manage this record.</td>
+    <td></td>
+    </tr>
+    <tr>
+    <td>31</td>
+    <td>インポート(Import)</td>
+    <td>コミュニティ管理者でcommunityIdsが空欄</td>
+    <td>ERROR</td>
+    <td>少なくとも1つの管理対象コミュニティを含める必要があります。</td>
+    <td>You must include at least one managed community.</td>
+    <td></td>
+    </tr>
     </tbody>
     </table>
 
@@ -1138,6 +1200,53 @@
     <td>The specified scheme is used in the author ID.</td>
     <td></td>
     </tr>
+    <tr>
+    <td>21</td>
+    <td>インポート(Import)</td>
+    <td>コミュニティIDに許可されていない記号や制御文字等を入力した</td>
+    <td>ERROR</td>
+    <td>無効なコミュニティID形式です。</td>
+    <td>Invalid community ID format.</td>
+    <td></td>
+    </tr>
+    <tr>
+    <td>22</td>
+    <td>インポート(Import)</td>
+    <td>community_idsでDBに存在しないコミュニティのIDを入力した</td>
+    <td>ERROR</td>
+    <td>指定されたコミュニティID「{1}」は存在しません。</td>
+    <td>Community ID(s) {1} does not exist.</td>
+    <td>{1}: コミュニティID</td>
+    </tr>
+    <tr>
+    <td>23</td>
+    <td>インポート(Import)</td>
+    <td>コミュニティ管理者で管理対象外のコミュニティのIDを入力した</br>
+    または、コミュニティ管理者で管理対象外のコミュニティの紐づけを解除した
+    </td>
+    <td>ERROR</td>
+    <td>著者IDに紐づく、コミュニティ「{1}」の管理権限がありません。</td>
+    <td>You do not have permission for this Author’s communities: {1}.</td>
+    <td>{1}: コミュニティID</td>
+    </tr>
+    <tr>
+    <td>24</td>
+    <td>インポート(Import)</td>
+    <td>コミュニティ管理者で管理対象外のコミュニティのみに紐づく識別子のschemeを入力した</td>
+    <td>ERROR</td>
+    <td>このレコードを操作することはできません。</td>
+    <td>You cannot manage this record.</td>
+    <td></td>
+    </tr>
+    <tr>
+    <td>25</td>
+    <td>インポート(Import)</td>
+    <td>コミュニティ管理者でcommunity_idsが空欄</td>
+    <td>ERROR</td>
+    <td>少なくとも1つの管理対象コミュニティを含める必要があります。</td>
+    <td>You must include at least one managed community.</td>
+    <td></td>
+    </tr>
     </table>
    
   - 処理の「エラー」は登録不可、「ワーニング」は登録可能とする。
@@ -1201,6 +1310,7 @@
       | **scheme の重複** | 同一ファイル内に重複がある場合 |
       | **URL の形式** | `http://` または `https://` で始まっていない場合 |
       | **削除対象の識別子** | DB内に対象が存在しない場合 |
+      | **コミュニティID列** | DB内に対象が存在しない、またはコミュニティ管理者の管理対象外のコミュニティの場合|
 
       - schemeの値が対象となるDBに既存で存在する場合、更新とする。
       - schemeの値が対象となるDBに存在しない場合、新規登録となる。

@@ -254,12 +254,40 @@ identifier：アイテムに利用可能なメタデータフォーマットが�
 
 #### 引数
 
-    １．from：UTCdatetimeの任意の引数。日付による選択的ハーベスティングの下限を設定する。  
-    ２．until：UTCdatetimeの任意の引数。日付による選択的ハーベスティングの上限を設定する。  
-    ３．metadataPrefix：返却レコードのメタデータ部に含まれるフォーマットを指定する引数。必須項目。  
-    ４．set：Spec値を持つ任意の引数。選択的ハーベスティングを行う際のセットの基準を指定する。  
-    ５. resumptionToken：リポジトリが応答する際に不完全リストとセットになっている要素。この要素を指定して検索を行うことで完全リストの検索を可能とする任意の引数。
-    
+| 引数 | 概要 |
+| ---- | ---- |
+| from|UTCdatetimeの任意の引数。日付による選択的ハーベスティングの下限を設定する。|
+| until| UTCdatetimeの任意の引数。日付による選択的ハーベスティングの上限を設定する。  |
+| metadataPrefix | 返却レコードのメタデータ部に含まれるフォーマットを指定する引数。必須項目。|  
+| set | Spec値を持つ任意の引数。選択的ハーベスティングを行う際のセットの基準を指定する。  |
+| resumptionToken | リポジトリが応答する際に不完全リストとセットになっている要素。この要素を指定して検索を行うことで完全リストの検索を可能とする任意の引数。|
+
+以下に応答例を示す。
+
+```
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+<responseDate>YYYY-MM-DDThh:mm:ssZ</responseDate> 
+<request verb="ListRecords" metadataPrefix="○○○○">https://[host]/oai</request>
+<ListRecords>
+<record>
+<header>
+指定したレコードの情報
+</header>
+</record> 
+</ListRecords>
+</OAI-PMH\>
+```
+
+#### 処理概要
+
+1. パラメータを基にElasticsearchで絞り込みを実施
+2. 絞り込み結果をもとにPostgreSQLから応答XMLを作成
+
+
+### ListSets  
+    リポジトリのセット構成を検索する際に使用するverb。  
+    使用可能となる引数は次のものである。  
+    resumptionToken：リポジトリが応答する際に不完全リストとセットになっている要素。この要素を指定して検索を行うことで完全リストの検索を可能とする任意の引数。
 #### 例
 
 ```

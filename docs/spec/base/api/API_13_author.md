@@ -51,10 +51,10 @@
 
 | スコープ | システム管理者 | リポジトリ管理者 | コミュニティ管理者 | 登録ユーザ | 一般ユーザ | ゲスト（未ログイン） |
 | --- | --- | --- | --- | --- | --- | --- |
-|author:search| 〇 | 〇 | ✕ | ✕ | ✕ | ✕ |
-|author:create| 〇 | 〇 | ✕ | ✕ | ✕ | ✕ |
-|author:update| 〇 | 〇 | ✕ | ✕ | ✕ | ✕ |
-|author:delete| 〇 | 〇 | ✕ | ✕ | ✕ | ✕ |
+|author:search| 〇 | 〇 | 〇 | ✕ | ✕ | ✕ |
+|author:create| 〇 | 〇 | 〇 | ✕ | ✕ | ✕ |
+|author:update| 〇 | 〇 | 〇 | ✕ | ✕ | ✕ |
+|author:delete| 〇 | 〇 | 〇 | ✕ | ✕ | ✕ |
 
 
 ## 5. 著者DB検索
@@ -63,7 +63,7 @@
 
 - OAuth2認証機能を用いてユーザーの適切なアクセス制限を行う。
 - 指定された検索キーで著者DBを検索した結果を返す。
-- 検索キーとして著者姓名、著者名、著者姓、著者識別子（外部識別子を含む）を利用できる。
+- 検索キーとして著者姓名、著者名、著者姓、著者識別子（外部識別子を含む）、コミュニティIDを利用できる。
 - スコープとロールによるアクセス制御を行う。
 - 著者識別子種別と属機関識別子種別はidではなくschemeの値でリクエスト、レスポンスをする
 
@@ -102,6 +102,7 @@ GET /api/{version}/authors
     |familyname|著者姓|
     |idtype|著者識別子種別。選択肢は画面と同様|
     |authorid|idtypeに対応した著者識別子|
+    |communityid|著者を管理するコミュニティのID|
 
 - ヘッダーパラメータ
 
@@ -174,7 +175,8 @@ GET /api/{version}/authors
                             }
                         ]
                     }
-                ]
+                ],
+                "communityIds": ["community1"]
             }
         ]
     }
@@ -236,6 +238,12 @@ GET /api/{version}/authors
     | --- | --- | --- |
     |periodStart|string|所属開始日。入力形式はyyyy-MM-dd。|
     |periodEnd|string|所属終了日。入力形式はyyyy-MM-dd。|
+
+    **communityIds**
+
+    |項目名|型|説明|
+    | --- | --- | --- |
+    |communityIds[n]|string|著者を管理するコミュニティのID|
 
 
 ### 5.3. 処理概要
@@ -354,7 +362,8 @@ POST /api/{version}/authors
                         }
                     ]
                 }
-            ]
+            ],
+            "communityIds": ["community1"]
         }
     }
     ```
@@ -421,6 +430,14 @@ POST /api/{version}/authors
     |periodStart|string|✕|-|所属開始日。入力形式はyyyy-MM-dd。|
     |periodEnd|string|✕|-|所属終了日。入力形式はyyyy-MM-dd。|
 
+    **communityIds**
+
+    |項目名|型|必須|デフォルト値|説明|
+    | --- | --- | --- | --- | --- |
+    |communityIds[n]|string|△※|-|著者を管理するコミュニティのID|
+
+    ※ コミュニティ管理者の場合は管理対象のコミュニティが指定されていない場合はエラーにする
+
 #### レスポンス<!-- omit in toc -->
 
 - レスポンスコード
@@ -485,7 +502,8 @@ POST /api/{version}/authors
                         }
                     ]
                 }
-            ]
+            ],
+            "communityIds": ["community1"]
         }
     }
     ```
@@ -547,6 +565,12 @@ POST /api/{version}/authors
     |periodStart|string|所属開始日。入力形式はyyyy-MM-dd。|
     |periodEnd|string|所属終了日。入力形式はyyyy-MM-dd。|
 
+    **communityIds**
+
+    |項目名|型|説明|
+    | --- | --- | --- |
+    |communityIds[n]|string|著者を管理するコミュニティのID|
+
 ### 6.3. 処理概要
 
 1. ユーザー認証する
@@ -574,6 +598,12 @@ POST /api/{version}/authors
     - `affiliationPeriodInfo`について、以下の場合400エラーを返す。
       - yyyy-MM-ddの入力形式を満たさない場合
       - 所属開始日（`periodStart`）が所属終了日（`periodEnd`）より後の日付の場合
+   - `communityIds`について、以下の場合400エラーを返す。
+     - 許可されていない記号や制御文字を使用されている場合
+     - DBに存在しないコミュニティIDを指定した場合
+     - コミュニティ管理者権限のユーザーで管理対象のコミュニティが一つも含まれていない場合
+   - コミュニティ管理者で、いかの場合403エラーを返す。
+     - 管理対象外コミュニティのIDを指定した場合
 
 6. 著者情報を登録する
     - `authorIdInfo.idType`が`WEKO`の`authorIdInfo.authorId`が指定されていない場合、既存のWEKO IDの最大値+1の数字を`authorIdInfo.authorId`として登録する。
@@ -683,7 +713,8 @@ PUT /api/{version}/authors/{identifier}
                         }
                     ]
                 }
-            ]
+            ],
+            "communityIds": ["community1"]
         }
     }
     ```
@@ -752,6 +783,14 @@ PUT /api/{version}/authors/{identifier}
     |periodStart|string|✕|-|所属開始日。入力形式はyyyy-MM-dd。|
     |periodEnd|string|✕|-|所属終了日。入力形式はyyyy-MM-dd。|
 
+    **communityIds**
+
+    |項目名|型|必須|デフォルト値|説明|
+    | --- | --- | --- | --- | --- |
+    |communityIds[n]|string|△※|-|著者を管理するコミュニティのID|
+
+    ※ コミュニティ管理者の場合は管理対象のコミュニティが指定されていない場合エラーにする。
+
 #### レスポンス<!-- omit in toc -->
 
 - レスポンスコード
@@ -818,7 +857,8 @@ PUT /api/{version}/authors/{identifier}
                         }
                     ]
                 }
-            ]
+            ],
+            "communityIds": ["community1"]
         }
     }
     ```
@@ -880,6 +920,12 @@ PUT /api/{version}/authors/{identifier}
     |periodStart|string|所属開始日。入力形式はyyyy-MM-dd。|
     |periodEnd|string|所属終了日。入力形式はyyyy-MM-dd。|
 
+    **communityIds**
+
+    |項目名|型|説明|
+    | --- | --- | --- |
+    |communityIds[n]|string|著者を管理するコミュニティのID|
+
 
 ### 7.3. 処理概要
 
@@ -913,6 +959,14 @@ PUT /api/{version}/authors/{identifier}
     - `affiliationPeriodInfo`について、以下の場合400エラーを返す。
       - yyyy-MM-ddの入力形式を満たさない場合
       - 所属開始日（`periodStart`）が所属終了日（`periodEnd`）より後の日付の場合
+    - `communityIds`について、以下の場合400エラーを返す。
+      - 許可されていない記号や制御文字が含まれる場合
+      - DBに存在しないコミュニティIDが指定された場合
+      - コミュニティ管理者権限のユーザーが、指定したIDの中に管理対象コミュニティを一つも含まない場合
+   - コミュニティ管理者で、以下の場合403エラーを返す。
+      - 管理対象外コミュニティのIDを新たに指定した場合
+      - 変更前の著者に紐づいていた管理対象外コミュニティIDを指定しない場合
+      - 管理対象コミュニティに紐づかない著者を変更対象に指定した場合
 
 7. 著者情報を変更する
     - `authorIdInfo.idType`、`affiliationInfo.identifierInfo.affiliationIdType`は与えられた値で検索しIDを引っ張ってくる。
@@ -1001,6 +1055,7 @@ DELETE /api/{version}/authors/{identifier}
 5. パラメータの確認
     - `identifier`で著者情報を検索する。
     - 指定された著者情報が存在しない場合は404エラーを返す。
+    - コミュニティ管理者の場合、削除対象の著者は管理対象コミュニティに関連付けられている必要がある。該当しない場合は403エラーを返す。
 
 6. 著者を削除する
     - DBとElasticsearchの著者情報の`is_deleted`をTrueに書き変える。
