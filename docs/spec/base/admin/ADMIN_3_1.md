@@ -158,6 +158,8 @@
               - Guest
         
           - 「子インデックスのロール権限にも再帰的に反映させる」（Set the base authorities of child indexes recursively）チェックボックスにチェックを入れることで、所属するすべての子インデックスと子孫インデックスにロール権限の設定が再帰的に設定される。
+
+          - ロール権限の設定にmAPロールは表示されない。
     
       - グループ権限の設定には、  
         「グループ権限あり」（Group Authorized）と「権限なし」（Unauthorized）エリアを設ける。
@@ -204,6 +206,8 @@
               - Guest : -99
         
           - 「子インデックスのロール権限にも再帰的に反映させる」（Set the base authorities of child indexes recursively）チェックボックスにチェックを入れることで、所属するすべての子インデックスと子孫インデックスにロール権限の設定が再帰的に設定される。
+
+          - ロール権限の設定にmAPロールは表示されない。
     
       - グループ権限の設定には、  
         「グループ権限あり」（Group Authorized）と「権限なし」（Unauthorized）エリアを設ける。

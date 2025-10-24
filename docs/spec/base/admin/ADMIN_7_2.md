@@ -158,7 +158,7 @@
     
       - > ストレージロケーション（Storage Location）：：db内のfiles\_locationテーブルのnameカラムから情報を取り出し、プルダウン形式で表示する。初期状態ではどの情報も選択せず、「指定なし（Undesignated）」とする。
     
-      - > 表示/非表示（Display/Hide）：db内のacounts\_roleのnameカラムから情報を取り出し表示（Display）ボックス内に表示する。初期状態では、すべてのroleが表示側に表示される。
+      - > 表示/非表示（Display/Hide）：db内のacounts\_roleのnameカラムから情報を取り出し表示（Display）ボックス内に表示する。初期状態では、すべてのroleが表示側に表示される。mAPロールは表示/非表示の画面に表示されない。
 
   - > 既存のワークフローの編集の場合、入力欄の値は指定したworkflow\_idを用いてweko\_workflow.api.Workflow.get\_workflow\_detailを使用して情報をdb内のworkflow\_workflowテーブルから取り出して表示する。
 
