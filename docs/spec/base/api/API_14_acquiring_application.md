@@ -6,7 +6,7 @@
 
 -   利用方法
 
-APIを実行する。
+WEKO_RECORDS_UI_RESTRICTED_API が True の状態で API を実行する。
 
 -   利用可能なロール
 
@@ -42,6 +42,8 @@ weko_records_ui.rest.py
     -   デフォルトでは同一ホストからのアクセスは１分当たり100回までとする
 
     -   制限を超える場合429エラー（Too Many Requests）とする
+    
+    - 制限公開機能がOFF（WEKO_RECORDS_UI_RESTRICTED_API が False）である場合、403エラー（Forbidden）とする
 
 -   指定されたアイテム/ファイルの情報を取得する
 
@@ -67,11 +69,24 @@ weko_records_ui.rest.py
 
     -   API仕様書を参照
 
+- 設定値
+
+      - WEKO_RECORDS_UI_RESTRICTED_API
+
+          - パス: <https://github.com/RCOSDP/weko/blob/develop_v2.0.0/modules/weko-records-ui/weko_records_ui/config.py>
+
+          - 初期値: False
+
+          - 利用申請APIの有効無効を切り替える。
+
+          - scripts/instance.cfg で定義されている場合は、そちらの設定を優先する。
+
 -   更新履歴
 
 | 日付      | 更新内容 |
 |----------|----------|
 |2023/7/14 |初版作成   |
+|2025/10/31|APIの利用条件を記載|
 
 # 利用申請開始API
 
@@ -81,7 +96,7 @@ weko_records_ui.rest.py
 
 -   利用方法
 
-APIを実行する。
+WEKO_RECORDS_UI_RESTRICTED_API が True の状態で API を実行する。
 
 -   利用可能なロール
 
@@ -123,6 +138,8 @@ APIを実行する。
     -   デフォルトでは同一ホストからのアクセスは１分当たり100回までとする
 
     -   制限を超える場合429エラー（Too Many Requests）とする
+
+- 制限公開機能がOFF（WEKO_RECORDS_UI_RESTRICTED_API が False）である場合、403エラー（Forbidden）とする
 
 -   ゲストユーザーの場合、リクエストに含まれるメールアドレスを確認する
 
@@ -175,12 +192,24 @@ APIを実行する。
 
     -   API仕様書を参照
 
+- 設定値
+
+      - WEKO_RECORDS_UI_RESTRICTED_API
+
+          - パス: <https://github.com/RCOSDP/weko/blob/develop_v2.0.0/modules/weko-records-ui/weko_records_ui/config.py>
+
+          - 初期値: False
+
+          - 利用申請APIの有効無効を切り替える。
+
+          - scripts/instance.cfg で定義されている場合は、そちらの設定を優先する。
 
 -   更新履歴
 
 | 日付      | 更新内容 |
 |----------|----------|
 |2023/7/14 |初版作成   |
+|2025/10/31|APIの利用条件を記載|
 
 # 利用申請API
 
@@ -191,7 +220,7 @@ Registration）を行うためのAPIである。
 
 -   利用方法
 
-APIを実行する。
+WEKO_RECORDS_UI_RESTRICTED_API が True の状態で API を実行する。
 
 -   利用可能なロール
 
@@ -229,6 +258,8 @@ weko_workflow.rest.py
 
     -   制限を超える場合429エラー（Too Many Requests）とする
 
+- 制限公開機能がOFF（WEKO_RECORDS_UI_RESTRICTED_API が False）である場合、403エラー（Forbidden）とする
+
 -   ゲストユーザーの場合、リクエストに含まれるtokenを確認する
 
     -   tokenに紐づくゲストアクティビティが存在しない場合は404エラー
@@ -261,9 +292,21 @@ weko_workflow.rest.py
 
     -   API仕様書を参照
 
+- 設定値
+
+      - WEKO_RECORDS_UI_RESTRICTED_API
+
+          - パス: <https://github.com/RCOSDP/weko/blob/develop_v2.0.0/modules/weko-records-ui/weko_records_ui/config.py>
+
+          - 初期値: False
+
+          - 利用申請APIの有効無効を切り替える。
+
+          - scripts/instance.cfg で定義されている場合は、そちらの設定を優先する。
 
 -   更新履歴
 
 | 日付      | 更新内容 |
 |----------|----------|
 |2023/7/14 |初版作成   |
+|2025/10/31|APIの利用条件を記載|

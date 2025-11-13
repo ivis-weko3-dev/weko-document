@@ -462,13 +462,13 @@ DOI付与後は変更不可</td>
 <tr class="even">
 <td>.metadata.item_files[0].date[0].dateType</td>
 <td>ファイル情報[0].公開日[0].タイプ</td>
-<td>「Available」を自動設定（値があっても無視）</td>
+<td></td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>.metadata.item_files[0].date[0].dateValue</td>
 <td>ファイル情報[0].公開日[0].公開日</td>
-<td>「アクセス」＝オープンアクセスの際は自動設定／「アクセス」＝オープンアクセス日を指定 の際に手入力可／それ以外は空白</td>
+<td>「アクセス」＝オープンアクセス日を指定 の際に手入力可／それ以外は空白</td>
 <td></td>
 </tr>
 <tr class="even">
@@ -492,8 +492,9 @@ DOI付与後は変更不可</td>
 <tr class="odd">
 <td>.metadata.item_files[0].filename</td>
 <td>ファイル情報[0].ファイル名</td>
-<td>空欄で自動設定／手入力</td>
 <td></td>
+<td>ファイルパス[0] が空欄ではない時に、空欄、ファイルパス[0] のファイル名と一致しない場合、
+登録できない</td>
 </tr>
 <tr class="even">
 <td>.metadata.item_files[0].filesize[0].value</td>
@@ -504,7 +505,7 @@ DOI付与後は変更不可</td>
 <tr class="odd">
 <td>.metadata.item_files[0].format</td>
 <td>ファイル情報[0].フォーマット</td>
-<td><p>空欄で自動設定／手入力</p>
+<td>
 <p>ファイルアップロードIDを入力の場合、必須</p></td>
 <td></td>
 </tr>

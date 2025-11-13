@@ -9,6 +9,8 @@
         "anchors",
         "collapsible-chapters",
         "hide-published-with",
-        "plantuml-cloud"
+        "plantuml-cloud",
+        "prism",
+        "-highlight"
     ]
 }
