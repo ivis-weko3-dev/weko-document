@@ -45,6 +45,10 @@
 
 １．コンテンツ未登録アイテムの利用申請について設定する
 
+  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True の場合のみ表示
+
+  - 機能の有効無効はこの画面上で行うか、admin_settings テーブルの name が restricted_access であるレコードの settings 内の item_application.item_application_enable で設定可能
+
   - 「コンテンツ未登録アイテムの利用申請」(Application for use of items without content)エリアで機能有効化および、コンテンツ未登録状態で利用申請可能なアイテムタイプを設定する
 
       - 設定内容は以下とする。
@@ -71,6 +75,18 @@
 
 ２．各種制限公開機能の有効化、無効化について設定する。
 
+  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True の場合のみ表示
+
+  - 機能の有効無効はこの画面上で行うか、admin_settings テーブルの name が restricted_access であるレコードの settings 内のそれぞれ以下の項目で設定可能
+
+      - 承認アクションにおけるファイルプレビュー： preview_workflow_approval_enable
+
+      - メールテンプレート編集： edit_mail_templates_enable
+
+      - リクエストフォーム： display_request_form
+
+      - 非ログインユーザーのDLにおけるパスワードチェック機能： password_enable
+
   - 各エリアで機能有効化を設定する。
 
       - 設定項目は以下とする。
@@ -80,6 +96,8 @@
           - 「メールテンプレート編集」エリア
 
           - 「リクエストフォーム」エリア
+            
+          - 「非ログインユーザーのDLにおけるパスワードチェック機能」エリア
 
       - 各設定項目の設定内容は以下とする。
 
@@ -167,6 +185,8 @@
 
 ４. コンテンツファイルのダウンロードについて設定する
 
+  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True の場合のみ表示
+
   - 「コンテンツファイルのダウンロード」(Content File Download)エリアに、有効期限日数とダウンロード回数を設定する
 
       - 設定内容は以下の2つ
@@ -210,6 +230,8 @@
 
 ５. 利用報告ワークフローへのアクセスについて設定する
 
+  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True の場合のみ表示
+
   - 「利用報告ワークフローへのアクセス」(Usage Report Workflow Access)エリアに、有効期限日数を設定する
 
       - 設定内容は以下とする
@@ -224,7 +246,7 @@
 
                   - 英語：「Must set a positive integer for {}. 」
 
-          - 「無期限にする」(Unlimited)チェックボックス
+          - 「無期限」(Unlimited)チェックボックス
 
               - チェックを入れる場合、パラメータ値を9999999日に設定することとする
 
@@ -236,13 +258,15 @@
 
               - 英語：「Restricted Access was successfully updated.」
 
-          - 未設定かつ「無期限にする」チェックボックスをチェックしていない場合、「保存」（Save）ボタンを押すと、エラーメッセージが表示される
+          - 未設定かつ「無期限」チェックボックスをチェックしていない場合、「保存」（Save）ボタンを押すと、エラーメッセージが表示される
 
               - 日本語：「{}を設定してください。」
 
               - 英語：「Please set {}.」
 
 ６. 利用規約について設定する
+
+  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True の場合のみ表示
 
   - 設定内容は以下の通りです。
 
@@ -291,6 +315,8 @@
       - 英語：「Please input the Terms and Conditions in English.」
 
 ７. 利用報告督促メールを送付する
+
+  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True の場合のみ表示
 
   - 「利用報告督促メール」（Usage Report Reminder Email）エリアには、利用報告督促メールの送信対象となるアクティビティの情報を一覧で表示する
 
@@ -549,6 +575,51 @@
 
 <!-- end list -->
 
+８. 制限公開アイテムに非対象ユーザーがアクセスを試みた際に表示されるエラーメッセージについて設定する
+
+  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True の場合のみ表示
+
+  - 「エラーメッセージ」（Error Message）テキストエリアで、日本語と英語それぞれのエラーメッセージを編集できる。テキストエリアには初期状態として以下のエラーメッセージが記載されている。  
+     エラーメッセージ  
+     日本語：「このデータは利用できません（権限がないため）。」  
+     英語：「This data is not available for this user.」
+
+  - [保存（Save）]ボタンを押すと、設定内容を保存し、メッセージを表示する。  
+    ただし、「エラーメッセージ」（Error Message）テキストエリアが空白である場合に保存を行うことはできない。  
+    メッセージ  
+    日本語：「制限公開の設定を変更しました。」
+    英語：「Restricted Access was successfully updated.」
+
+  - > 関連モジュール
+    
+  - > weko_admin
+    
+  - > 処理概要
+    
+  - 設定内容をデータベースに保存する
+
+      - テーブル：「admin_settings」
+
+      - フィールド：'name'="restricted_access"  
+        例：
+        > {"error_msg": {"key": "", "content": {"en": {"content": "This data is not available for this user"}, "ja": {"content": "このデータは利用できません（権限がないため）。"}}},{"terms_and_conditions": [{"key": "161699201191", "content": {"en": {"title": "Terms 1", "content": "Terms and Conditions Description"}, "ja": {"title": "利用規約1", "content": ""}}, "existed": true}], "content_file_download": {"download_limit": 10, "expiration_date": 9999999, "download_limit_unlimited_chk": false, "expiration_date_unlimited_chk": true}, "usage_report_workflow_access": {"expiration_date_access": 500, "expiration_date_access_unlimited_chk": false}}}
+        
+  - ゲストユーザーに対して、アクティビティ画面を表示する関数（"display_guest_activity"）には"record_after_update"変数を設定する
+
+  - データベース内に"error_msg"というキーを持たない場合は、weko_admin.utils.get_restricted_access で初期状態のものが作成される。その後、設定が変更されるたび値が更新される。
+
+  - > 設定値
+    
+      - > WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG
+        
+          - > パス：<https://github.com/RCOSDP/weko/blob/develop_v2.0.0/modules/weko-admin/weko_admin/config.py#L1298>
+
+          - > 初期値：False
+
+          - > 制限公開機能の設定画面表示非表示および利用申請系機能と制限公開コンテンツ機能の有効無効を切り替える。
+
+          - > scripts/instance.cfg で定義されている場合は、そちらの設定を優先する。
+
   - > 更新履歴
 
 <table>
@@ -561,16 +632,21 @@
 </thead>
 <tbody>
 <tr class="odd">
+<td>2025/10/31</td>
+<td><strong>160a811eed2c61492558905db34fa0619da6b18f</strong></td>
+<td>各機能の表示・有効の条件を追加</td>
+</tr>
+<tr class="even">
 <td>2024/07/12</td>
 <td><strong>a27f536b5e375ada10a651ba1f13a589c9243ca1</strong></td>
 <td>コンテンツ未登録アイテムの利用申請設定、各種制限公開機能の有効化、無効化設定機能追加</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>2024/01/19</td>
 <td><strong>8c312e8cb1db9c6479b86d1443a38720079838b0</strong></td>
 <td>シークレットURL機能追加</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><blockquote>
 <p>2023/08/31</p>
 </blockquote></td>

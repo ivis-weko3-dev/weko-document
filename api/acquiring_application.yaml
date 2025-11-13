@@ -87,6 +87,8 @@ paths:
                   Etag:
                     description: 利用規約内容を示すハッシュ値
                     type: string
+        "304":
+          description: 前回取得時から更新なし
         "401":
           description: OAuth2認証失敗
           content:

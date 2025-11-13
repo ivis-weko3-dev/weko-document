@@ -240,8 +240,8 @@ $ curl -k "https://192.168.56.200/api/v1/tree/1623632832836" -H "Authorization:B
 全インデックスあるいは指定したインデックスの情報を取得する。
 
 #### エンドポイント
-GET /api/<version>/tree：全インデックス  
-GET /api/<version>/tree/<index_id>：指定したインデックス
+GET /api/\<version>/tree：全インデックス  
+GET /api/\<version>/tree/<index_id>：指定したインデックス
 
 #### リクエストヘッダー
 
@@ -315,7 +315,7 @@ GET /api/<version>/tree/<index_id>：指定したインデックス
 インデックスを新規作成する。
 
 #### エンドポイント
-POST /api/<version>/tree/index
+POST /api/\<version>/tree/index
 
 #### リクエストヘッダー
 
@@ -382,7 +382,7 @@ POST /api/<version>/tree/index
 指定したインデックスの情報を更新する。
 
 #### エンドポイント
-PUT /api/<version>/tree/index/<index_id>
+PUT /api/\<version>/tree/index/<index_id>
 
 #### リクエストヘッダー
 
@@ -429,7 +429,7 @@ PUT /api/<version>/tree/index/<index_id>
 指定したインデックスを削除する。
 
 #### エンドポイント
-DELETE /api/<version>/tree/index/<index_id>
+DELETE /api/\<version>/tree/index/<index_id>
 
 #### リクエストヘッダー
 
@@ -469,4 +469,3 @@ DELETE /api/<version>/tree/index/<index_id>
 | ---------- | ------------------------------------------ | -------------------------------------------------------- |
 | 2023/08/31 | 353ba1deb094af5056a58bb40f07596b8e95a562   | 初版作成                                                 |
 | 2025/06/06 | 34a972ec2f7a26b92cb55cb4524b20bdde180f39   | インデックス管理APIについて追記                          |
-

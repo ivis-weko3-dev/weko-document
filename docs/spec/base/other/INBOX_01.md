@@ -26,7 +26,7 @@
 
 WEKO3のアプリケーション環境設定（instance.cfg）で、通知機能を有効にする。
 
-```config
+```ini
 WEKO_NOTIFICATIONS = True
 ```
 

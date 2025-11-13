@@ -122,7 +122,7 @@
         
           - ワークフローの編集画面で、\[戻る（Back）\]ボタンを押すと、ワークフロー一覧画面に移動する。
 
-  - システム管理者でない（リポジトリ管理者、サブリポジトリ管理者）の場合、利用申請に関するワークフローは閲覧・編集ができない。また利用申請に関するワークフローを追加できない。（利用申請フラグが非表示であり、登録時に利用申請フラグがFalseとして登録される）。利用申請フラグの編集はシステム管理者のみ可能。
+  - WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG が True かつシステム管理者でない（リポジトリ管理者、サブリポジトリ管理者）の場合、利用申請に関するワークフローは閲覧・編集ができない。また利用申請に関するワークフローを追加できない。（利用申請フラグが非表示であり、登録時に利用申請フラグがFalseとして登録される）。利用申請フラグの編集は WEKO_ADMIN_RESTRICTED_ACCESS_DISPLAY_FLAG と WEKO_ADMIN_DISPLAY_RESTRICTED_SETTINGS が True かつシステム管理者の場合のみ可能。
 
   - 戻るボタンをクリックすると、一つ前のアクションに戻ることが可能(v1.0.7追加)。
 
@@ -158,9 +158,7 @@
     
       - > ストレージロケーション（Storage Location）：：db内のfiles\_locationテーブルのnameカラムから情報を取り出し、プルダウン形式で表示する。初期状態ではどの情報も選択せず、「指定なし（Undesignated）」とする。
     
-      - > 表示/非表示（Display/Hide）：db内のacounts\_roleのnameカラムから情報を取り出し表示（Display）ボックス内に表示する。初期状態では、すべてのroleが表示側に表示される。mAPロールは表示/非表示の画面に表示されない。
-      
-      ※ mAPロールは学認ｍAP連携機能で内部的に利用しているロール
+      - > 表示/非表示（Display/Hide）：db内のacounts\_roleのnameカラムから情報を取り出し表示（Display）ボックス内に表示する。初期状態では、すべてのroleが表示側に表示される。
 
   - > 既存のワークフローの編集の場合、入力欄の値は指定したworkflow\_idを用いてweko\_workflow.api.Workflow.get\_workflow\_detailを使用して情報をdb内のworkflow\_workflowテーブルから取り出して表示する。
 
@@ -175,9 +173,21 @@
 
 > ワークフロー名押下で編集画面に移行した際は、\[保存（Save）\]ボタンの横に\[削除（Delete）\]ボタンが配置される。\[削除（Delete）\]ボタン押下時は、削除可能なワークフローである場合はdb内のworkflow\_workflowテーブルのis\_deletedカラムにチェックが入る。
 
+> 設定値
+
+  - > WEKO_ADMIN_DISPLAY_RESTRICTED_SETTINGS
+  
+      - > パス：<https://github.com/RCOSDP/weko/blob/develop_v2.0.0/modules/weko-admin/weko_admin/config.py#L1380>
+
+      - > 初期値：False
+
+      - > 利用申請フラグの表示非表示を切り替える。
+
+      - > scripts/instance.cfg で定義されている場合は、そちらの設定を優先する。
   - > 更新履歴
 
 |日付|GitHubコミットID|更新内容|
 |:---:|:---:|:---:|
 |> 2023/08/31|353ba1deb094af5056a58bb40f07596b8e95a562|初版作成|
 |> 2025/01/23|-|サブリポジトリ対応|
+|> 2025/10/31|160a811eed2c61492558905db34fa0619da6b18f|要素の表示条件・アクセス権限を記載|
