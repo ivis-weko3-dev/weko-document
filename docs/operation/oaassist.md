@@ -30,7 +30,6 @@ OAuth2キーを発行する。
 Doorkeeper::Application.find_by(organization_id: 723)
 ```
 
-
 ## WEKO3
 
 管理画面でOAuth2キーを登録する。
