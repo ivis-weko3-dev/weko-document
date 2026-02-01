@@ -375,6 +375,28 @@
 
 > WEKO\_MAX\_FILE\_SIZE = WEKO\_BUCKET\_QUOTA\_SIZE
 
+
+### 保存先
+
+#### Path Style URL
+
+Path Styleの場合、
+管理画面で設定したURIが「s3://jctest/」とすると、
+オブジェクトの保存先は例えば以下のようになる。
+
+jctest/b6/a5/1012-dea5-4ca0-82e1-ee6c9fed8908/data
+
+
+#### Virtual Hosted Style
+
+Virtual Hosted Styleの場合、
+管理画面で設定したURIが「https://jctest.s3.ap-northeast-1-ntt.wasabisys.com/」とすると、
+オブジェクトの保存先は例えば以下のようになる。
+
+jctest/jctest/b6/a5/1012-dea5-4ca0-82e1-ee6c9fed8908/data
+
+
+
 ## 更新履歴
 
 <table>
