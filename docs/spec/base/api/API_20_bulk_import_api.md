@@ -44,13 +44,22 @@ curl -X POST {hostname}/api/items/import-task?mode=<mode>&is_change_identifier=<
   - `is_change_identifier`：識別子変更モード可否（true/false）指定しなかった場合はfalseとして扱われる。
 
 - **フォームデータ**
-  - `file`：アップロードするZIPファイル（MIMEタイプ: application/zip）
+  - `file`：アップロードするZIPファイル（MIMEタイプ: application/zip）<br>
+  ※ ZIPファイルは[ADMIN_2_4.md](../admin/ADMIN_2_4.md)で使用するファイルと同様のものを使用する。<br>
+  ※ TSVファイルの「.bulk_doi」に指定したDOI値
+  で[DOIを使用したメタデータ補完機能](../user/USER_4_6.md#3-web-apiによるdoiを使用したメタデータ補完機能)を行うことが出来る。
 
 - **HTTPヘッダー**
   - `Authorization`: Bearer <アクセストークン>
   - `Content-Disposition`: attachment; filename=〇〇.zip（添付ファイル名指定）
 
 #### レスポンス
+
+- インポートチェック処理のタイムアウト時間はデフォルトで60秒が設定されている。<br>
+  この値は設定ファイルのWEKO_ITEMS_UI_BULK_IMPORT_TIMEOUTから変更可能。<br>
+  ※ タイムアウト時間60秒で処理できるインポートファイル数は約250件。(実行環境による)
+- タスク結果はexpire(有効期限)まで確認することが出来、デフォルトはタスク登録から24時間後に設定されている。<br>
+  有効期限は設定ファイルのWEKO_ITEMS_UI_EXPIRE_TIMEから変更可能。
 
 - **成功レスポンス インポートモード**
   ```json
@@ -142,7 +151,7 @@ curl -X GET {hostname}/api/items/import-task/get_bulk_import_task_status/<task_i
 ```
 
 - **パスパラメータ**
-  - `task_id`：インポートタスクID
+  - `task_id`：タスクID
 
 - **HTTPヘッダー**
   - `Authorization`: Bearer <アクセストークン>
