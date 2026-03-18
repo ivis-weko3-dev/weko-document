@@ -18,7 +18,7 @@
     },
     "pluginsConfig": {
         "search": {
-            "maxIndexSize": 10000000000
+            "maxIndexSize": 100000000000000
         }
     }
 }
