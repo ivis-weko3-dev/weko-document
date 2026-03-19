@@ -1,0 +1,1071 @@
+openapi: 3.0.3
+info:
+  title: インデックスツリーAPI
+  version: "1.0"
+tags:
+  - name: indexedit
+    description: インデックスツリーの画面API
+  - name: tree
+    description: インデックスツリーAPI
+
+paths:
+  /admin/indexedit/:
+    get:
+      tags:
+        - indexedit
+      summary: ツリー編集画面表示
+      description: |
+        インデックスツリーの編集画面を表示する。
+        |ロール|動作|
+        |----|----|
+        |システム管理者|使用可能|
+        |リポジトリ管理者|使用可能|
+        |コミュニティ管理者|使用可能|
+        |登録ユーザー|使用不可|
+        |一般ユーザー|使用不可|
+        |ゲストユーザー|使用不可|
+      responses:
+        "200":
+          description: 正常に画面が表示された場合
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/IndexEditPage"
+        "403":
+          description: 権限がなく画面が表示できない場合
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/PermissionDeniedHTML"
+        "500":
+          description: サーバーエラーが発生した場合
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/ServerError"
+      security:
+        - cookieAuth: []
+
+  /admin/indexedit/{index_id}:
+    get:
+      tags:
+        - indexedit
+      summary: ツリー編集画面表示
+      description: |
+        インデックスを指定し、インデックスツリーの編集画面を表示する。
+        |ロール|動作|
+        |----|----|
+        |システム管理者|使用可能|
+        |リポジトリ管理者|使用可能|
+        |コミュニティ管理者|使用可能|
+        |登録ユーザー|使用不可|
+        |一般ユーザー|使用不可|
+        |ゲストユーザー|使用不可|
+      parameters:
+        - name: index_id
+          in: path
+          description: インデックスID
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: 正常に画面が表示された場合
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/IndexEditPage"
+        "403":
+          description: 権限がなく画面が表示できない場合
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/PermissionDeniedHTML"
+        "500":
+          description: サーバーエラーが発生した場合
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/ServerError"
+      security:
+        - cookieAuth: []
+
+  /admin/indexedit/upload:
+    post:
+      tags:
+        - indexedit
+      summary: 画像ファイルアップロード
+      description: |
+        インデックスのサムネイル画像ファイルをアップロードする。
+        |ロール|動作|
+        |----|----|
+        |システム管理者|使用可能|
+        |リポジトリ管理者|使用可能|
+        |コミュニティ管理者|使用可能|
+        |登録ユーザー|使用不可|
+        |一般ユーザー|使用不可|
+        |ゲストユーザー|使用不可|
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: アップロードする画像ファイル
+      responses:
+        "200":
+          description: 画像ファイルが正常にアップロードされた場合
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: ステータスコード
+                  msg:
+                    type: string
+                    description: メッセージ
+                  data:
+                    type: object
+                    description: 画像ファイル情報
+                    properties:
+                      path:
+                        type: string
+                        description: 画像ファイルパス
+              example:
+                code: 0
+                msg: "file upload success"
+                data:
+                  path: "/data/indextree/thumbnail.png"
+        "400":
+          description: ファイルが存在しないまたはファイル名がない場合
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/BadRequestHTML"
+        "403":
+          description: 権限がなく画像ファイルがアップロードできない場合
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/PermissionDeniedHTML"
+        "500":
+          description: サーバーエラーが発生した場合
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/ServerError"
+      security:
+        - cookieAuth: []
+
+  /api/tree:
+    get:
+      tags:
+        - tree
+      summary: インデックスツリー取得
+      description: |
+        インデックスのツリー情報を取得する。
+        |ロール|動作|
+        |----|----|
+        |システム管理者|使用可能|
+        |リポジトリ管理者|使用可能|
+        |コミュニティ管理者|使用可能|
+        |登録ユーザー|使用可能|
+        |一般ユーザー|使用可能|
+        |ゲストユーザー|使用可能|
+      parameters:
+        - name: action
+          in: query
+          schema:
+            type: string
+          description: アクション
+        - name: c
+          in: query
+          schema:
+            type: integer
+          description: コミュニティID
+        - name: more_ids
+          in: query
+          schema:
+            type: string
+          description: 追加で表示するインデックスIDリスト(スラッシュ区切り)
+      responses:
+        "200":
+          description: 正常にツリー情報が取得できた場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IndexTree"
+        "400":
+          description: 不正なリクエストの場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidDataRESTError"
+      security:
+        - cookieAuth: []
+
+  /api/tree/index/{index_id}:
+    get:
+      tags:
+        - tree
+      summary: インデックス取得
+      description: |
+        インデックス情報を取得する。
+        |ロール|動作|
+        |----|----|
+        |システム管理者|使用可能|
+        |リポジトリ管理者|使用可能|
+        |コミュニティ管理者|使用可能|
+        |登録ユーザー|使用可能|
+        |一般ユーザー|使用可能|
+        |ゲストユーザー|使用可能|
+      parameters:
+        - name: index_id
+          in: path
+          description: インデックスID
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: 正常にインデックス情報が取得できた場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Index"
+        "400":
+          description: 不正なリクエストの場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidDataRESTError"
+        "403":
+          description: インデックスの閲覧権限がない場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PermissionDeniedJSON"
+      security:
+        - cookieAuth: []
+    post:
+      tags:
+        - tree
+      summary: インデックス新規作成
+      description: |
+        インデックスを新規作成する。
+        |ロール|動作|
+        |----|----|
+        |システム管理者|使用可能|
+        |リポジトリ管理者|使用可能|
+        |コミュニティ管理者|使用可能|
+        |登録ユーザー|使用不可|
+        |一般ユーザー|使用不可|
+        |ゲストユーザー|使用不可|
+      parameters:
+        - name: index_id
+          in: path
+          description: 親インデックスID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: インデックス情報
+        required: true
+        content:
+          application/json:
+            example:
+              id: 1234567890123
+              value: "New Index"
+      responses:
+        "200":
+          description: 指定した親インデックスがロックされている場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IndexResponse"
+              example:
+                status: 200
+                message: ""
+                errors: ["Index Delete is in progress on another device."]
+        "201":
+          description: 正常にインデックスが作成できた場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IndexResponse"
+              example:
+                status: 201
+                message: "Index created successfully."
+                errors: []
+        "400":
+          description: 不正なリクエスト、またはインデックス作成に失敗した場合
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/InvalidDataRESTError"
+                  - $ref: "#/components/schemas/IndexAddedRESTError"
+              examples:
+                invalidData:
+                  summary: 不正なデータが送信された場合
+                  value:
+                    message: "Could not load data."
+                    status: 400
+                addFailure:
+                  summary: インデックスの作成に失敗した場合
+                  value:
+                    message: "Could not add data."
+                    status: 400
+        "401":
+          description: 認証されていない場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedJSON"
+        "403":
+          description: 権限がなくインデックスが作成できない場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PermissionDeniedJSON"
+        "500":
+          description: サーバーエラーが発生した場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServerErrorJSON"
+      security:
+        - cookieAuth: []
+    put:
+      tags:
+        - tree
+      summary: インデックス更新
+      description: |
+        インデックスを更新する。
+        |ロール|動作|
+        |----|----|
+        |システム管理者|使用可能|
+        |リポジトリ管理者|使用可能|
+        |コミュニティ管理者|使用可能|
+        |登録ユーザー|使用不可|
+        |一般ユーザー|使用不可|
+        |ゲストユーザー|使用不可|
+      parameters:
+        - name: index_id
+          in: path
+          description: インデックスID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: インデックス情報
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IndexEdit"
+      responses:
+        "200":
+          description: 成否に関わらずインデックス更新処理が完了した場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IndexEditResponse"
+              examples:
+                success1:
+                  summary: 正常にインデックスが更新できた場合
+                  value:
+                    status: 200
+                    message: "Index updated successfully."
+                    errors: []
+                    delete_flag: false
+                success2:
+                  summary: 正常にインデックスが更新でき、サムネイル削除フラグが立っている場合
+                  value:
+                    status: 200
+                    message: "Index updated successfully."
+                    errors: []
+                    delete_flag: true
+                failure1:
+                  summary: アイテムインポート中でインデックスが更新できなかった場合
+                  value:
+                    status: 200
+                    message: ""
+                    errors: ["The index cannot be updated becase import is in progress."]
+                    delete_flag: false
+                failure2:
+                  summary: インデックスがロックされている場合
+                  value:
+                    status: 200
+                    message: ""
+                    errors: ["Index Delete is in progress on another device."]
+                    delete_flag: false
+                failure3:
+                  summary: DOIが付与されたアイテムを含むインデックスを非公開にできなかった場合
+                  value:
+                    status: 200
+                    message: ""
+                    errors: ["The index cannot be kept private because there are links from items that have a DOI."]
+                    delete_flag: false
+                failure4:
+                  summary: DOIが付与されたアイテムを含むインデックスをハーベスト非公開にできなかった場合
+                  value:
+                    status: 200
+                    message: ""
+                    errors: ["Index harvests cannot be kept private because there are links from items that have a DOI."]
+                    delete_flag: false
+        "400":
+          description: 不正なリクエスト、またはインデックス更新に失敗した場合
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/InvalidDataRESTError"
+                  - $ref: "#/components/schemas/IndexUpdatedRESTError"
+              examples:
+                invalidData:
+                  summary: 不正なデータが送信された場合
+                  value:
+                    message: "Could not load data."
+                    status: 400
+                updateFailure:
+                  summary: インデックスの更新に失敗した場合
+                  value:
+                    message: "Could not update data."
+                    status: 400
+        "401":
+          description: 認証されていない場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedJSON"
+        "403":
+          description: 権限がなくインデックスが更新できない場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PermissionDeniedJSON"
+        "500":
+          description: サーバーエラーが発生した場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServerErrorJSON"
+      security:
+        - cookieAuth: []
+    delete:
+      tags:
+        - tree
+      summary: インデックス削除
+      description: |
+        インデックスを削除する。
+        |ロール|動作|
+        |----|----|
+        |システム管理者|使用可能|
+        |リポジトリ管理者|使用可能|
+        |コミュニティ管理者|使用可能|
+        |登録ユーザー|使用不可|
+        |一般ユーザー|使用不可|
+        |ゲストユーザー|使用不可|
+      parameters:
+        - name: index_id
+          in: path
+          description: インデックスID
+          required: true
+          schema:
+            type: integer
+        - name: action
+          in: query
+          schema:
+            type: string
+          description: アクション
+      responses:
+        "200":
+          description: 成否を問わずインデックス削除処理が完了した場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IndexResponse"
+              examples:
+                success:
+                  summary: 正常にインデックスが削除できた場合
+                  value:
+                    status: 200
+                    message: "Index deleted successfully."
+                    errors: []
+                failure:
+                  summary: インデックスの削除処理に失敗した場合
+                  value:
+                    status: 200
+                    message: "Failed to delete index."
+                    errors: []
+                locked:
+                  summary: インデックスがロックされている場合
+                  value:
+                    status: 200
+                    message: ""
+                    errors: ["Index Delete is in progress on another device."]
+                has_doi_item:
+                  summary: インデックス内にDOIが付与されたアイテムが存在する場合
+                  value:
+                    status: 200
+                    message: ""
+                    errors: ["The index cannot be deleted because there is a link from an item that has a DOI."]
+                has_editing_item:
+                  summary: インデックス内に編集中のアイテムが存在する場合
+                  value:
+                    status: 200
+                    message: ""
+                    errors: ["This index cannot be deleted because the item belonging to this index is being edited."]
+                has_harvest_setting:
+                  summary: インデックスにハーベスト設定が存在する場合
+                  value:
+                    status: 200
+                    message: ""
+                    errors: ["The index cannot be deleted becase the index in harvester settings."]
+        "204":
+          description: インデックスが指定されていない場合
+        "401":
+          description: 認証されていない場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnauthorizedJSON"
+        "403":
+          description: 権限がなくインデックスが削除できない場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PermissionDeniedJSON"
+        "500":
+          description: サーバーエラーが発生した場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServerErrorJSON"
+      security:
+        - cookieAuth: []
+
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: session
+  schemas:
+    IndexEditPage:
+      type: object
+      description: インデックスツリー編集画面のHTMLコンテンツ
+      example: |
+        <!DOCTYPE html>
+        <html>
+          <body>
+            <input id="lang-code" type="hidden" value="en" />
+            <div class="row">
+              <div class="hide" id="get_tree_json">/api/tree</div>
+              <div class="hide" id="upt_tree_json"></div>
+              <div class="hide" id="mod_tree_detail">/api/tree/index/</div>
+              <div class="hide" id="admin_coverpage_setting">False</div>
+              <input id="show_modal" type="hidden" value="True" />
+              <app-root-tree-hensyu nodeId=0></app-root-tree-hensyu>
+            </div>
+          </body>
+        </html>
+    IndexTree:
+      type: object
+      description: インデックスツリーのJSONデータ
+      example: 
+        - browsing_group: ""
+          browsing_role: "3,-98,-99"
+          children: []
+          cid: 1234567890123
+          contribute_group: ""
+          contribute_role: "1,2,3,4,-98"
+          coverpage_state: false
+          display_no: 5
+          emitLoadNextLevel: false
+          id: "1234567890123"
+          index_link_enabled: false
+          is_deleted: false
+          link_name: "New Index"
+          more_check: false
+          name: "サンプルインデックス"
+          pid: 0
+          positions: 0
+          public_date: null
+          public_state: true
+          recursive_coverpage_check: false
+          settings: {
+            checked: false,
+            isCollapsedOnInit: true
+          }
+          value: "サンプルインデックス"
+    Index:
+      type: object
+      description: インデックスのJSONデータ
+      properties:
+        biblio_flag:
+          type: boolean
+          description: 雑誌情報フラグ
+        browsing_group:
+          type: object
+          description: 閲覧可能グループ
+          $ref: "#/components/schemas/GroupRights"
+        browsing_role:
+          type: object
+          description: 閲覧可能ロール
+          $ref: "#/components/schemas/RoleRights"
+        can_edit:
+          type: boolean
+          description: 編集可能フラグ
+        cnri:
+          type: string
+          description: CNRI
+        comment:
+          type: string
+          description: コメント
+        contribute_group:
+          type: object
+          description: 登録可能グループ
+          $ref: "#/components/schemas/GroupRights"
+        contribute_role:
+          type: object
+          description: 登録可能ロール
+          $ref: "#/components/schemas/RoleRights"
+        coverpage_state:
+          type: boolean
+          description: PDF表紙表示フラグ
+        display_format:
+          type: string
+          description: 表示形式
+        display_no:
+          type: integer
+          description: 子インデックスの初期表示件数
+        harvest_public_state:
+          type: boolean
+          description: ハーベスト公開フラグ
+        harvest_spec:
+          type: string
+          description: ハーベスト仕様
+        have_children:
+          type: boolean
+          description: 子インデックス有無フラグ
+        id:
+          type: integer
+          description: インデックスID
+        image_name:
+          type: string
+          description: サムネイル画像ファイル名
+        index_link_enabled:
+          type: boolean
+          description: インデックスリンク有効フラグ
+        index_link_name:
+          type: string
+          description: インデックスリンク名
+        index_link_name_english:
+          type: string
+          description: インデックスリンク名(英語)
+        index_name:
+          type: string
+          description: インデックス名
+        index_name_english:
+          type: string
+          description: インデックス名(英語)
+        index_url:
+          type: string
+          description: インデックスURL
+        is_deleted:
+          type: boolean
+          description: 削除フラグ
+        more_check:
+          type: boolean
+          description: さらに表示フラグ
+        online_issn:
+          type: string
+          description: オンラインISSN
+        owner_user_id:
+          type: integer
+          description: 所有者ユーザーID
+        parent:
+          type: integer
+          description: 親インデックスID
+        position:
+          type: integer
+          description: インデックス表示順序
+        public_date:
+          type: string
+          description: インデックス公開日
+        public_state:
+          type: boolean
+          description: インデックス公開フラグ
+        recursive_browsing_group:
+          type: boolean
+          description: 閲覧可能グループ継承フラグ
+        recursive_browsing_role:
+          type: boolean
+          description: 閲覧可能ロール継承フラグ
+        recursive_contribute_group:
+          type: boolean
+          description: 登録可能グループ継承フラグ
+        recursive_contribute_role:
+          type: boolean
+          description: 登録可能ロール継承フラグ
+        recursive_coverpage_check:
+          type: boolean
+          description: PDF表紙表示継承フラグ
+        recursive_public_state:
+          type: boolean
+          description: インデックス公開フラグ継承フラグ
+        rss_status:
+          type: boolean
+          description: RSSアイコン表示フラグ
+      example:
+        biblio_flag: false
+        browsing_group: {
+          allow: [],
+          deny: []
+        }
+        browsing_role: {
+          allow: [
+            {
+              id: 3,
+              name: "Contributor"
+            },
+            {
+              id: -98,
+              name: "Authenticated User"
+            },
+            {
+              id: -99,
+              name: "Guest"
+            }
+          ],
+          deny: [
+            {
+              id: 4,
+              name: "Community Administrator"
+            },
+            {
+              id: 5,
+              name: "General"
+            }
+          ]
+        }
+        can_edit: true
+        cnri: ""
+        comment: ""
+        contribute_group: {
+          allow: [],
+          deny: []
+        }
+        contribute_role: {
+          allow: [
+            {
+              id: 3,
+              name: "Contributor"
+            },
+            {
+              id: 4,
+              name: "Community Administrator"
+            },
+            {
+              id: -98,
+              name: "Authenticated User"
+            }
+          ],
+          deny: [
+            {
+              id: 5,
+              name: "General"
+            },
+            {
+              id: -99,
+              name: "Guest"
+            }
+          ]
+        }
+        coverpage_state: false
+        display_format: "1"
+        display_no: 5
+        harvest_public_state: true
+        harvest_spec: ""
+        have_children: false
+        id: 1234567890123
+        image_name: ""
+        index_link_enabled: false
+        index_link_name: ""
+        index_link_name_english: "New Index"
+        index_name: "サンプルインデックス"
+        index_name_english: "Sample Index"
+        index_url: ""
+        is_deleted: false
+        more_check: false
+        online_issn: ""
+        owner_user_id: 1
+        parent: 0
+        position: 0
+        public_date: ""
+        public_state: true
+        recursive_browsing_group: false
+        recursive_browsing_role: false
+        recursive_contribute_group: false
+        recursive_contribute_role: false
+        recursive_coverpage_check: false
+        recursive_public_state: false
+        rss_status: false
+    IndexEdit:
+      type: object
+      description: インデックスツリー編集画面のJSONデータ
+      allOf:
+        - $ref: "#/components/schemas/Index"
+        - type: object
+          properties:
+            thumbnail_delete_flag:
+              type: boolean
+              description: サムネイル削除フラグ
+      example:
+        biblio_flag: false
+        browsing_group: {
+          allow: [],
+          deny: []
+        }
+        browsing_role: {
+          allow: [
+            {
+              id: 3,
+              name: "Contributor"
+            },
+            {
+              id: -98,
+              name: "Authenticated User"
+            },
+            {
+              id: -99,
+              name: "Guest"
+            }
+          ],
+          deny: [
+            {
+              id: 4,
+              name: "Community Administrator"
+            },
+            {
+              id: 5,
+              name: "General"
+            }
+          ]
+        }
+        can_edit: true
+        cnri: ""
+        comment: ""
+        contribute_group: {
+          allow: [],
+          deny: []
+        }
+        contribute_role: {
+          allow: [
+            {
+              id: 3,
+              name: "Contributor"
+            },
+            {
+              id: 4,
+              name: "Community Administrator"
+            },
+            {
+              id: -98,
+              name: "Authenticated User"
+            }
+          ],
+          deny: [
+            {
+              id: 5,
+              name: "General"
+            },
+            {
+              id: -99,
+              name: "Guest"
+            }
+          ]
+        }
+        coverpage_state: false
+        display_format: "1"
+        display_no: 5
+        harvest_public_state: true
+        harvest_spec: ""
+        have_children: false
+        id: 1234567890123
+        image_name: ""
+        index_link_enabled: false
+        index_link_name: ""
+        index_link_name_english: "New Index"
+        index_name: "サンプルインデックス"
+        index_name_english: "Sample Index"
+        index_url: ""
+        is_deleted: false
+        more_check: false
+        online_issn: ""
+        owner_user_id: 1
+        parent: 0
+        position: 0
+        public_date: ""
+        public_state: true
+        recursive_browsing_group: false
+        recursive_browsing_role: false
+        recursive_contribute_group: false
+        recursive_contribute_role: false
+        recursive_coverpage_check: false
+        recursive_public_state: false
+        rss_status: false
+        thumbnail_delete_flag: false
+    BadRequestHTML:
+      type: object
+      description: 不正なリクエストの場合のレスポンス
+      example: |
+        <!DOCTYPE html>
+        <title>400 Bad Request</title>
+        <h1>Bad Request</h1>
+        <p>The browser (or proxy) sent a request that this server could not understand.</p>
+    PermissionDeniedHTML:
+      type: object
+      description: 権限がない場合のレスポンス
+      example: |
+        <!DOCTYPE html>
+        <html>
+          <body>
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-10">
+                  <h1><i class="fa fa-flash"></i>Permission required</h1>
+                  <p>You do not have sufficient permissions to view this page.</p>
+                </div>
+              </div>
+            </div>
+          </body>
+        </html>
+    PermissionDeniedJSON:
+      type: object
+      description: 権限がない場合のレスポンス
+      example: 
+        message: "You don't have the permission to access the requested resource. It is either read-protected or not readable by the server."
+        status: 403
+    ServerError:
+      type: object
+      description: サーバーエラーが発生した場合のレスポンス
+      example: |
+        <!DOCTYPE html>
+        <html>
+          <body>
+            <div class="container error-page">
+              <div class="row">
+                <h1><i class="fa fa-flush"></i>Internal server error</h1>
+              </div>
+            </div>
+          </body>
+        </html>
+    ServerErrorJSON:
+      type: object
+      description: サーバーエラーが発生した場合のレスポンス
+      example: 
+        message: "The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application."
+        status: 500
+    InvalidDataRESTError:
+      type: object
+      description: 不正なデータが送信された場合のレスポンス
+      example: 
+        message: "Could not load data."
+        status: 400
+    IndexAddedRESTError:
+      type: object
+      description: インデックスの作成に失敗した場合のレスポンス
+      example: 
+        message: "Could not add data."
+        status: 400
+    IndexUpdatedRESTError:
+      type: object
+      description: インデックスの更新に失敗した場合のレスポンス
+      example: 
+        message: "Could not update data."
+        status: 400
+    UnauthorizedJSON:
+      type: object
+      description: 認証されていない場合のレスポンス
+      example: 
+        message: "The server could not verify that you are authorized to access the URL requested. You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required."
+        status: 401
+    IndexResponse:
+      type: object
+      description: インデックス作成レスポンス
+      properties:
+        status:
+          type: integer
+          description: ステータスコード
+        message:
+          type: string
+          description: メッセージ
+        errors:
+          type: array
+          items:
+            type: string
+          description: エラーメッセージリスト
+    IndexEditResponse:
+      type: object
+      description: インデックス更新レスポンス
+      properties:
+        status:
+          type: integer
+          description: ステータスコード
+        message:
+          type: string
+          description: メッセージ
+        errors:
+          type: array
+          items:
+            type: string
+          description: エラーメッセージリスト
+        delete_flag:
+          type: boolean
+          description: サムネイル削除フラグ
+    GroupRights:
+      type: object
+      description: グループ権限
+      properties:
+        allow:
+          $ref: "#/components/schemas/GroupRightInfo"
+        deny:
+          $ref: "#/components/schemas/GroupRightInfo"
+    GroupRightInfo:
+      type: object
+      description: グループ権限情報
+      properties:
+        id:
+          type: integer
+          description: グループID
+        name:
+          type: string
+          description: グループ名
+    RoleRights:
+      type: object
+      description: ロール権限
+      properties:
+        allow:
+          $ref: "#/components/schemas/RoleRightInfo"
+        deny:
+          $ref: "#/components/schemas/RoleRightInfo"
+    RoleRightInfo:
+      type: object
+      description: ロール権限情報
+      properties:
+        id:
+          type: integer
+          description: ロールID
+        name:
+          type: string
+          description: ロール名

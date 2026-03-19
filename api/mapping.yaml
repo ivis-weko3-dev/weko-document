@@ -1,0 +1,435 @@
+openapi: 3.0.3
+info:
+  title: マッピングAPI
+  version: "1.0"
+tags:
+  - name: Mapping.index
+    description: アイテムタイプのマッピング画面表示
+  - name: Mapping.mapping_register
+    description: アイテムタイプのマッピング情報登録
+  - name: Mapping.schema_list
+    description: アイテムタイプのマッピング用スキーマ取得
+
+paths:
+  /admin/itemtypes/mapping/:
+    get:
+      tags:
+        - Mapping.index
+      summary: マッピング画面表示
+      description: |-
+        マッピング画面を表示する。<br>本APIはログインページによるログイン後に使用可能。
+        |ロール|動作|
+        |----|----|
+        |システム管理者|使用可能|
+        |リポジトリ管理者|使用可能|
+        |コミュニティ管理者|使用不可|
+        |登録ユーザー|使用不可|
+        |一般ユーザー|使用不可| 
+        |ゲストユーザー|使用不可|
+      responses:
+        '200':
+          description: |
+            アイテムタイプがない場合のエラー画面（HTML）が返される。
+          content:
+            text/html:
+              schema:
+                type: string
+              example: |
+                  <!DOCTYPE html>
+                  <html>
+                    <body>
+                      <p>You do not even have an itemtype.<br>
+                      Go to <a href="/admin/itemtypes/register/">Register Itemtype</a>!</p>
+                    </body>
+                  </html>
+        '302':
+          description: |
+            アイテムタイプが存在する場合、アイテムタイプ一覧(昇順)の先頭のIDのマッピング画面へリダイレクトする。
+          headers:
+            Location:
+              description: |
+                リダイレクト先のパス
+              schema:
+                type: string
+                example: /admin/itemtypes/mapping/{item_type_id}
+        '400':
+          description: 不正なリクエストやサーバー内部エラー時のエラー画面（HTML）
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/ErrorBody"
+        '403':
+          description: 権限がない場合のエラー
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/PermissionErrorBody"
+
+  /admin/itemtypes/mapping/{item_type_id}:
+    get:
+      tags:
+        - Mapping.index
+      summary: 指定アイテムタイプのマッピング画面表示
+      description: |-
+        指定したアイテムタイプIDのマッピング画面を表示する。<br>本APIはログインページによるログイン後に使用可能。
+        |ロール|動作|
+        |----|----|
+        |システム管理者|使用可能|
+        |リポジトリ管理者|使用可能|
+        |コミュニティ管理者|使用不可|
+        |登録ユーザー|使用不可|
+        |一般ユーザー|使用不可| 
+        |ゲストユーザー|使用不可|
+      parameters:
+        - name: item_type_id
+          in: path
+          required: true
+          description: アイテムタイプID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: |
+            マッピング画面、またはアイテムタイプがない場合のエラー画面（HTML）が返される。
+          content:
+            text/html:
+              schema:
+                type: string
+              examples:
+                normal:
+                  summary: マッピング画面HTML
+                  value: |
+                    <!DOCTYPE html>
+                    <html>
+                      <head>
+                        <title>WEKO3</title>
+                        <!-- CSSやJSのリンクは省略 -->
+                      </head>
+                      <body>
+                        <input id="lang-code" type="hidden" value="en"/>
+                        <input id="is-system-admin" type="hidden" value="True"/>
+                        <div id="alerts"></div>
+                        <div id="errors"></div>
+                        <div class="row">
+                          <div class="col-sm-12">
+                            <div class="panel panel-info">
+                              <div class="panel-body item-type-list-header">
+                                <div class="form-inline">
+                                  <div class="col-sm-6 item-type-list">
+                                    <div class="form-group">
+                                      <label for="item-type-lists">Item Type List</label>
+                                      <select class="form-control" id="item-type-lists">
+                                        <option value="1" selected>Article (article)</option>
+                                        <option value="2">Book (book)</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div class="col-sm-6">
+                                    <div class="form-group">
+                                      <label for="jpcoar_lists">Schema List</label>
+                                      <select class="form-control" id="jpcoar_lists">
+                                        <option value="jpcoar_mapping" selected>jpcoar_v2_mapping</option>
+                                        <option value="another_schema">another_schema</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- 省略: メタシステム、マッピングテーブル、子要素リスト、保存ボタン、モーダル等 -->
+                        <div class="row">
+                          <div class="col-sm-2">
+                            <button id="mapping-submit" class="btn btn-primary pull-right">
+                              <span class="glyphicon glyphicon-save"></span>&nbsp;
+                              Save
+                            </button>
+                          </div>
+                        </div>
+                        <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"
+                                        aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Result</h4>
+                              </div>
+                              <div class="modal-body">
+                                <p>One fine body&hellip;</p>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-primary hide" id="btn_confirm">OK</button>
+                                <button type="button" class="btn btn-primary hide" id="btn_submit">
+                                  <span class="glyphicon glyphicon-save"></span>&nbsp;Save
+                                </button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                  <span class="glyphicon glyphicon-remove"></span>&nbsp;Close
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </body>
+                    </html>
+                no_itemtype:
+                  summary: アイテムタイプがない場合のエラー画面HTML
+                  value: |
+                    <!DOCTYPE html>
+                    <html>
+                      <body>
+                        <p>You do not even have an itemtype.<br>
+                        Go to <a href="/admin/itemtypes/register/">Register Itemtype</a>!</p>
+                      </body>
+                    </html>
+        '302':
+          description: |
+            指定したitem_type_idが存在しない場合、かつアイテムタイプ一覧に値がある場合は、アイテムタイプ一覧(昇順)の先頭のIDのマッピング画面へリダイレクトする。
+          headers:
+            Location:
+              description: |
+                リダイレクト先のパス
+              schema:
+                type: string
+                example: /admin/itemtypes/mapping/{item_type_id}
+        '400':
+          description: 不正なリクエストやサーバー内部エラー時のエラー画面（HTML）
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/ErrorBody"
+        '403':
+          description: 権限がない場合のエラー
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/PermissionErrorBody"
+
+  /admin/itemtypes/mapping:
+    post:
+      tags:
+        - Mapping.mapping_register
+      summary: アイテムタイプのマッピング登録
+      description: |-
+        アイテムタイプのマッピング情報を登録・更新する。<br>本APIはログインページによるログイン後に使用可能。
+        |ロール|動作|
+        |----|----|
+        |システム管理者|使用可能|
+        |リポジトリ管理者|使用可能|
+        |コミュニティ管理者|使用不可|
+        |登録ユーザー|使用不可|
+        |一般ユーザー|使用不可| 
+        |ゲストユーザー|使用不可|
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                item_type_id:
+                  type: integer
+                  description: アイテムタイプID
+                mapping_type:
+                  type: string
+                  description: マッピング種別（例 jpcoar_mapping）
+                mapping:
+                  type: object
+                  description: マッピング情報
+              required:
+                - item_type_id
+                - mapping_type
+                - mapping
+            examples:
+              normal:
+                summary: 正常リクエスト例
+                value:
+                  item_type_id: 1
+                  mapping_type: jpcoar_mapping
+                  mapping:
+                    field1: value1
+                    field2: value2
+      responses:
+        '200':
+          description: |
+            正常登録、マッピング重複エラー、その他エラー時のレスポンス
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Successfully saved new mapping.
+                  duplicate:
+                    type: boolean
+                    example: true
+                  err_items:
+                    type: array
+                    items:
+                      type: string
+              examples:
+                success:
+                  summary: 正常登録
+                  value:
+                    msg: Successfully saved new mapping.
+                duplicate:
+                  summary: マッピング重複
+                  value:
+                    duplicate: true
+                    err_items:
+                      - field1
+                      - field2
+                    msg: Duplicate mapping as below
+                header_error:
+                  summary: Content-Type不正
+                  value:
+                    msg: Header Error
+                error:
+                  summary: 予期せぬエラー
+                  value:
+                    msg: Unexpected error occurred.
+        '403':
+          description: 権限がない場合のエラー
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/PermissionErrorBody"
+
+  /admin/itemtypes/mapping/schema:
+    get:
+      tags:
+        - Mapping.schema_list
+      summary: 全スキーマ一覧取得
+      description: |-
+        全てのマッピング用スキーマ情報を取得する。<br>本APIはログインページによるログイン後に使用可能。 
+        |ロール|動作|
+        |----|----|
+        |システム管理者|使用可能|
+        |リポジトリ管理者|使用可能|
+        |コミュニティ管理者|使用不可|
+        |登録ユーザー|使用不可|
+        |一般ユーザー|使用不可| 
+        |ゲストユーザー|使用不可|
+      responses:
+        '200':
+          description: 全スキーマ情報（JSON）
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  description: スキーマ名ごとのスキーマ情報
+              example:
+                ddi_mapping: object
+                jpcoar_mapping: object
+                jpcoar_v1_mapping: object
+                lom_mapping: object
+                oai_dc_mapping: object
+        '403':
+          description: 権限がない場合のエラー
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/PermissionErrorBody"
+        '500':
+          description: サーバー内部エラー
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+  /admin/itemtypes/mapping/schema/{SchemaName}:
+    get:
+      tags:
+        - Mapping.schema_list
+
+      summary: 指定スキーマ取得
+      description: |-
+        指定したスキーマ名のマッピング用スキーマ情報を取得する。<br>本APIはログインページによるログイン後に使用可能。 
+        |ロール|動作|
+        |----|----|
+        |システム管理者|使用可能|
+        |リポジトリ管理者|使用可能|
+        |コミュニティ管理者|使用不可|
+        |登録ユーザー|使用不可|
+        |一般ユーザー|使用不可| 
+        |ゲストユーザー|使用不可|
+      parameters:
+        - name: SchemaName
+          in: path
+          required: true
+          description: 取得したいスキーマ名
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 指定スキーマ情報（JSON）
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  description: スキーマ名ごとのスキーマ情報
+              example:
+                jpcoar_mapping:
+                  accessRights: 
+                    type: object
+                  alternative:
+                    type: object
+        '403':
+          description: 権限がない場合のエラー
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/PermissionErrorBody"
+        '500':
+          description: サーバー内部エラー
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ErrorBody:
+      type: string
+      example: |
+        <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+        <title>WEKO3</title>
+        <h1>Bad Request</h1>
+        <p>The browser (or proxy) sent a request that this server could not understand.</p>
+    InternalServerError:
+      type: string
+      example: |
+        <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+        <title>WEKO3</title>
+        <h1>Internal Server Error</h1>
+        <p>The server encountered an internal error and was unable to complete your request.</p>
+    PermissionErrorBody:
+      type: string
+      example: |
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>WEKO3</title>
+          </head>
+          <body>
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-10">
+                  <h1><i class="fa fa-flash"></i>Permission required</h1>
+                  <p>You do not have sufficient permissions to view this page.</p>
+                </div>
+              </div>
+            </div>
+          </body>
+        </html>
