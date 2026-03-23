@@ -7,33 +7,35 @@
 
 ## 利用方法
 
-1\. システム管理者、リポジトリ管理者でログインする。
+1\. システム管理者、リポジトリ管理者、サブリポジトリ管理者でログインする。
 
 2.【Administration\>インデックスツリー管理(Index Tree)\>ツリー編集(Edit Tree)】画面を開く。
 
 ## 利用可能なロール
 
 
-|ロール|システム管理者|リポジトリ管理者|コミュニティ管理者|登録ユーザー|一般ユーザー|ゲスト(未ログイン)|
-|---|---|---|---|---|---|---|
-|利用可否|○|○|||||
+|  ロール  | システム管理者 | リポジトリ管理者 | コミュニティ管理者 | 登録ユーザー | 一般ユーザー | ゲスト(未ログイン) |
+| -------- | :------------: | :--------------: | :----------------: | :----------: | :----------: | :----------------: |
+| 利用可否 |       〇       |        〇        |         〇※       |      ×      |      ×      |        ×          |
+
+※ サブリポジトリ管理者の場合は、管理対象のサブリポジトリに設定したインデックスをルートとしたインデックスツリーが表示される。
 
 
 ## 機能内容
 
-> 1\. インデックスツリーを追加する  
-> 【Administration \> インデックスツリー管理 \> ツリー編集（Edit Tree）】画面に移動する。  
-> その後新しく作成するインデックスの親となるインデックスをRootIndex以下から選択する。  
-> そして、Edit Treeエリア左上にある「追加」（Add）ボタンを押すことで、インデックスが新規登録される。
+1\. インデックスツリーを追加する  
+【Administration \> インデックスツリー管理 \> ツリー編集（Edit Tree）】画面に移動する。  
+その後新しく作成するインデックスの親となるインデックスをRootIndex以下から選択する。  
+そして、Edit Treeエリア左上にある「追加」（Add）ボタンを押すことで、インデックスが新規登録される。
 
   - 「追加」（Add）ボタンを押す時に選択しているインデックスの最下行に、インデックス（New Index）を配置する。  
     「Root Index」を選択している場合、インデックス一覧の最下行に配置する。
 
-> 2\. インデックスツリーを編集する  
-> 【Administration \> インデックスツリー管理 \> ツリー編集（Edit Tree）】画面にて編集したいインデックスを押下することでそのインデックスの編集画面が右に表示される。  
-> なお、Root Indexは選択することができるが、編集することはできない。
-> 
-> インポート中はインデックスツリーの編集ができない。
+2\. インデックスツリーを編集する  
+【Administration \> インデックスツリー管理 \> ツリー編集（Edit Tree）】画面にて編集したいインデックスを押下することでそのインデックスの編集画面が右に表示される。  
+なお、Root Indexは選択することができるが、編集することはできない。
+
+インポート中はインデックスツリーの編集ができない。
 
   - 入力内容は以下の通りである。
     
@@ -47,6 +49,16 @@
         
           - デフォルト値：「New Index」
     
+      - 「インデックスURL」（Index URL）
+        
+          - インデックスの固定URLを表示する。  
+            ※表示のみ。編集は行えない。
+
+      - 「CNRI」（CNRI）
+        
+          - インデックスのCNRIが存在する場合、表示する。  
+            ※表示のみ。編集は行えない。
+
       - 「コメント」（Comment）
         
           - インデックスのコメントを入力する。
@@ -54,13 +66,21 @@
           - URLを表示する場合、次の形式で入力する。  
             形式：
 
-> \[\[URL|表示名\]\]
-> 
-> 上記のように入力すると、表示名をリンクで表示する。「|表示名」を省略した場合、URLをリンク形式で表示する。
+\[\[URL|表示名\]\]
+
+上記のように入力すると、表示名をリンクで表示する。「|表示名」を省略した場合、URLをリンク形式で表示する。
 
   - 「公開」（Publish）
     
       - 「公開する」（Open to public）チェックボックスを設ける。
+
+        - チェックを入れる際に、ポップアップが表示される。
+
+        - ポップアップの「公開設定を有効化する（Open to public）」チェックボックスにチェックを入れ、「有効にする（Enable）」ボタンを押下することで、「公開する」チェックボックスにチェックが入る。
+
+        - ポップアップの表示制御を以下のコンフィグファイルで行っている。下記変数の値をTrueに変更することで表示することができる。(初期値はFalseになっている)
+          - > パス：/root/weko/modules/weko-index-tree/weko_index_tree/config.py
+          - > 変数：WEKO_INDEX_TREE_SHOW_MODAL
     
       - チェックを入れた場合
         
@@ -105,6 +125,13 @@
   - 「ハーベスト公開」（Harvest Publish）  
     「公開する」（Open to public）チェックボックスを設ける
     
+      - チェックを入れる際に、ポップアップが表示される。
+
+      - ポップアップの「公開設定を有効化する（Open to public）」チェックボックスにチェックを入れ、「有効にする（Enable）」ボタンを押下することで、「公開する」チェックボックスにチェックが入る。
+      - ポップアップの表示制御を以下のコンフィグファイルで行っている。下記変数の値をTrueに変更することで表示することができる。(初期値はFalseになっている)
+        - > パス：/root/weko/modules/weko-index-tree/weko_index_tree/config.py
+        - > 変数：WEKO_INDEX_TREE_SHOW_MODAL
+
       - チェックを入れた場合、インデックスへのハーベスト要求に対して、所属するデータを提供できる。
 
   - 「ONLINE ISSN」（Online ISSN）  
@@ -139,6 +166,24 @@
         
           - 「子インデックスのグループ権限にも再帰的に反映させる」（Set the base authorities of child indexes recursively）チェックボックスにチェックを入れることで、所属する子インデックスと子孫インデックスすべてにグループの設定が再帰的に設定される。
 
+      - 学認mAP連携機能が有効な場合、閲覧権限の設定に学認mAPのグループ情報を利用できる。
+
+         - グループIDのフォーマットが「jc\_<institution_fqdn>\_roles\_<role_keyword>」に従っている学認グループは、ロール権限として表示され閲覧権限を変更できる。
+
+              - <institution_fqdn>には機関のFQDNから".","-"を"_"に置換した値が設定される。
+
+                  - 例: abc-u.ac.jp → abc_u_ac_jp
+
+              - 例外的に「jc_roles_sysadm」もロール権限として表示され閲覧権限を変更できる。
+
+              - ロール権限に設定できるグループIDのフォーマット（プレフィックス、システム管理者用グループID）は、設定値 WEKO\_ACCOUNTS\_GAKUNIN\_GROUP\_PATTERN\_DICT を変更することで、フォーマットを変更できる。
+
+         - 上記以外のグループIDの場合はグループ権限として表示され、閲覧権限を変更できる。
+
+              - ただし、学認mAPのグループ情報は内部的には全てロールとして扱われる。
+
+         - 学認mAP連携機能でGakuNin mAPのグループ情報がWEKO3に追加された際、設定するmAPグループの閲覧権限のデフォルト値は、WEKO\_INDEXTREE\_GAKUNIN\_GROUP\_DEFAULT\_BROWSING\_PERMISSIONの真偽値から権限有無を決定する。
+
   - 「投稿権限」（Deposit Privilege）
     
       - ロール権限の設定には、  
@@ -167,16 +212,34 @@
         
           - 「子インデックスのグループ権限にも再帰的に反映させる」（Set the base authorities of child indexes recursively）チェックボックスにチェックを入れることで、所属する子インデックスと子孫インデックスすべてにグループの設定が再帰的に設定される。
 
+      - 学認mAP連携機能が有効な場合、投稿権限の設定に学認mAPのグループ情報を利用できる。
+
+         - グループIDのフォーマットが「jc\_<institution_fqdn>\_roles\_<role_keyword>」に従っている学認グループは、ロール権限として表示され投稿権限を変更できる。
+
+              - <institution_fqdn>には機関のFQDNから".","-"を"_"に置換した値が設定される。
+
+                  - 例: abc-u.ac.jp → abc_u_ac_jp
+
+              - 例外的に「jc_roles_sysadm」もロール権限として表示され投稿権限を変更できる。
+
+              - ロール権限に設定できるグループIDのフォーマット（プレフィックス、システム管理者グループID）は、設定値 WEKO\_ACCOUNTS\_GAKUNIN\_GROUP\_PATTERN\_DICT を変更することで、フォーマットを変更できる。
+
+         - ロール権限として利用できない学認グループは、すべてグループ権限として表示され、投稿権限を変更できる。
+
+              - ただし、学認mAPのグループ情報は内部的には全てロールとして扱われる。
+
+         - 学認mAP連携機能でGakuNin mAPのグループ情報がWEKO3に追加された際、設定するmAPグループの投稿権限のデフォルト値は、WEKO\_INDEXTREE\_GAKUNIN\_GROUP\_DEFAULT\_CONTRIBUTE\_PERMISSIONの真偽値から権限有無を決定する。
+
   - 「表示形式(検索結果)」（Display Format(Search Results)）  
     検索結果の表示形式を選択する。
     
       - 「一覧形式」（List）  
         検索結果をアイテムの一覧で表示する。デフォルトはこの形式で設定されている。  
-        一覧形式の詳細は[USER-2-1 一覧形式表示](\\l)を参照すること。
+        一覧形式の詳細は[USER-2-1 一覧形式表示](../user/USER_2_1.md)を参照すること。
     
       - 「目次形式」（Table Of Contents）  
         検索結果を見出しの一覧で表示する。  
-        目次形式の詳細は[USER-2-2 目次形式表示](#目次形式表示)を参照すること。
+        目次形式の詳細は[USER-2-2 目次形式表示](../user/USER_2_2.md)を参照すること。
 
   - インデックスサムネイル画像のアップロードエリア
 
@@ -236,26 +299,14 @@
 
 4\. インデックスツリーを移動する。
 
-  - > インデックスの順序の変更と所属する親インデックスの変更はドラッグ&ドロップにより可能である。  
-    > なお、Root Indexを動かすことはできない。アイテムインポート中はインエックスを移動できない。
+  - インデックスの順序の変更と所属する親インデックスの変更はドラッグ&ドロップにより可能である。  
+    なお、Root Indexを動かすことはできない。アイテムインポート中はインエックスを移動できない。
 
-<!-- end list -->
 
-## 関連モジュール
-
-<!-- end list -->
-
-  - > weko\_index\_tree
-
-  - > weko\_search\_ui
-
-  - > weko\_admin
-
-<!-- end list -->
-
-  - > 関連モジュール
-
-<!-- end list -->
+  -  関連モジュール
+     - weko\_index\_tree
+     - weko\_search\_ui
+     - weko\_admin
 
   - インデックスツリー編集画面表示について
     
@@ -265,262 +316,102 @@
     
       - 【Administration \> インデックスツリー管理(Index Tree) \> ツリー編集（Edit Tree）】画面にて追加ボタンを押下すると、weko\_index\_tree.rest.postメソッドにてweko\_index\_tree.api.createが呼び出される。  
         それによって初期値が以下の表であるインデックスを生成され、indexテーブルに登録される。
+        インデックス作成時、識別可能なエンドポイントを作成する。
+        CNRIが有効である場合は、ハンドルを発行し、当該のエンドポイントの名前解決が可能な状態にする。
+
 
   - インデックスのキャッシュについて
     
-      - インデックスのキャッシュはRedisサーバに以下キー名でインデックス保存時に作成される。
-        
-          - index\_tree\_view\_" + os.environ.get('INVENIO\_WEB\_HOST\_NAME') + "\_" + lang
 
-<table>
-<thead>
-<tr class="header">
-<th>インデックスツリー設定値</th>
-<th></th>
-<th></th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>#</td>
-<td>項目(日本語)</td>
-<td>DBキー</td>
-<td>デフォルト値</td>
-<td>備考</td>
-</tr>
-<tr class="even">
-<td>1</td>
-<td>なし</td>
-<td>id</td>
-<td>(現在の時間を元にしたもの)</td>
-<td>time.timeメソッドに1000を掛けた値</td>
-</tr>
-<tr class="odd">
-<td>2</td>
-<td>なし</td>
-<td>parent</td>
-<td>(親インデックスのID)</td>
-<td>rootindex下なら初期値0</td>
-</tr>
-<tr class="even">
-<td>3</td>
-<td>インデックス</td>
-<td>index_name</td>
-<td>New Index</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>4</td>
-<td></td>
-<td>index_name_english</td>
-<td>New Index</td>
-<td>必須事項</td>
-</tr>
-<tr class="even">
-<td>5</td>
-<td>コメント</td>
-<td>comment</td>
-<td>None</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>6</td>
-<td>公開</td>
-<td>public_state</td>
-<td>false</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>7</td>
-<td></td>
-<td>public_date</td>
-<td>None</td>
-<td>yyyy/MM/dd HH:mm:ssの形式</td>
-</tr>
-<tr class="odd">
-<td>8</td>
-<td></td>
-<td>recursive_public_state</td>
-<td>false</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>9</td>
-<td>インデックスリンク</td>
-<td>index_link_enabled</td>
-<td>false</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>10</td>
-<td></td>
-<td>index_link_name</td>
-<td>None</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>11</td>
-<td></td>
-<td>index_link_name_english</td>
-<td>New Index</td>
-<td>必須事項</td>
-</tr>
-<tr class="odd">
-<td>12</td>
-<td>表示範囲</td>
-<td>more_check</td>
-<td>false</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>13</td>
-<td></td>
-<td>display_no</td>
-<td>5</td>
-<td>表示数</td>
-</tr>
-<tr class="odd">
-<td>14</td>
-<td>RSSアイコン</td>
-<td>rss_status</td>
-<td>false</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>15</td>
-<td>PDFCoverPage</td>
-<td>coverpage_state</td>
-<td>false</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>16</td>
-<td></td>
-<td>recursive_coverpage_state</td>
-<td>None</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>17</td>
-<td>ハーベスト公開</td>
-<td>harvest_public_state</td>
-<td>true</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>18</td>
-<td>ONLINE_ISSN</td>
-<td>online_issn</td>
-<td>None</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>19</td>
-<td></td>
-<td>biblio_flag</td>
-<td>None</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>20</td>
-<td>閲覧権限</td>
-<td>browsing_role</td>
-<td>3,-98,-99</td>
-<td>ロールID</td>
-</tr>
-<tr class="even">
-<td>21</td>
-<td></td>
-<td>recursive_browsing_role</td>
-<td>false</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>22</td>
-<td></td>
-<td>browsing_group</td>
-<td>(現在存在するすべてのグループを許可)</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>23</td>
-<td></td>
-<td>recursive_browsing_group</td>
-<td>false</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>24</td>
-<td>投稿権限</td>
-<td>contribute_role</td>
-<td>1,2,3,4,-98,-99</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>25</td>
-<td></td>
-<td>recursive_contribute_role</td>
-<td>false</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>26</td>
-<td></td>
-<td>contribute_group</td>
-<td>(現在存在するすべてのグループを許可)</td>
-<td></td>
-</tr>
-<tr class="even">
-<td>27</td>
-<td></td>
-<td>recursive_contribute_group</td>
-<td>false</td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>28</td>
-<td>表示形式</td>
-<td>display_format</td>
-<td>1(一覧形式を表す)</td>
-<td><p>1:一覧形式</p>
-<p>2:目次形式</p></td>
-</tr>
-<tr class="even">
-<td>29</td>
-<td>サムネイル</td>
-<td>image_name</td>
-<td>None</td>
-<td>値に入るのはサムネイル画像のパスを表す文字列</td>
-</tr>
-</tbody>
-</table>
+|No.|キャッシュ名|有効期限|備考|
+|:---|:---|:---|:---|
+|1|index_tree_view_" + os.environ.get('INVENIO_WEB_HOST_NAME') + "_" + lang|無期限|ユーザ権限に基づく加工前のルートインデックスのツリー情報。<br/>　・キャッシュ名の［ホスト名(INVENIO_WEB_HOST_NAME)］、［言語(current_i18n.language)］は設定に応じて変わる<br/>　　例）index_tree_view_weko3.example.org_ja<br/>ユーザ＝認証あり:当該redisキャッシュを使用する。<br/>ユーザ＝認証なし:No2のredisキャッシュが存在しない場合、No2のredisキャッシュ生成のために当該redisキャッシュを使用する。|
+|2|index_reset_tree_view_" + os.environ.get('INVENIO_WEB_HOST_NAME') + "_" + lang|有効期限(秒) = 有効期限日時 - キャッシュ登録日時|非ログインユーザ向けに加工したMore表示が有効のルートインデックスのツリー情報<br/>ツリー情報取得処理、詳細検索条件用の情報取得処理の改善用<br/>・キャッシュ名の［ホスト名(INVENIO_WEB_HOST_NAME)］、［言語(current_i18n.language)］は設定に応じて変わる<br/>例）index_reset_tree_view_weko3.example.org_ja<br/>・有効期限の［有効期限日時］は、キャッシュ登録日の翌00時00分00秒とする<br/>例）[キャッシュ登録日時］2025-04-01 23:59:00　［有効期限日時］2025-04-02 00:00:00　［有効期限］60秒<br/>※公開日が未来日に設定されたインデックス情報は削除された状態でredisキャッシュに保存される。<br/>そのため公開日を迎えたインデックスが表示されるように、日付が変わるタイミングで毎日キャッシュを削除する必要がある。<br/>・ユーザ認証なしの権限に基づいた加工後のルートインデックスのツリー情報を保存する<br/>ユーザ認証なしの場合に、当該redisキャッシュを使用する|
+
+
+
+5\. 設定
+
+  - GakuNin mAPから連携されたグループ情報の閲覧権限初期値を設定する。（Trueの場合、閲覧権限ありとして初期値を設定する。）
+
+      - パス：<https://github.com/RCOSDP/weko/blob/v1.1.0/modules/weko-index-tree/weko_index_tree/config.py#L96>
+
+      - 設定キー：WEKO\_INDEXTREE\_GAKUNIN\_GROUP\_DEFAULT\_BROWSING\_PERMISSION
+
+      - 現在の設定値：
+
+> WEKO\_INDEXTREE\_GAKUNIN\_GROUP\_DEFAULT\_BROWSING\_PERMISSION = False
+
+  - GakuNin mAPから連携されたグループ情報の投稿権限初期値を設定する。（Trueの場合、投稿権限ありとして初期値を設定する。）
+
+      - パス：<https://github.com/RCOSDP/weko/blob/v1.1.0/modules/weko-index-tree/weko_index_tree/config.py#L99>
+
+      - 設定キー：WEKO\_INDEXTREE\_GAKUNIN\_GROUP\_DEFAULT\_CONTRIBUTE\_PERMISSION
+
+      - 現在の設定値：
+
+> WEKO\_INDEXTREE\_GAKUNIN\_GROUP\_DEFAULT\_CONTRIBUTE\_PERMISSION = False
+
+
+|インデックスツリー設定値| | | | |
+|:---:|:---:|:---:|:---:|:---:|
+|\#|項目(日本語)|DBキー|デフォルト値|備考|
+|1|なし|id|(現在の時間を元にしたもの)|time.timeメソッドに1000を掛けた値|
+|2|なし|parent|(親インデックスのID)|rootindex下なら初期値0|
+|3|インデックス|index_name|New Index| |
+|4| |index_name_english|New Index|必須事項|
+|5|インデックスURL| |(インデックスの固定URL)|※表示のみ|
+|6|CNRI| |(インデックスのCNRI)|※表示のみ|
+|7|コメント|comment|None| |
+|8|公開|public_state|false| |
+|9| |public_date|None|yyyy/MM/dd HH:mm:ssの形式|
+|10| |recursive_public_state|false| |
+|11|インデックスリンク|index_link_enabled|false| |
+|12| |index_link_name|None| |
+|13| |index_link_name_english|New Index|必須事項|
+|14|表示範囲|more_check|false| |
+|15| |display_no|5|表示数|
+|16|RSSアイコン|rss_status|false| |
+|17|PDFCoverPage|coverpage_state|false| |
+|18| |recursive_coverpage_state|None| |
+|19|ハーベスト公開|harvest_public_state|true| |
+|20|ONLINE_ISSN|online_issn|None| |
+|21| |biblio_flag|None| |
+|22|閲覧権限|browsing_role|3,-98,-99|ロールID|
+|23| |recursive_browsing_role|false| |
+|24| |browsing_group|(現在存在するすべてのグループを許可)| |
+|25| |recursive_browsing_group|false| |
+|26|投稿権限|contribute_role|1,2,3,4,-98,-99| |
+|27| |recursive_contribute_role|false| |
+|28| |contribute_group|(現在存在するすべてのグループを許可)| |
+|29| |recursive_contribute_group|false| |
+|30|表示形式|display_format|1(一覧形式を表す)|1:一覧形式, 2:目次形式| |
+|31|サムネイル|image_name|None|値に入るのはサムネイル画像のパスを表す文字列|
 
   - インデックス編集について
-    
       - 【Administration \> インデックスツリー管理(Index Tree) \> ツリー編集（Edit Tree）】画面にてインデックスを編集後、「送信」ボタンを押下することでweko\_index\_tree.rest.putメソッドを呼び出し、同フォルダのapi.pyのupdateメソッドでテーブルを更新する。それによって編集した箇所が上記の表の対応するテーブルキーでindexテーブルの値を更新する。
-    
       - なおweko\_index\_tree.api.updateメソッド実行時、表の\#8,16,21,23,25,27がtrueの場合、それに対応するメソッドが呼び出される。それによって対応する設定が編集されたインデックスの子以下で同じように適用され、indexテーブルを更新する。
 
   - インデックス削除について
-    
-      - 【Administration \> インデックスツリー管理(Index Tree) \> ツリー編集（Edit Tree）】画面にてインデックスを選択後、「削除」ボタンを押し、ポップアップの選択肢「すべて削除」を押下する。この操作によってweko\_index\_tree.rest.deleteにて同フォルダのutil.pyのperform\_delete\_indexメソッドが呼び出される。このメソッドによってindexテーブルから該当インデックスとその子インデックスを物理削除。
+      - 【Administration \> インデックスツリー管理(Index Tree) \> ツリー編集（Edit Tree）】画面にてインデックスを選択後、「削除」ボタンを押し、ポップアップの選択肢「すべて削除」を押下する。この操作によってweko\_index\_tree.rest.deleteにて同フォルダのutil.pyのperform\_delete\_indexメソッドが呼び出される。このメソッドによってindexテーブルから該当インデックスとその子インデックスを論理削除する。
+      また、インデックス追加時に作成したハンドルはインデックスの削除と同時に削除を実施する。
 
   - インデックス移動について
-    
       - 【Administration \> インデックスツリー管理(Index Tree) \> ツリー編集（Edit Tree）】画面にてインデックスをドラッグアンドドロップすることで親インデックスの変更、または表示する順番の変更ができる。その変更をした際に、weko\_index\_tree.rest.putメソッドにて同フォルダのapi.pyのmoveメソッドが呼び出される。このメソッドによってindexテーブルのキー「parent」、「position」の値を変更する。
 
   - キャッシュについて
-    
       - インデックスを作成、編集、削除、移動した際に、weko\_index\_tree.utils.save\_index\_trees\_to\_redisメソッドを用いて、インデックスツリーの日英の親子関係をredisに保存している。
-
-<!-- end list -->
 
 ## 更新履歴
 
 |日付|GitHubコミットID|更新内容|
-|---|---|---|
-|2024/07/1|7733de131da9ad59ab591b2df1c70ddefcfcad98|v1.0.7対応|
-|2023/08/31|353ba1deb094af5056a58bb40f07596b8e95a562|初版作成|
+|:---:|:---:|:---:|
+| 2023/08/31|353ba1deb094af5056a58bb40f07596b8e95a562|初版作成|
+| 2024/07/01|7733de131da9ad59ab591b2df1c70ddefcfcad98|v1.0.7対応|
+| 2024/08/27|f49b016c92ef98e0656947bf651ca1a2f3dbc286|v1.0.8|
+| 2025/01/23|-|サブリポジトリ対応|
+| 2025/01/30|3530eae9075af6afc57b777d8c3137f038523610|学認mAP連携対応|
+| 2025/10/10|3581747ebfbda5f623e7b8da759293d2090c4112|インデックス公開ロック機能追加|
+| 2025/11/12|5254da1cf9caafb27a27f361ae36099da4f2c042|キャッシュ機能の改善|
+
 

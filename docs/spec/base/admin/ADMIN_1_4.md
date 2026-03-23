@@ -346,7 +346,7 @@
 
   - 作成者
     
-      - 作成者識別子SchemeをID Prefixから自動で取得する
+      - ~~作成者識別子SchemeをID Prefixから自動で取得する~~ (v2.0.0)
     
       - 作成者識別子と作成者識別子Schemeから自動設定されるため、作成者識別子URIは非活性項目になっている
     
@@ -374,7 +374,7 @@
 
   - 寄与者
     
-      - 寄与者識別子SchemeをID Prefixから自動で取得する
+      - ~~寄与者識別子SchemeをID Prefixから自動で取得する~~ (v2.0.0)
     
       - 寄与者識別子と寄与者識別子Schemeから自動設定されるため、寄与者識別子URIは非活性項目になっている
 
@@ -402,7 +402,7 @@
 
   - 権利者情報
     
-      - 権利者識別子SchemeをID Prefixから自動で取得する
+      - ~~権利者識別子SchemeをID Prefixから自動で取得する~~ (v2.0.0)
     
       - 権利者識別子と権利者識別子Schemeから自動設定されるため、権利者識別子URIは非活性項目になっている
 
@@ -582,6 +582,16 @@
 <th>日付</th>
 <th>GitHubコミットID</th>
 <th>更新内容</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><blockquote>
+<p>2025/12/08</p>
+</blockquote></td>
+<td>ecc4cc7112aa59c2bc52f97fe3c3836aec5fd206</td>
+<td>v2.0.0 対応</td>
+</tr>
 </tr>
 </thead>
 <tbody>

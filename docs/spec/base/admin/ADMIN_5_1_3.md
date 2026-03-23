@@ -13,34 +13,11 @@
 
   - > 利用可能なロール
 
-<table>
-<thead>
-<tr class="header">
-<th>ロール</th>
-<th>システム<br />
-管理者</th>
-<th>リポジトリ<br />
-管理者</th>
-<th>コミュニティ<br />
-管理者</th>
-<th>登録ユーザー</th>
-<th>一般ユーザー</th>
-<th>ゲスト<br />
-(未ログイン)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>利用可否</td>
-<td>○</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
+|ロール|システム<br>管理者|リポジトリ<br>管理者|サブリポジトリ<br>管理者|登録ユーザー|一般ユーザー|ゲスト<br>(未ログイン)|
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+|利用可否|○|○|○※| | | |
+
+※サブリポジトリ管理者の場合は管理するコミュニティに紐づく所属機関識別子のみ編集可能
 
   - > 機能内容
 
@@ -55,9 +32,12 @@
           - 「IDスキーマ名（Scheme）」：所属機関のSchemeが表示される。
         
           - 「URL」：所属機関のURLが表示される。
+
+          - 「コミュニティ（Community）」：所属機関を管理するコミュニティが表示される。
         
           - 「コントロール（Control）」：コントロールのボタンが表示される。  
-            コントロールのボタンは［編集（Edit）］、［追加（Add）］である。
+            コントロールのボタンは［編集（Edit）］、［追加（Add）］である。  
+            コミュニティ管理者の場合、管理対象外のコミュニティに紐づく所属機関の［編集（Edit）］ボタンは非活性表示される。
     
       - クリーンビルド環境での初期設定値は以下の通りである。
         
@@ -71,25 +51,36 @@
     
       - \[追加（Add）\]ボタンを押すと、入力内容をチェックする。
         
-          - 問題があれば、外部著者ID Prefixを追加せず、エラーメッセージを表示する。
+          - 問題があれば、Affiliation IDを追加せず、エラーメッセージを表示する。
             
               - 何かの項目を入力しない場合、またはURL形式が不正場合は以下のメッセージを表示する。  
                 エラーメッセージ：「Please enter the correct ＋　項目名」
             
               - 設定されたSchemeを選択する場合は以下のメッセージを表示する。  
                 エラーメッセージ：「Specified scheme is already exist.」
+
+              - コミュニティ管理者が管理対象外のコミュニティを選択した場合は以下のメッセージを表示する。  
+                エラーメッセージ：「You do not have permission for this Affiliation ID’s communities: {1}.」  
+                ※ {1}: 該当コミュニティのID
+
+              - コミュニティ管理者が自身の管理するコミュニティを一つも選択しない場合以下のメッセージを表示する。  
+                エラーメッセージ：「You must include at least one managed community.」
         
-          - 問題なければ、外部著者ID Prefixを追加し、以下のメッセージを表示する。  
+          - 問題なければ、Affiliation IDを追加し、以下のメッセージを表示する。  
             メッセージ：「Successfully added」
     
       - \[編集（Edit）\]ボタンを押すと、該当のAffiliation ID情報を編集可能とし、コントロールのボタンを該当行の直下に表示する。  
         コントロールのボタン：\[保存 （Save）」、\[キャンセル（Cancel）\]、\[削除（Delete）\]
         
-          - 該当の外部著者ID Prefix情報を編集してから、\[保存 （Save）\]ボタンを押すと、編集内容を保存し、以下のメッセージを表示する。  
+          - 該当のAffiliation ID情報を編集してから、\[保存 （Save）\]ボタンを押すと、編集内容を保存し、以下のメッセージを表示する。  
             メッセージ：「Update completed」
         
-          - \[削除（Delete）\]ボタンを押すと、該当の外部著者ID Prefixを削除し、以下のメッセージを表示する  
+          - \[削除（Delete）\]ボタンを押すと、該当のAffiliation IDを削除し、以下のメッセージを表示する  
             メッセージ：「Successfully deleted」
+
+              - コミュニティ管理者が管理対象外のコミュニティに紐づくID Prefixを削除しようとした場合、Affiliation IDを削除せず、以下のエラーメッセージを表示する。  
+                エラーメッセージ：「You do not have permission for this Affiliation ID’s communities: {1}.」  
+                ※ {1}: 該当コミュニティのID
         
           - \[キャンセル（Cancel）\]ボタンを押すと、編集前の状態に戻る。
 
@@ -157,26 +148,13 @@
 
   - 追加時は、追加したい情報を最下部のテキストボックスに入力後に\[追加（Add）\]ボタンを押すことで、weko\_authors.views.create\_affiliationが呼び出され、db内のauthors\_affiliation\_settingsテーブル内に情報が追加される。
 
+  - Affiliation IDとコミュニティとの関連付けは、中間テーブル`author_affiliation_community_relations`により多対多の関係で管理される。各操作時には、ログインユーザーが所属するコミュニティに紐づくAffiliation IDのみを対象として処理が行われる。
+
 <!-- end list -->
 
   - > 更新履歴
 
-<table>
-<thead>
-<tr class="header">
-<th>日付</th>
-<th>GitHubコミットID</th>
-<th>更新内容</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><blockquote>
-<p>2023/08/31</p>
-</blockquote></td>
-<td>353ba1deb094af5056a58bb40f07596b8e95a562</td>
-<td>初版作成</td>
-</tr>
-</tbody>
-</table>
-
+|日付|GitHubコミットID|更新内容|
+|:---:|:---:|:---:|
+|> 2023/08/31|353ba1deb094af5056a58bb40f07596b8e95a562|初版作成|
+|> 2025/01/23|-|サブリポジトリ対応|

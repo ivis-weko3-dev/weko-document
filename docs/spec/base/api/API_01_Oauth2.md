@@ -14,7 +14,7 @@ API-8-5の機能を用いて、OAuthアプリケーション、またはトー�
 
   - 【アカウント(Account)\>Applications】画面にてOAuthアプリケーション、OAuthトークンを登録することができる。
 
-  - 詳細は[USER-8-5 API設定](https://ivis.sharepoint.com/sites/NIIDMR646/Shared%20Documents/%5bWEKO3%5d10_開発/01.開発/2023/JAIRO%20Cloud（WEKO3）のドキュメント整備/機能設計書/マージ前/機能設計書_WebAPI_API-1-6.docx#_API設定)を参照すること
+  - 詳細は[USER-8-5 API設定](../user/USER_8_5.md)を参照すること
 
 **Authorize URL (GET) /oauth/authorize**
 
@@ -55,6 +55,13 @@ Query parametersの値を以下とする。
 > /oauth/authorize…に接続した際、許可される内容について表示される。
 > 
 > 「Authorize application」ボタンを押下すると、codeとstateの値がサーバー側からクライアント側に渡される。
+
+レスポンスコード
+
+  | コード | 説明                                                          |
+  | ------ | ------------------------------------------------------------- |
+  | 200    | ・正常終了<br>・ユーザが OAuth 認証画面で Reject を押下した時 |
+  | 400    | リクエストに不備がある時                                     |
 
 **Access token URL (POST) /oauth/token**
 
@@ -107,6 +114,13 @@ Request body parametersを以下のものだとする。
 > accessurl = 'https://「weko3の接続先」/oauth/token'
 > 
 > request = requests.post(url=accessurl, data=params)
+
+レスポンスコード
+
+  | コード | 説明                                                          |
+  | ------ | ------------------------------------------------------------- |
+  | 200    | 正常終了|
+  | 400    | リクエストに不備がある時                                     |
 
 **アクセストークンの発行**
 
@@ -225,7 +239,7 @@ url, headers, body = oauth.prepare_token_request('https://dev.ir.rcos.nii.ac.jp/
 
   - > 関連モジュール
 
-> invenio\_oauth2server
+> invenio\_oauth2server 
 
   - > 更新履歴
 
@@ -251,6 +265,13 @@ url, headers, body = oauth.prepare_token_request('https://dev.ir.rcos.nii.ac.jp/
 </blockquote></td>
 <td>7733de131da9ad59ab591b2df1c70ddefcfcad98</td>
 <td>v1.0.7対応</td>
+</tr>
+<tr class="odd">
+<td><blockquote>
+<p>2025/06/11</p>
+</blockquote></td>
+<td></td>
+<td>レスポンスコードを追記</td>
 </tr>
 </tbody>
 </table>

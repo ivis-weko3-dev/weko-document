@@ -28,44 +28,57 @@
     
       - 「Action User」カラムに、アクションを実行するユーザーを限定できる
         
-          - 「Action User」プルダウンを選択する。「Action User」プルダウンでの選択肢は現在システムに登録されたユーザーである
-            
+          - 「Action User」プルダウンから選択する。「Action User」プルダウンの選択肢は以下である。
+
+              - システム管理者、リポジトリ管理者は、システムに登録されたすべてのユーザが表示される。
+
+              - サブリポジトリ管理者は、自身が管理するサブリポジトリに関連するユーザのみが表示される。
+
+              - 「Item Registration」アクションに対して
+
+                  - 「Action User」プルダウンの値下にある、「登録者にメールを送信する」チェックボックスと「利用申請時に、アイテム登録者に対しメールを送信する」チェックボックスで利用申請時に送信するメールの送信可否を設定する。
+
+                      - admin_settings テーブルの name が restricted_access のレコードの settings.edit_mail_templates_enable が true の場合のみ有効
+
+                      - 「登録者にメールを送信する」チェックボックス：利用申請時に、申請者に対して送信するメールを設定する。
+
+                      - 「利用申請時に、アイテム登録者に対しメールを送信する」チェックボックス：利用登録/利用申請時に、申請先アイテムの登録者に対して送信するメールを設定する。
+
               - 「Approval」アクションに対して
                 
-                  - 選択肢はシステムに登録しているユーザーと、「プロパティを指定」(Specify Property)である
+                  - 選択肢は上記のユーザーと、「アイテム登録者」、「プロパティを指定」(Specify Property)である
+
+                      - 「アイテム登録者」および「プロパティを指定」は　admin_settings テーブルの name が restricted_access のレコードの settings.edit_mail_templates_enable が true の場合のみ有効
+
+                      - 「アイテム登録者」を設定した場合には、workflow_flow_action_role テーブルの action_item_registrant に true を設定する。
+
+                      - action_item_registrant が true の場合には該当フローを用いたワークフローで approval 時にアイテム登録者が承認者として action_user に設定される。
+
+                      - 「アイテム登録者」を選択した場合には、「承認依頼通知メール」は発行されない。
                     
-                      - 「プロパティを指定」(Specify Property)を選択した場合、「プロパティを指定する」(Specify Property)モーダル画面を表示する。当該画面でプロパティを選択する
+                      - 「プロパティを指定」(Specify Property)を選択した場合、「プロパティを指定する」(Specify Property)モーダル画面を表示する。当該画面でプロパティを選択する。
                     
-                      - モーダル画面には、プロパティ定義に「"approval":true」キーワードを持つプロパティ名を表示する
+                      - モーダル画面には、プロパティ定義に「"approval":true」キーワードを持つプロパティ名を表示する。
                     
-                      - モーダルに表示しているプロパティを選択して「設定」(Setting)ボタンを押すことで、プロパティを指定できる
+                      - モーダルに表示しているプロパティを選択して「設定」(Setting)ボタンを押すことで、プロパティを指定できる。
                     
-                      - 「閉じる」（Close）ボタンを押すと、モーダルを閉じる
+                      - 「閉じる」（Close）ボタンを押すと、モーダルを閉じる。
                 
-                  - 「Item Resistration」アクションの以下チェックボックスにチェックを入れることで、管理者画面で登録したメールを自動送信することができる
-                    
-                      - チェックボックス：「Send an email to the registrant」  
-                        Item Resistration登録完了時に、登録者にリマインドメールを送信する  
-                        **\*\***\*チェックボックスをクリックすると、チェックボックス下のリストボックスが活性する。
-                        
-                          - リストボックスから、【Admin \> 設定 \> メールテンプレート】で登録したメールのタイトルを選択することができる。
-                
-                  - 「Approval」アクションごとに以下チェックボックスにチェックを入れることで、管理者画面で登録したメールを自動送信することができる
-                    
-                      - チェックボックス
+                  - 「Approval」アクションごとに通知メールを設定できるモーダル画面を表示する「通知メール設定」ボタンを表示する。
+
+                      - admin_settings テーブルの name が restricted_access のレコードの settings.edit_mail_templates_enable が true の場合のみ有効
+
+                      - モーダル画面に表示されたチェックボックスにチェックを入れ、プルダウンからメールテンプレートを設定することで、管理者画面で登録したメールを自動送信することができる。
+
                         
                           - 「承認依頼通知メール」（Approval Request Notification Email）  
-                            Approvalフロー遷移時に、設定した承認者に承認を依頼するメールを送信する
+                            承認者に承認を依頼するメールを送信する。
                         
                           - 「承認却下通知メール」（Approval Rejection Notification Email）  
-                            Approvalフローにて承認者が却下を行った場合、登録者に承認者が却下された旨を通知するメールを送信する
-                        
-                          - 「承認通知メール」（Approval Notification Email）  
-                            Approvalフローにて承認者が承認を行った場合、登録者に承認者が承認された旨を通知するメールを送信する
-                    
-                      - チェックボックスをクリックすると、チェックボックス下のリストボックスが活性する。
-                        
-                          - リストボックスから、【Admin \> 設定 \> メールテンプレート】で登録したメールのタイトルを選択することができる。
+                            登録者に承認者が却下された旨を通知するメールを送信する。
+                          
+                          - 「承認通知メール」（Approval Notification Email」
+                            登録者に承認者が承認された旨を通知するメールを送信する。
         
           - 「Deny」チェックボックスにチェックを入れる場合、選択されているユーザーが実施不可とする
     
@@ -99,7 +112,6 @@
                 制限公開フラグ：チェックする  
                 GakuNinRDM Flag：チェックしない  
                 登録インデックスの指定：利用申請（インデックスにて登録）
-            
               - 表示/非表示  
                 　表示：System Administrator, Repository Administrator  
                 　非表示：Contributor,Community Administrator
@@ -110,7 +122,32 @@
                 アイテムタイプ：二段階利用申請  
                 制限公開フラグ：チェックする  
                 GakuNinRDM Flag：チェックしない  
-                登録インデックスの指定：利用申請（インデックスにて登録)
+                登録インデックスの指定：利用申請（インデックスにて登録）
+              - 表示/非表示  
+                　表示：System Administrator, Repository Administrator  
+                　非表示：Contributor,Community Administrator
+              
+              - 利用登録 
+                ワークフロー: 利用登録 
+                フロー：利用登録 
+                アイテムタイプ：利用申請 
+                制限公開フラグ：チェックする 
+                GakuNinRDM Flag：チェックしない 
+                登録インデックスの指定：利用申請（インデックスにて登録
+              - 表示/非表示  
+                　表示：System Administrator, Repository Administrator  
+                　非表示：Contributor,Community Administrator
+              
+              - 利用規約のみ 
+                ワークフロー: 利用規約のみ 
+                フロー：利用規約のみ 
+                アイテムタイプ：利用申請 
+                制限公開フラグ：チェックする 
+                GakuNinRDM Flag：チェックしない 
+                登録インデックスの指定：利用申請（インデックスにて登録） 
+                表示/非表示 
+                　表示：System Administrator, Repository Administrator 
+                　非表示：Contributor,Community Administrator 
             
               - 
               - 
@@ -131,11 +168,16 @@
 </thead>
 <tbody>
 <tr class="odd">
+<td>2025/10/31</td>
+<td>160a811eed2c61492558905db34fa0619da6b18f</td>
+<td>設定値による表示制御を記載</td>
+</tr>
+<tr class="even">
 <td>2024/01/19</td>
 <td></td>
 <td></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><blockquote>
 <p>2023/08/31</p>
 </blockquote></td>

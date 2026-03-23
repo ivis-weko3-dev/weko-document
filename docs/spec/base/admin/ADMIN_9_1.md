@@ -12,34 +12,9 @@
 
   - > 利用可能なロール
 
-<table>
-<thead>
-<tr class="header">
-<th>ロール</th>
-<th>システム<br />
-管理者</th>
-<th>リポジトリ<br />
-管理者</th>
-<th>コミュニティ<br />
-管理者</th>
-<th>登録ユーザー</th>
-<th>一般ユーザー</th>
-<th>ゲスト<br />
-(未ログイン)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>利用可否</td>
-<td>○</td>
-<td>○</td>
-<td>○</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
+|ロール|システム<br>管理者|リポジトリ<br>管理者|サブリポジトリ<br>管理者|登録ユーザー|一般ユーザー|ゲスト<br>(未ログイン)|
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+|利用可否|○|○|○| | | |
 
   - > 機能内容
 
@@ -64,7 +39,7 @@
       - Metadata Prefix：メタデータスキーマを指定。必須項目。  
         jpcoar, oai\_dc, ddi, jpcoar\_v1,jpcoar\_v2,lomのいずれかを入力する必要がある。前述の５つ以外でも登録は可能であるが、実行はできない。
     
-      - Target Index：ハーベストされたアイテムに対して登録先インデックスを指定。必須項目。インデックスツリー一覧からプルダウン形式で選択。
+      - Target Index：ハーベストされたアイテムに対して登録先インデックスを指定。必須項目。インデックスツリー一覧からプルダウン形式で選択。サブリポジトリ管理者の場合は管理対象のサブリポジトリに属するインデックスのみ表示。
     
       - Update Style：更新方法。Bulk/Differenceからプルダウン形式で選択。初期値はBulk。
         
@@ -284,111 +259,16 @@
         
           - 存在しない場合、新規登録をする
             
-              - 該当アイテムがどのハーベスト用アイテムタイプに属するか、確認する
-                
-                  - 「dc:type」の値を元に、ハーベスト用アイテムタイプを以下のように確定できる  
-                    パス：   
-                    https://github.com/RCOSDP/weko/blob/13c305a3048309dbda87a614ffedac18423820aa/modules/invenio-oaiharvester/invenio\_oaiharvester/harvester.py\#L1078
+              - Metadata Prefix の設定によって、アイテムタイプを決まる （v2.0.0）
 
-> RESOURCE\_TYPE\_MAP = {
-> 
-> 'conference paper': 'Conference Paper',
-> 
-> 'data paper': 'Journal Article',
-> 
-> 'departmental bulletin paper': 'Departmental Bulletin Paper',
-> 
-> 'editorial': 'Article',
-> 
-> 'journal article': 'Journal Article',
-> 
-> 'newspaper': 'Journal Article',
-> 
-> 'periodical': 'Article',
-> 
-> 'review article': 'Article',
-> 
-> 'software paper': 'Article',
-> 
-> 'article': 'Article',
-> 
-> 'book': 'Book',
-> 
-> 'book part': 'Book',
-> 
-> 'cartographic material': 'Others',
-> 
-> 'map': 'Others',
-> 
-> 'conference object': 'Presentation',
-> 
-> 'conference proceedings': 'Presentation',
-> 
-> 'conference poster': 'Presentation',
-> 
-> 'dataset': 'Data or Dataset',
-> 
-> 'interview': 'Others',
-> 
-> 'image': 'Others',
-> 
-> 'still image': 'Others',
-> 
-> 'moving image': 'Others',
-> 
-> 'video': 'Others',
-> 
-> 'lecture': 'Others',
-> 
-> 'patent': 'Others',
-> 
-> 'internal report': 'Others',
-> 
-> 'report': 'Research Paper',
-> 
-> 'research report': 'Research Paper',
-> 
-> 'technical report': 'Technical Report',
-> 
-> 'policy report': 'Others',
-> 
-> 'report part': 'Others',
-> 
-> 'working paper': 'Others',
-> 
-> 'data management plan': 'Others',
-> 
-> 'sound': 'Others',
-> 
-> 'thesis': 'Thesis or Dissertation',
-> 
-> 'bachelor thesis': 'Thesis or Dissertation',
-> 
-> 'master thesis': 'Thesis or Dissertation',
-> 
-> 'doctoral thesis': 'Thesis or Dissertation',
-> 
-> 'interactive resource': 'Others',
-> 
-> 'learning object': 'Learning Material',
-> 
-> 'manuscript': 'Others',
-> 
-> 'musical notation': 'Others',
-> 
-> 'research proposal': 'Others',
-> 
-> 'software': 'Software',
-> 
-> 'technical documentation': 'Others',
-> 
-> 'workflow': 'Others',
-> 
-> 'other': 'Others'
-> 
-> }
-
-  - アイテムのメタデータにJPCOARスキーマの「dc:type」の値がない、または「dc:type」の値が上記の値に含まらない場合、デフォルトのハーベスト用アイテタイプ「Multiple」としてハーベストする。
+                |Metadata Prefix の値|使用しているハーベスト用アイテムタイプ|
+                |:--|:--|
+                |oai_dc|Multiple|
+                |jpcoar|Multiple|
+                |jpcoar_1.0|Multiple|
+                |jpcoar_2.0|Multiple|
+                |oai_ddi25|Harvesting DDI|
+                |ddi|Harvesting DDI|
 
 <!-- end list -->
 
@@ -462,21 +342,8 @@
 
   - > 更新履歴
 
-<table>
-<thead>
-<tr class="header">
-<th>日付</th>
-<th>GitHubコミットID</th>
-<th>更新内容</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><blockquote>
-<p>2023/08/31</p>
-</blockquote></td>
-<td>353ba1deb094af5056a58bb40f07596b8e95a562</td>
-<td>初版作成</td>
-</tr>
-</tbody>
-</table>
+|日付|GitHubコミットID|更新内容|
+|:---:|:---:|:---:|
+|> 2023/08/31|353ba1deb094af5056a58bb40f07596b8e95a562|初版作成|
+|> 2025/01/23|-|サブリポジトリ対応|
+|> 2025/12/22|3746dcec79f1b508e40d8ba078c3165cd8acca3a|v2.0.0 対応|
