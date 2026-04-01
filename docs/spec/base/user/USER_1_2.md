@@ -261,6 +261,12 @@
 <td>geopoint_JA_1</td>
 <td>geo_distance</td>
 </tr>
+<tr class="odd">
+<td>27</td>
+<td>アクセス権<br />
+(Access Rights)</td>
+<td>チェックボックス</td>
+</tr>
 </tbody>
 </table>
 
@@ -601,6 +607,13 @@
 <td>geopoint_JA_1</td>
 <td>geo_point</td>
 <td>geo_point1</td>
+<td></td>
+<tr class="odd">
+<td>26</td>
+<td>アクセス権<br />
+(Access Right)</td>
+<td>Keyword</td>
+<td>Access Right</td>
 <td></td>
 </tr>
 </tbody>
