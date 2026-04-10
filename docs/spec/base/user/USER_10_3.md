@@ -274,7 +274,7 @@
       | 解決済みDOI(doi.org)のURL　      | relation                                              | jpcoar:relation(relationType=isFormatOf)→jpcoar:relatedIdentifier(identifierType=URI)                      |
       | 論文のカテゴリ   | subject                                            | jpcoar:subject(subjectScheme=Other)                   |
       | 論文の主要カテゴリ   | subject                                          | jpcoar:subject(subjectScheme=Other)の先頭                   |
-      | 著者によるコメント   | subject                                          | jpcoar:subject(subjectScheme=Other)の先頭                   |
+      | 著者によるコメント   | description                                          | datacite:description(descriptionType=Other)                  |
       | DOI   | relation | jpcoar:relation(relationType=isVersionOf)→jpcoar:relatedIdentifier(identifierType=DOI)                   |
 
 ## 関連モジュール
@@ -344,7 +344,7 @@
 
   * arXiv API からDOIに紐づくメタデータを取得する
     * `weko_workspace.api.arXivURL.get_data()` を呼び出し、arXiv API からデータを取得する
-      * DataCite API からはXML形式でレスポンスが返却される
+      * arXiv API からはXML形式でレスポンスが返却される
     * 取得したAPIレスポンスを解析し、辞書型に整形する
     * アイテムタイプのJPCOARマッピングに応じた項目にメタデータを設定する
 
