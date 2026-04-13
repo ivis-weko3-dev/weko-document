@@ -243,6 +243,39 @@
       | 収録誌のISSN  | prism:issn                                          | jpcoar:sourceIdentifier             |
       | 関連識別子  | prism:doi                                             | jpcoar:relatedIdentifier(identifierType="DOI")             |
 
+---
+
+### arXiv APIからのメタデータ取得
+
+  - WEB API リクエスト  
+    ※ API仕様： https://info.arxiv.org/help/api/user-manual.html
+    - リクエストURL  https://export.arxiv.org/api/query?search_query=doi:{doi}
+    - method  
+      GET
+    - パラメータ  
+      | パラメーター名 | 説明 | 値 |
+      | ----- | ----- | ----- |
+      | doi | 検索するDOI | {doi}: 入力されたDOI
+
+    - 取得したデータは、アイテムの対応項目および対応するJPCOARマッピング(jpcoar_v2_mapping)が設定されたメタデータ項目に自動入力される
+
+      取得データの入力先メタデータ項目
+      | **データ** | **パス** | **対応するJPCOARマッピング** |
+      | --------- | -------- | --------------------------- |
+      | タイトル      | title                                        | dc:title                              |
+      | arXivの論文ページへのURL       |    identifier                                        | jpcoar:identifier(identifierType=URI)                  |
+      | 論文の提出日     | date                                    | datacite:date(dateType=Submitted)                |
+      | 論文の最終更新日      | date                                        | datacite:date(dateType=Updated)               |
+      | 論文の要約    | description                                |datacite:description(descriptionType=Abstract)                |
+      | 著者の名前     | creator                               　　　　　　　　　| jpcoar:creator→jpcoar:createrName                　　|
+      | 著者の所属機関       | creator                                                                   |jpcoar:creator→jpcoar:affiliation→jpcoar:affiliationName
+      | HTML表示用のURL      | relation                                  | jpcoar:relation(relationType=isFormatOf)→jpcoar:relatedIdentifier(identifierType=URI)             |
+      | pdf表示用のURL   | relation                              | jpcoar:relation(relationType=isFormatOf)→jpcoar:relatedIdentifier(identifierType=URI)    |
+      | 解決済みDOI(doi.org)のURL　      | relation                                              | jpcoar:relation(relationType=isFormatOf)→jpcoar:relatedIdentifier(identifierType=URI)                      |
+      | 論文のカテゴリ   | subject                                            | jpcoar:subject(subjectScheme=Other)                   |
+      | 論文の主要カテゴリ   | subject                                          | jpcoar:subject(subjectScheme=Other)の先頭                   |
+      | 著者によるコメント   | description                                          | datacite:description(descriptionType=Other)                  |
+      | DOI   | relation | jpcoar:relation(relationType=isVersionOf)→jpcoar:relatedIdentifier(identifierType=DOI)                   |
 
 ## 関連モジュール
 
@@ -301,6 +334,17 @@
       * 医中誌Web API にメタデータ取得リクエストを送信する
         * XML形式でレスポンスが返却される
       * レスポンス取得後はログアウトAPIを呼びだす
+    * 取得したAPIレスポンスを解析し、辞書型に整形する
+    * アイテムタイプのJPCOARマッピングに応じた項目にメタデータを設定する
+
+
+---
+
+### arXiv APIからのメタデータ取得
+
+  * arXiv API からDOIに紐づくメタデータを取得する
+    * `weko_workspace.api.arXivURL.get_data()` を呼び出し、arXiv API からデータを取得する
+      * arXiv API からはXML形式でレスポンスが返却される
     * 取得したAPIレスポンスを解析し、辞書型に整形する
     * アイテムタイプのJPCOARマッピングに応じた項目にメタデータを設定する
 
