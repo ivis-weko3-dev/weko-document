@@ -148,7 +148,7 @@
         2. 1を満たさずファイルのアクセスがopen_date、日付が未来である場合embargoed accessで表示される
         3. 1,2を満たさずファイルのアクセスがopen_loginが存在する場合、restricted accessで表示される
         4. すべてのファイルが「open_access」または「アクセスがopen_date,日付が処理日以前」である場合open accessで表示される
-        5. 1~4を満たさない場合、ｍembargoed accessのままとなる
+        5. 1~4を満たさない場合、embargoed accessのままとなる
 
 2 Permalink欄の表示について
 

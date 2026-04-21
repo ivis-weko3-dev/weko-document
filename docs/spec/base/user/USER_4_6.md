@@ -68,7 +68,7 @@ Item Registrationの一部として、画面上の入力欄でメタデータを
       2. 1を満たさずファイルのアクセスがopen_date、日付が未来である場合embargoed accessに修正される
       3. 1,2を満たさずファイルのアクセスがopen_loginが存在する場合、restricted accessに修正される
       4. すべてのファイルが「open_access」または「アクセスがopen_date,日付が処理日以前」である場合open accessに修正される
-      5. 1~4を満たさない場合、ｍembargoed accessのままとなる
+      5. 1~4を満たさない場合、embargoed accessのままとなる
 
 ### 2. アイテムのメタデータを自動入力できる
 
