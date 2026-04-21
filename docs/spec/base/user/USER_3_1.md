@@ -142,12 +142,13 @@
       - 【Administration \> アイテムタイプ管理(ItemTypes) \> メタデータ (Metadata) 画面】の言語のサブプロパティの"Show List"のチェックを非活性とする。
 
   - Access Rightsの表示について
-    - weko_search_ui/config.py: WEKO_SEARCH_FIX_ACCESSRIGHTSがTrueに設定されている場合、Access RIghtsは以下の条件で表示される
+    - weko_search_ui/config.py: WEKO_SEARCH_FIX_ACCESSRIGHTSがTrueに設定されている場合、Access Rightsは以下の条件で表示される
       - Access Rights:embargoed accessの場合
         1. ファイルのアクセスにopen_restrictredが存在する場合、restricted accessで表示される
         2. 1を満たさずファイルのアクセスがopen_date、日付が未来である場合embargoed accessで表示される
-        3. 1,2を満たさずファイルのアクセスがopen_loginが存在する場合、restricted_accessで表示される
-        4. すべてのファイルが「がopen_access」または「アクセスがopen_date,日付が処理日以前」である場合open accessで表示される
+        3. 1,2を満たさずファイルのアクセスがopen_loginが存在する場合、restricted accessで表示される
+        4. すべてのファイルが「open_access」または「アクセスがopen_date,日付が処理日以前」である場合open accessで表示される
+        5. 1~4を満たさない場合、ｍembargoed accessのままとなる
 
 2 Permalink欄の表示について
 

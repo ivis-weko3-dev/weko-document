@@ -596,20 +596,20 @@
 <td></td>
 </tr>
 <tr class="odd">
-<td>24</td>
+<td>25</td>
 <td>float_JA_1</td>
 <td>float_range</td>
 <td>float_range1</td>
 <td></td>
 </tr>
 <tr class="even">
-<td>25</td>
+<td>26</td>
 <td>geopoint_JA_1</td>
 <td>geo_point</td>
 <td>geo_point1</td>
 <td></td>
 <tr class="odd">
-<td>26</td>
+<td>27</td>
 <td>アクセス権<br />
 (Access Right)</td>
 <td>Keyword</td>
