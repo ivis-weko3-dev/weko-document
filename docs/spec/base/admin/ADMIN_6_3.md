@@ -87,7 +87,7 @@
               - 件名：\[○○機関リポジトリ\]YYYY.MM-yyyy.mm statistics report  
                 ※YYYY.MMは集計月(from), yyyy.mmは集計月(to)を表示
             
-              - メールのテンプレート： https://github.com/RCOSDP/weko/blob/v0.9.26\_hiroba/modules/weko-admin/weko\_admin/templates/weko\_admin/email\_templates/site\_license\_report.html
+              - メールのテンプレート： https://github.com/RCOSDP/weko/blob/v0.9.26_hiroba/modules/weko-admin/weko_admin/templates/weko_admin/email_templates/site_license_report.html
             
               - 本文：サイトライセンス利用統計の内容
                 
