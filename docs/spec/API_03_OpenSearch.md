@@ -112,8 +112,8 @@ query.opensearch_factory※</td>
 <td></td>
 <td><ul><li><p>0</p></li>
 <li><p>1</p></li></ul></td>
-<td>0:idxで指定したインデックスの子インデックスを検索対象にしない<br>
-1:idxで指定したインデックスの子インデックスを検索対象にする</td>
+<td>0: idxで指定したインデックスの子インデックスを検索対象にしない<br>
+1: idxで指定したインデックスの子インデックスを検索対象にする</td>
 </tr>
 <tr class="even">
 <td>sort</td>
@@ -126,10 +126,10 @@ query.opensearch_factory※</td>
 </ul></td>
 <td>ソート方法を指定する<br>
 
-controlnumber:アイテムID降順<br>
--controlnumber:アイテムID昇順<br>
-custom_sort:カスタムソート昇順<br>
--custom_sort:カスタムソート降順<br>
+controlnumber: アイテムID降順<br>
+-controlnumber: アイテムID昇順<br>
+custom_sort: カスタムソート昇順<br>
+-custom_sort: カスタムソート降順<br>
 </td>
 <td></td>
 </tr>
