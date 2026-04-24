@@ -104,7 +104,7 @@
        
               - 添付ファイル名：SiteLicenseUserReport_YYYY.MM-yyyy.mm.zip
             
-              - メールのテンプレート： https://github.com/RCOSDP/weko/blob/v0.9.26\_hiroba/modules/weko-admin/weko\_admin/templates/weko\_admin/email\_templates/site\_license\_report.html
+              - メールのテンプレート： https://github.com/RCOSDP/weko/blob/v0.9.26_hiroba/modules/weko-admin/weko_admin/templates/weko_admin/email_templates/site_license_report.html
             
               - 本文：サイトライセンス利用統計の内容
                 
