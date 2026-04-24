@@ -125,7 +125,6 @@ query.opensearch_factory※</td>
 <li><p>-custom_sort</p></li>
 </ul></td>
 <td>ソート方法を指定する<br>
-
 controlnumber: アイテムID降順<br>
 -controlnumber: アイテムID昇順<br>
 custom_sort: カスタムソート昇順<br>
