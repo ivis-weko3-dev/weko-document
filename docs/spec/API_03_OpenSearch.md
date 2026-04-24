@@ -99,13 +99,13 @@ query.opensearch_factory※</td>
 <td>index_id</td>
 <td></td>
 <td>int</td>
-<td>検索対象のインデックスid</td>
+<td>検索対象のインデックスID</td>
 </tr>
 <tr class="even">
 <td>idx</td>
 <td></td>
 <td>string</td>
-<td>検索対象のインデックスid(コンマ区切りで複数指定可)</td>
+<td>検索対象のインデックスID(コンマ区切りで複数指定可)</td>
 </tr>
 <tr class="odd">
 <td>recursive</td>
@@ -126,8 +126,8 @@ query.opensearch_factory※</td>
 </ul></td>
 <td>ソート方法を指定する<br>
 
-controlnumber:アイテムid降順<br>
--controlnumber:アイテムid昇順<br>
+controlnumber:アイテムID降順<br>
+-controlnumber:アイテムID昇順<br>
 custom_sort:カスタムソート昇順<br>
 -custom_sort:カスタムソート降順<br>
 </td>
