@@ -60,6 +60,15 @@ Item Registrationの一部として、画面上の入力欄でメタデータを
     - アイテムとの紐づけを行わない(解除する)場合は、「作成者」パネル内の各入力エリアの右上にある[×]で紐づけを解除する
     - アイテムで個別に編集した作成者の項目は、Adminの著者DBには反映されない。  
     なお、アイテムで個別に編集した後に著者DBから著者を取り込むと、個別編集した項目は上書きされる
+  
+- weko_search_ui/config.py: WEKO_SEARCH_FIX_ACCESSRIGHTSがTrueに設定されている場合
+  - 入力したメタデータが以下のaccessRigthsの修正条件に該当する場合、修正後のAccess Rightsの値でアイテムが登録される
+    - Access Rights:embargoed accessの場合
+      1. ファイルのアクセスにopen_restrictredが存在する場合、restricted accessに修正される
+      2. 1を満たさずファイルのアクセスがopen_date、日付が未来である場合embargoed accessに修正される
+      3. 1,2を満たさずファイルのアクセスがopen_loginが存在する場合、restricted accessに修正される
+      4. すべてのファイルが「open_access」または「アクセスがopen_date,日付が処理日以前」である場合open accessに修正される
+      5. 1~4を満たさない場合、embargoed accessのままとなる
 
 ### 2. アイテムのメタデータを自動入力できる
 

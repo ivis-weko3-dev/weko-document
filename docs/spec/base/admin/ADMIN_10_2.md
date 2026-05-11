@@ -154,6 +154,8 @@
                   - from-until：「Change List」ごとに対象日
                     
                       - フォーマット：YYYY-MM-DDThh:mm:ssZ
+
+                      - 設定値WEKO_SEARCH_FIX_ACCESSRIGHTSがTrueの場合、エンバーゴの期間が終了した日付がupdatedの日付より新しいレコードは、エンバーゴ期間終了日が対象日に該当する。
             
               - 「Change List一覧」のサンプル
 
@@ -259,6 +261,8 @@
           - from-until：「Change Dump」ごとに対象日
             
               - フォーマット：YYYY-MM-DDThh:mm:ssZ
+
+              - 設定値WEKO_SEARCH_FIX_ACCESSRIGHTSがTrueの場合、エンバーゴの期間が終了した日付がupdatedの日付より新しいレコードは、エンバーゴ期間終了日が対象日に該当する。
     
       - 「Change Dump一覧」のサンプル
 

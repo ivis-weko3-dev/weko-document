@@ -106,7 +106,10 @@
             <https://schema.irdb.nii.ac.jp/ja/schema/35>  
               
             updatedの日付のマッピングは、Getrecord、ListRecord、ListIdentifierのheaderにおいて、「datestamp=record.updated,」が使用されており、invenio\_records.api.get\_recordからDBのupdatedを取得している。  
-              
+            
+            設定値WEKO_SEARCH_FIX_ACCESSRIGHTSがTrueの場合、エンバーゴを考慮したupdatedが出力される。
+            AccessRightsがembargoed accessからopen accessに修正される場合、ファイルの公開日とDBのupdatedを比較して、新しい日付がupdatedとして出力される。
+            
             jpcoarスキーマガイドラインに記載されている以下の項目は不要となる
             
               - datacite:date dateType="Created"
