@@ -80,14 +80,14 @@
           - ［保存（Save）］ボタンを押すと、設定内容を保存し、メッセージを表示する  
             メッセージ：「Update successfully」
         
-          - 送信時の処理(v0.9.26)
+          - 送信時の処理(v0.9.22)
             
               - 宛先：チェックした機関のメールアドレス
             
               - 件名：\[○○機関リポジトリ\]YYYY.MM-yyyy.mm statistics report  
                 ※YYYY.MMは集計月(from), yyyy.mmは集計月(to)を表示
             
-              - メールのテンプレート： https://github.com/RCOSDP/weko/blob/v0.9.26_hiroba/modules/weko-admin/weko_admin/templates/weko_admin/email_templates/site_license_report.html
+              - メールのテンプレート： https://github.com/RCOSDP/weko/blob/v0.9.22/modules/weko-admin/weko\_admin/templates/weko\_admin/email\_templates/site\_license\_report.html
             
               - 本文：サイトライセンス利用統計の内容
                 
@@ -207,4 +207,3 @@
 |:---:|:---:|:---:|
 |> 2023/08/31|353ba1deb094af5056a58bb40f07596b8e95a562|初版作成|
 |> 2025/01/23|-|サブリポジトリ対応|
-|> 2026/04/24|-|統計レポート機能の改修|
