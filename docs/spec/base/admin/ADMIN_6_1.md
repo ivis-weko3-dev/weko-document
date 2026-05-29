@@ -203,7 +203,7 @@
               |------------|------------|------------|------------|------------|
               | 1 | Daily | `logReport_<集計日>.zip`  | `logReport_<レポートタイプ>_<集計日>.tsv`  |  Aggregation Period `<集計日>`  | 
               | 2 | Weekly  | `logReport_<集計開始日>_<集計終了日>.zip` | `logReport_<レポートタイプ>_<集計開始日>_<集計終了日>.tsv`  | Aggregation Period `<集計開始日>_<集計終了日>`  |
-              | 3 | Monthly  | `logReport_<集計月>.zip` | `logReport_<レポートタイプ>_<集計月>.tsv`  | Aggregation Period `<集計月>`  | 
+              | 3 | Monthly  | `logReport_<集計月>.zip` | `logReport_<レポートタイプ>_<集計月>.tsv`  | Aggregation Month `<集計月>`  | 
         
           - 定型レポートのオン・オフ
             
