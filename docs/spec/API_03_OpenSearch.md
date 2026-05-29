@@ -80,8 +80,8 @@ query.opensearch_factory※</td>
 <li><p>html</p></li>
 </ul></td>
 <td><p>レスポンス結果のフォーマット</p>
-<p>デフォルトはhtml形式。</p>
-<p>値がhtmlもしくは指定されていない場合、詳細検索画面に遷移する。</p></td>
+<p>デフォルトはhtml形式。（広場機能）</p>
+<p>値がhtmlもしくは指定されていない場合、詳細検索画面に遷移する。（広場機能）</p></td>
 </tr>
 <tr class="odd">
 <td>size</td>
@@ -125,12 +125,10 @@ query.opensearch_factory※</td>
 <li><p>-custom_sort</p></li>
 </ul></td>
 <td>ソート方法を指定する<br>
-controlnumber: アイテムID降順<br>
--controlnumber: アイテムID昇順<br>
-custom_sort: カスタムソート昇順<br>
--custom_sort: カスタムソート降順<br>
+controlnumber: アイテムID順<br>
+custom_sort: カスタムソート順（広場機能）<br>
+「-」を付与することで昇順/降順が切り替わる<br>
 </td>
-<td></td>
 </tr>
 <tr class="odd">
 <td>list_view_num</td>
