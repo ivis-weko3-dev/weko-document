@@ -16,7 +16,7 @@
 
 ## 機能内容
 
-データの連携は以下の流れで行われる(項番は図内の番号と対応している)	
+データの連携は以下の流れで行われる
     
     1. WEKO上でアイテム登録が完了すると同時に、Signalにデータ連携の予約がされる
     2. 予約キューがRabbitMQにエンキューされる
@@ -24,21 +24,81 @@
     4. celerybeatが設定されたタイミングでバッチを起動する
     5. キューから得た情報をもとに、データを取得・変換しデータ登録を行う
 
-・キューは、１つのアイテム登録につき１つ存在する。
-・データ連携は、一括反映が可能なため、著者はまとめて、アイテムごとに反映する。（10MB制限に留意する）
-・WEKOでは１アイテム（＝業績情報）内に複数の著者を抱えているが、researchmapでは１著者に複数の業績情報を抱えている。そのため、１キューあたり、著者数ぶんの連携データを作成する。
-・送信対象の著者は、「コントリビュータ」「著者」欄に登録されている、著者DBに登録されている人を対象とする。
-・Researchmapに登録されている著者が連携対象。アイテムに登録された著者の中で、著者DBにresearchmapの情報が登録されている場合のみ連携する。
-・公開アイテムが連携対象。キューに登録されたアイテムでも、非公開ならば連携は行わない。（コンテンツファイルの公開状態は確認しない）
-・連携結果をWEKO内の結果テーブルに書き戻す。（結果が出るまで待機する）
-・リトライを行う。
+- キューは、１つのアイテム登録につき１つ存在する。
+- データ連携は、一括反映が可能なため、著者はまとめて、アイテムごとに反映する。（10MB制限に留意する）
+- WEKOでは１アイテム（＝業績情報）内に複数の著者を抱えているが、researchmapでは１著者に複数の業績情報を抱えている。そのため、１キューあたり、著者数ぶんの連携データを作成する。
+- 送信対象の著者は、「コントリビュータ」「著者」欄のメタデータに、識別子スキーム「researchmap」で著者IDが登録されている人を対象とする。
+- Researchmapに登録されている著者が連携対象。アイテムメタデータの nameIdentifier（nameIdentifierScheme="researchmap"）に値が存在する著者のみ連携する。
+- 公開アイテムが連携対象。キューに登録されたアイテムでも、非公開ならば連携は行わない。（コンテンツファイルの公開状態は確認しない）
+- 連携済みアイテムの業績IDはWEKO内のlinkage_itemsテーブルに保持する。アイテム更新時の再連携では、保持している業績IDをリクエストに含めることで、researchmap側で既存業績の更新として処理される。
+- 再連携時にresearchmap側で対象業績が見つからない場合（404エラー）、linkage_itemsの該当レコードを削除済み状態（DELETED）に更新する。このとき、新規業績として登録するかどうかをユーザーがキュー投入時に選択できる（should_create_if_not_foundフラグ）。
+- アイテム更新後に連携対象著者が変わった場合、メタデータから消えた著者のlinkage_itemsレコードをDELETED状態に更新し、再追加された著者のレコードはREGISTERED状態に戻す。
+- researchmapから返却された業績IDが既に別アイテムのlinkage_itemsに存在する場合、重複とみなして新規レコードの作成をスキップし、その旨を連携結果メッセージに記録する。
+- linkage_itemsのステータスは REGISTERED（R）と DELETED（D）の2値をとる。DELETED状態のレコードは連携送信の対象外となる。
+- 連携結果をWEKO内の結果テーブルに書き戻す。（結果が出るまで待機する）
+- リトライを行う。
 
 ![処理詳細](../media/media/image38.png)
 
+## autofill機能（流用入力）による業績紐づけ情報の登録
 
-##
+アイテム登録・編集画面で、researchmapの既存業績データをWEKOのアイテムメタデータに自動入力し、使用した業績IDをlinkage_itemsに登録する機能。
 
-|No|ファイルバス|モジュール名|説明|
+### メタデータ自動入力の流れ
+
+1. ユーザーが著者パーマリンク・業績種別・業績IDを入力し、Getボタンを押下する
+2. `get_auto_fill_record_data`（`weko_items_autofill/views.py`）が呼び出される
+3. `get_researchmapid_record_data`（`weko_items_autofill/utils.py`）がresearchmap APIからデータを取得する
+4. 取得データを `WEKO_ITEMS_UI_CRIS_LINKAGE_RESEARCHMAP_MAPPINGS` に従いJPCOARマッピング形式に変換する
+5. `WEKO_ITEMS_AUTOFILL_RESEARCHMAP_REQUIRED_ITEM` に定義されたフィールドのみフォームに自動入力される
+
+- 入力パラメータ：著者パーマリンク・業績種別（`achievement_type`）・業績ID（`achievement_id`）・アイテムタイプID
+- パーマリンクと業績IDはAPIコール前にバリデーションを行う（パーマリンク：英数字3〜20文字、業績ID：数字のみ）
+- `enable_item_achievement_link` が有効な場合、指定した業績IDが既に他のWEKOアイテムのlinkage_itemsに存在するときは警告メッセージを返す
+
+### 業績紐づけ情報の登録
+
+autofillで使用した業績IDは、アイテム保存（ワークフロー完了）時に以下の条件をすべて満たす場合に `linkage_items` レコードとして自動登録される：
+
+1. `enable_item_achievement_link` が有効であること
+2. autofillで指定したパーマリンクがアイテムのメタデータ（nameIdentifierScheme="researchmap"）に存在すること
+3. 同じパーマリンクがこのアイテムの `linkage_items` に未登録であること
+4. 同じ業績IDがシステム内の他アイテムの `linkage_items` に未登録であること
+
+### 紐づけパターン一覧
+
+各列の意味：
+
+- **連携済みID**：このアイテムの `linkage_items` に既に存在する業績ID（`-` は未連携）
+- **autofill使用ID**：autofillで指定した業績ID
+- **使用IDがWEKOにあるか**：autofill使用IDがWEKO内のいずれかのアイテムの `linkage_items` に存在するか
+- **autofill後の変更**：autofill後にアイテムメタデータを変更したか
+- **連携**：アイテム保存時にresearchmap連携（バッチ送信）を有効にしたか
+
+> **注意**：連携済みIDが存在する場合（`-` 以外）、そのIDは必ずWEKO内の `linkage_items` に存在する。そのため、「連携済みIDあり かつ 使用IDがWEKOにあるか=FALSE」の組み合わせは論理的に発生しないため、以下の表には含めない。
+
+| 連携済みID | autofill使用ID | 使用IDがWEKOにあるか | autofill後の変更 | 連携 | 結果（autofill→紐づけなし） | 結果（autofill→紐づけあり） |
+|:---:|:---:|:---:|:---:|:---:|:---|:---|
+| - | 1234 | TRUE | あり | TRUE | researchmapに作成。WEKO内で紐づけ保存 | 作成アイテムに1234を紐づけ。Autofill後に紐づけられないというワーニング表示 |
+| - | 1234 | FALSE | あり | TRUE | researchmapに作成。WEKO内で紐づけ保存 | 作成アイテムに1234を紐づけ。1234を更新 |
+| - | 1234 | TRUE | あり | FALSE | なにもなし | 作成アイテムに1234を紐づけ。Autofill後に紐づけられないというワーニング表示 |
+| - | 1234 | FALSE | あり | FALSE | なにもなし | 作成アイテムに1234を紐づけ |
+| - | 1234 | TRUE | なし | TRUE | マージモードにより異なる。merge: エラー / similar: 1234にマージの可能性大。WEKO内業績ID重複のため保存失敗（ログ出力） / force: 1234でない業績を作成し紐づけ保存 | 作成アイテムに1234を紐づけ。Autofill後に紐づけられないというワーニング表示。その後マージモードにより異なる。merge: エラー / similar: 1234にマージの可能性大。WEKO内業績ID重複のため保存失敗（ログ出力） / force: 1234でない業績を作成し紐づけ保存 |
+| - | 1234 | FALSE | なし | TRUE | マージモードにより異なる。merge: エラー / similar: 1234にマージの可能性大。1234と紐づけ / force: 1234でない業績を作成し紐づけ保存 | マージモードにより異なる。merge: エラー / similar: 1234にマージの可能性大。1234と紐づけ / force: 1234でない業績を作成し紐づけ保存 |
+| - | 1234 | TRUE | なし | FALSE | なにもなし | 作成アイテムに1234を紐づけ。Autofill後に紐づけられないというワーニング表示 |
+| - | 1234 | FALSE | なし | FALSE | なにもなし | 作成アイテムに1234を紐づけ |
+| 1234 | 1234 | TRUE | あり | TRUE | 1234を更新。ID紐づけに変更なし | 1234を更新。ID紐づけに変更なし |
+| 1234 | 1234 | TRUE | あり | FALSE | なにもなし | ID紐づけに変更なし（すでに紐づけ済み） |
+| 1234 | 1234 | TRUE | なし | TRUE | 1234を更新。ID紐づけに変更なし | 1234を更新。アイテムに1234を紐づけようとするが、すでに紐づけ済みなので変化なし |
+| 1234 | 1234 | TRUE | なし | FALSE | なにもなし | アイテムに1234を紐づけようとするが、すでに紐づけ済みなので変化なし |
+| 1234 | 5678 | TRUE | あり | TRUE | 紐づいている1234の業績が5678+変更で更新。紐づくIDは1234のまま | 紐づいている1234の業績が5678+変更で更新。紐づくIDは1234のまま |
+| 1234 | 5678 | TRUE | あり | FALSE | なにもなし | アイテムに1234を紐づけようとするが、すでに紐づけ済みなので変化なし |
+| 1234 | 5678 | TRUE | なし | TRUE | 紐づいている1234の業績が5678の内容で更新。紐づくIDは1234のまま | 紐づいている1234の業績が5678の内容で更新。紐づくIDは1234のまま |
+| 1234 | 5678 | TRUE | なし | FALSE | なにもなし | アイテムに1234を紐づけようとするが、すでに紐づけ済みなので変化なし |
+
+## モジュール一覧
+
+|No|ファイルパス|モジュール名|説明|
 |---|---|---|---|
 |1|weko_admin/admin.py|save_keys|シークレットキーとクライアントキーの保存する|
 |2||save_merge_mode|マージモードの変更を保存する|
@@ -49,18 +109,25 @@
 |7|weko_items_ui/linkage.py|create_access_token|認証キーの作成する|
 |8||create_jwt|シークレットキーとクライアントキーからJWTを作成する|
 |9||retry|指定された回数リトライを行う|
-|10|weko_items_ui/models.py|register_linkage_result|連携結果を取得し、DBに保存する|
-|11||set_running|連携結果を実行中とする|
-|12|weko_items_ui/signals.py|receiver|RabbitMQにキューを入れる|
-|13|weko_items_ui/tasks.py|bulk_post_item_to_researchmap|RabbitMQからキューを取得する|
-|14||process_researchmap_queue|researchmapに送信に必要な情報を取得し、データを送信する|
-|15||get_item|uuidからアイテムを取得する|
-|16||is_public|アイテムの公開情報を取得する|
-|17||get_authors|著者情報を取得する|
-|18||get_merge_mode|マージモードを取得する|
-|19||get_achievement_type|業績種別を取得する|
-|20||build_achievement|業績種別ごとのJSONを作成する|
-|21||build_one_data|著者1人分のデータを作成する|
+|10|weko_items_ui/models.py|CRISLinkageResult.register_linkage_result|連携結果を取得し、DBに保存する|
+|11||CRISLinkageResult.set_running|連携結果を実行中とする|
+|12||LinkageItems.create|業績IDと著者パーマリンクをlinkage_itemsテーブルに保存する|
+|13||LinkageItems.get_items_by_permalink_itemid|アイテムIDと著者パーマリンクで連携済み業績IDを取得する（REGISTERED状態のみ）|
+|14||LinkageItems.get_by_item_id|アイテムIDで全ステータスの連携レコードを取得する|
+|15||LinkageItems.get_by_external_item_id|業績IDで連携レコードを取得し重複チェックに使用する|
+|16||LinkageItems.update_status|連携レコードのステータスをREGISTERED/DELETEDに更新する|
+|17|weko_items_ui/signals.py|receiver|RabbitMQにキューを入れる|
+|18|weko_items_ui/tasks.py|bulk_post_item_to_researchmap|RabbitMQからキューを取得する|
+|19||process_researchmap_queue|researchmapに送信に必要な情報を取得し、データを送信する|
+|20||update_linkage_by_authors|著者変更に応じてlinkage_itemsのステータスを更新する|
+|21||get_item|uuidからアイテムを取得する|
+|22||is_public|アイテムの公開情報を取得する|
+|23||get_authors|アイテムのメタデータから連携対象の著者情報を取得する|
+|24||get_merge_mode|マージモードを取得する|
+|25||get_achievement_type|業績種別を取得する|
+|26||build_achievement|業績種別ごとのJSONを作成する|
+|27||build_one_data|著者1人分のデータを作成する|
+|28||sync_item_to_researchmap|業績データをresearchmapに送信し連携結果とlinkage_itemsを更新する|
 
 
 
@@ -87,10 +154,11 @@
 
 ## 実装補足（v2.0.2 実装との突き合わせ）
 
-- 実装補足：JWT生成関数は `create_jwt`（`weko_items_ui.linkage`）。BASE_URL/HOST の既定は `https://api-trial.researchmap.jp` / `api-trial.researchmap.jp:443`。連携結果モデルは `CRISLinkageResult`（table `cris_linkage_result`）。連携タスクの beat は `crontab(hour=0, minute=0)`。config は `WEKO_ITEMS_UI_CRIS_LINKAGE_RESEARCHMAP_*`（weko-items-ui）。
+- 実装補足：JWT生成関数は `create_jwt`（`weko_items_ui.linkage`）。BASE_URL/HOST の既定は `https://api-trial.researchmap.jp` / `api-trial.researchmap.jp:443`。連携結果モデルは `CRISLinkageResult`（table `cris_linkage_result`）。アイテムと業績の紐づけ情報は `LinkageItems` (table `linkage_items`)。連携タスクの beat は `crontab(hour=0, minute=0)`。config は `WEKO_ITEMS_UI_CRIS_LINKAGE_RESEARCHMAP_*`（weko-items-ui）。
 
 ## 更新履歴
 
 |日付|GitHubコミットID|更新内容|
 |---|---|---|
 |||初版作成|
+|2026-07-31|7ba798e2c4600622e093159ca1a989ff3899709b|連携済み業績IDの保持と更新時の挙動、autofill機能による業績紐づけ情報の登録について追記|
