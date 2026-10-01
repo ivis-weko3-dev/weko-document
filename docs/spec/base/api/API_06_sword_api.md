@@ -277,6 +277,7 @@ GET /sword/service-document
 | 403    | エラードキュメント   | 認証に失敗した場合。                                                                                                  |
 | 412    | エラードキュメント   | サーバー側がOn-Behalf-Of をサポートしていないにもかかわらず、<br/>リクエストでOn-Behalf-Of ヘッダーが提供された場合。 |
 | 500    | エラードキュメント   | サーバー内部エラーが発生した場合。                                                                                    |
+| 503    | エラードキュメント   | DB・Redis・Elasticsearchの接続障害・一時障害の場合。                                                                  |
 
 
 #### レスポンス
@@ -322,7 +323,8 @@ POST /sword/service-document
 | 412    | エラードキュメント     | サーバー側がOn-Behalf-Of をサポートしていないにもかかわらず、<br/>リクエストでOn-Behalf-Of ヘッダーーが提供された場合。           |
 | 413    | エラードキュメント     | 送信されたファイルのサイズがサーバーに設定されたmaxUploadSizeを超えている場合。                                                   |
 | 415    | エラードキュメント     | ヘッダーまたはボディに付加されたファイルのContent-Typeがサーバー側で<br/>サポートされていない場合。                               |
-| 500    | エラードキュメント     | サーバー内部エラーが発生した場合。                                                                                                |
+| 500    | エラードキュメント     | 想定されていないサーバー内部エラーが発生した場合。                                                                                |
+| 503    | エラードキュメント     | DB・Redis・Elasticsearchの接続障害・一時障害の場合。                                                                              |
 
 
 #### レスポンス
@@ -361,6 +363,7 @@ GET /sword/deposit/\<recid\>
 | 404    | エラードキュメント     | 指定したrecidに該当するアイテムが存在しない（削除されている）場合。                                                        |
 | 412    | エラードキュメント     | サーバー側がOn-Behalf-Of をサポートしていないにもかかわらず、<br/>リクエストでOn-Behalf-Of ヘッダーが提供された場合。      |
 | 500    | エラードキュメント     | サーバー内部エラーが発生した場合。                                                                                         |
+| 503    | エラードキュメント     | DB・Redis・Elasticsearchの接続障害・一時障害の場合。                                                                       |
 
 
 #### レスポンス
@@ -407,10 +410,12 @@ PUT /sword/deposit/\<recid\>
 | 401    | エラードキュメント     | リクエストでAuthorization ヘッダーが提供されない場合。                                                                            |
 | 403    | エラードキュメント     | 認証に失敗した場合。<br/>認証したOAuthトークンに必要なスコープが与えられていない場合。                                            |
 | 404    | エラードキュメント     | 登録されたアイテムが見つからない場合。                                                                                            |
+| 409    | エラードキュメント     | 他の処理との競合により、リクエストを受け付けられない場合。<br/>対象アイテムが別の処理で編集予定の場合。                           |
 | 412    | エラードキュメント     | サーバー側がOn-Behalf-Of をサポートしていないにもかかわらず、<br/>リクエストでOn-Behalf-Of ヘッダーーが提供された場合。           |
 | 413    | エラードキュメント     | 送信されたファイルのサイズがサーバーに設定されたmaxUploadSizeを超えている場合。                                                   |
 | 415    | エラードキュメント     | ヘッダーまたはボディに付加されたファイルのContent-Typeがサーバー側で<br/>サポートされていない場合。                               |
-| 500    | エラードキュメント     | サーバー内部エラーが発生した場合。                                                                                                |
+| 500    | エラードキュメント     | 想定されていないサーバー内部エラーが発生した場合。                                                                                |
+| 503    | エラードキュメント     | DB・Redis・Elasticsearchの接続障害・一時障害の場合。                                                                              |
 
 
 ### アイテム削除機能：DELETE /sword/deposit/\<recid\>
@@ -441,10 +446,12 @@ DELETE /sword/deposit/\<recid\>
 | 204    | -                      | 空のレスポンスを返す。削除に成功したことを示す。                                                                           |
 | 400    | エラードキュメント     | リクエスト内容に何らかの不備がある場合。                                                                                   |
 | 401    | エラードキュメント     | リクエストでAuthorization ヘッダーが提供されない場合。                                                                     |
-| 403    | エラードキュメント     | 認証に失敗した場合。                                                                                                       |
+| 403    | エラードキュメント     | 認証に失敗した場合。<br/>認証したOAuthトークンに必要なスコープが与えられていない場合。                                     |
 | 404    | エラードキュメント     | 指定したrecidに該当するアイテムが存在しない（削除されている）場合。                                                        |
+| 409    | エラードキュメント     | 他の処理との競合により、リクエストを受け付けられない場合。<br/>対象アイテムが別の処理で編集予定、一括インポート中、または編集中の場合。 |
 | 412    | エラードキュメント     | サーバー側がOn-Behalf-Of をサポートしていないにもかかわらず、<br/>リクエストでOn-Behalf-Of ヘッダーが提供された場合。      |
-| 500    | エラードキュメント     | サーバー内部エラーが発生した場合。                                                                                         |
+| 500    | エラードキュメント     | 想定されていないサーバー内部エラーが発生した場合。                                                                         |
+| 503    | エラードキュメント     | DB・Redis・Elasticsearchの接続障害・一時障害の場合。                                                                       |
 
 
 #### レスポンス
@@ -962,7 +969,7 @@ Content-Type: application/json
 | --------- | ------ | ------------------------------------------------------------------- |
 | @context  | string | "https://swordapp.github.io/swordv3/swordv3.jsonld"を固定で出力。   |
 | @type     | string | エラータイプを示す文字列。[エラータイプ](#エラータイプ) を参照。    |
-| error     | string | エラー内容の説明。                                                  |
+| error     | string | エラー内容の説明。`"<コード>: <メッセージ>"` の形式で出力する       |
 | log       | string | より詳細なエラー内容。現在は出力していない。                        |
 | timestamp | string | エラー発生時のタイムスタンプ。                                      |
 
@@ -995,8 +1002,10 @@ Content-Type: application/json
 | UnexpectedSegment            | 400    | サーバーが予期していないセグメントを受信した。                                               |
 | **Additional ErrorType**     |        |                                                                                              |
 | NotFound                     | 404    | リクエストされたリソースが存在しない。                                                       |
-| ServerError                  | 500    | サーバー内部エラーが発生した。                                                               |
+| Conflict                     | 409    | 他の処理との競合により、リクエストを受け付けられない（編集予定・一括インポート中・編集中）。 |
 | TooManyRequests              | 429    | 分間のリクエスト数が制限を超えている。                                                       |
+| ServerError                  | 500    | サーバー内部エラーが発生した。                                                               |
+| ServiceUnavailable           | 503    | DB・Redis・Elasticsearchなど依存先の接続障害・一時障害により、リクエストを処理できない。     |
 
 ## 関連モジュール
 
@@ -1077,20 +1086,20 @@ Content-Type: application/json
 1. リクエストをチェックする
     - **`Authorization`** ヘッダーに記載されたアクセストークンを使用しユーザーを認証する。  
       アクセストークンのScopeを確認し、`deposit:write`、`deposit:actions`、`item:create`が与えられていなければエラーとする。
-    - **`On-Behalf-Of`** ヘッダーが存在する場合、`On-Behalf-Of`許容設定（[設定値:13](#conf13)）が無効であればエラー（[メッセージ:2](#err02)）とする。
+    - **`On-Behalf-Of`** ヘッダーが存在する場合、`On-Behalf-Of`許容設定（[設定値:13](#conf13)）が無効であればエラー（[SWORD-1202](#sword-1202)）とする。
     - **`Content-Length`** ヘッダーおよびファイルサイズを検証する。  
-      `Content-Length`ヘッダーの値あるいはファイルサイズがアップロードのサイズ上限（[設定値:17](#conf17)）を上回っていればエラー（[メッセージ:5](#err05)）とする。
+      `Content-Length`ヘッダーの値あるいはファイルサイズがアップロードのサイズ上限（[設定値:17](#conf17)）を上回っていればエラー（[SWORD-1305](#sword-1305)）とする。
     - **`Content-Disposition`** ヘッダーを解析する。  
-      値が`attachment`かつオプションにファイル名が指定されているかを確認し、満たさない場合はエラー（[メッセージ:8](#err08)）とする。
-      リクエストのファイルの有無や実際のファイルと上記のファイル名の合致を確認し、不一致であればエラー（[メッセージ:9](#err09）)とする。
+      値が`attachment`かつオプションにファイル名が指定されているかを確認し、満たさない場合はエラー（[SWORD-1303](#sword-1303)）とする。
+      リクエストのファイルの有無や実際のファイルと上記のファイル名の合致を確認し、不一致であればエラー（[SWORD-1304](#sword-1304)）とする。
     - **`Content-Type`** ヘッダーをもとに送付されたファイルを検証する。  
-      ヘッダーの値が`application/zip`でなければ、エラー（[メッセージ:6](#err06)）とする。
+      ヘッダーの値が`application/zip`でなければ、エラー（[SWORD-1401](#sword-1401)）とする。
     - **`Packaging`** ヘッダーを検証する。  
-      値の末尾が`SWORDBagIt`のとき、`/metadata`フォルダ直下に`sword.json`ファイルが存在すればSWORDBagIt形式と判定し、なければエラー（[メッセージ:16](#err16)）とする。  
+      値の末尾が`SWORDBagIt`のとき、`/metadata`フォルダ直下に`sword.json`ファイルが存在すればSWORDBagIt形式と判定し、なければエラー（[SWORD-1404](#sword-1404)）とする。  
       値の末尾が`SimpleZip`のとき、`/data`フォルダ直下に`ro-crate-metadata.json`ファイルが存在すればRO-Crate+BagIt形式と判定し、`.tsv/.csv`ファイルがあればTSV/CSV形式、`.xml`ファイルがあればXML形式と判定する。  
-      値がその他の場合はエラー（[メッセージ:07](#err7)）とする。
+      値がその他の場合はエラー（[SWORD-1402](#sword-1402)）とする。
     - **`Digest`** ヘッダーを検証する。  
-      メタデータ形式がJSON-LD、かつダイジェスト検証設定（[設定値:21](#conf21)）が有効であるとき、DigestとリクエストボディのZipファイルのハッシュ値が一致しなければエラー（[メッセージ:10](#err10)）とする。
+      メタデータ形式がJSON-LD、かつダイジェスト検証設定（[設定値:21](#conf21)）が有効であるとき、DigestとリクエストボディのZipファイルのハッシュ値が一致しなければエラー（[SWORD-1306](#sword-1306)）とする。
 
     ※ SWORD APIでは使用可能なエラータイプが定められているため、適切なエラータイプが存在しない場合はBad Request（エラーコード400）とし、エラードキュメントにエラー原因を記述し返却する。
 
@@ -1105,14 +1114,14 @@ Content-Type: application/json
     - メタデータを記述したXMLファイルが含まれていなければエラーとする。
 
     **JSON-LD形式**
-    - 登録対象のファイルそれぞれのハッシュ値が`manifest-sha256.txt` に記載されている値と一致しなければエラー（[メッセージ:24](#err24)）とする。
+    - 登録対象のファイルそれぞれのハッシュ値が`manifest-sha256.txt` に記載されている値と一致しなければエラー（[SWORD-1501](#sword-1501)）とする。
 
 3. 登録の前処理を行う
 
    メタデータファイル形式がXMLおよびJSON-LDであれば、メタデータをアイテムタイプへマッピングする。  
    また、アイテムを登録するとき、一括登録機能をもちいて直接登録をするか、個別登録機能をもちいてワークフローを経由して登録するかを、
    [ADMIN_16_1：SWORD API TSV/XML](../admin/ADMIN_16_1.md)および[ADMIN_16_2：SWORD API JSON-LD](../admin/ADMIN_16_2.md)の設定から取得する。  
-   このとき、設定されたワークフローが削除されていた場合や、Item Registration アクションが含まれていなければエラー（[メッセージ:22](#err22)）とする。
+   このとき、設定されたワークフローが削除されていた場合や、Item Registration アクションが含まれていなければエラー（[SWORD-2104](#sword-2104)、[SWORD-2105](#sword-2105)）とする。
 
     **TSV/CSV形式**
     - メタデータのマッピングを行わず、直接アイテムタイプとして読み込む。
@@ -1125,7 +1134,7 @@ Content-Type: application/json
 
     **JSON-LD形式**
     - アクセストークンから、マッピング定義、マッピング先アイテムタイプを取得する。  
-        クライアントに対する設定がない場合はエラー（[メッセージ:21](#err21)）とする。
+        クライアントに対する設定がない場合はエラー（[SWORD-2103](#sword-2103)）とする。
     - JSONファイルからメタデータを取得し、マッピング定義に基づいてメタデータをアイテムタイプへマッピングする。  
         マッピング処理の詳細については、[メタデータマッピング機能](../admin/ADMIN_2_5.md#マッピング機能)を参照。  
         SWORD APIとしては原則1リクエストにつき1つのアイテムが登録されるべきだが、例外としてアイテム分割フラグ（[wk:isSplited](../admin/ADMIN_2_5.md#wkissplitedアイテム分割フラグ)）が有効であれば、メタデータを論文アイテムと論拠データアイテムに分割する。
@@ -1140,10 +1149,10 @@ Content-Type: application/json
 
     **共通処理**
     - `On-Behalf-Of`ヘッダーが存在する場合、その値を取得しアイテムの代理投稿者情報とする。
-    - 読み込まれたメタデータのバリデーションチェックや必須項目のチェックを行い、問題があればエラー（[メッセージ:11](#err11)）とする。
+    - 読み込まれたメタデータのバリデーションチェックや必須項目のチェックを行い、問題があればエラー（[SWORD-1501](#sword-1501)）とする。
     - 登録先インデックスの状態やアイテムの公開ステータスのチェックを行い、問題があればエラーとする。
     - SWORD API設定（[ADMIN_16_1](../admin/ADMIN_16_1.md)、[ADMIN_16_2](../admin/ADMIN_16_2.md)）でアイテム重複チェックが有効であれば、[アイテムの重複チェック](../user/USER_4_6.md#4-アイテム重複チェック機能)を行う。  
-      重複している場合はエラー（）とする。
+      重複している場合はエラー（[SWORD-1503](#sword-1503)）とする。
 
 4. 登録処理を行う
    アイテムの登録方法に応じて別々の登録処理を行う。
@@ -1163,7 +1172,7 @@ Content-Type: application/json
     ※ メタデータ形式がXML形式の場合、現時点ではインデックスを指定することができないため、直接登録は行えない。  
       また、ワークフロー経由で登録する場合、ワークフローに登録先インデックスが指定されていなければ、アクティビティにメタデータとファイルを登録して停止する。
 
-    アイテムの登録処理に失敗した場合は、エラー（[メッセージ:14](#err14)）とする。
+    アイテムの登録処理に失敗した場合は、エラー（[SWORD-2401](#sword-2401)、[SWORD-3104](#sword-3104)、[SWORD-3201](#sword-3201)）とする。
 
 5. レスポンスを返却する
    - アイテムの登録完了の有無に関わらず、登録されたアイテムのURL、アクティビティ詳細画面のURLおよび、ファイル情報がある場合はそのファイルのURLをステータスドキュメントに含めて返却する。
@@ -1190,8 +1199,8 @@ Content-Type: application/json
   例外として[メタデータのみ置換フラグ](../admin/ADMIN_2_5.md#wkmetadatareplaceメタデータのみ置換フラグ)が有効な場合は、
   メタデータのみを置き換え、ファイルを維持する。  
   本来、このような扱いはメタデータのURIに対するPOSTメソッドで行うべき処理であるが、暫定的にアイテム更新のPUTメソッドで対応する。
-- 画面やAPI同士との競合を避けるため、排他制御を行う。排他制御によって更新が拒否された場合は、エラー（[ーメッセージ:25](#err25)）とする。  
-  一括インポート機能によって更新中である場合、すでにアイテムに対するアクティビティが存在する場合も同様にエラー（[ーメッセージ:26](#err26)、[メッセージ:27](#err27)）とする。
+- 画面やAPI同士との競合を避けるため、排他制御を行う。排他制御によって更新が拒否された場合は、エラー（[SWORD-2201](#sword-2201)）とする。  
+  一括インポート機能によって更新中である場合、すでにアイテムに対するアクティビティが存在する場合も同様にエラー（[SWORD-2202](#sword-2202)、[SWORD-2203](#sword-2203)）とする。
 
 
 ### アイテム削除機能：DELETE /sword/deposit/\<recid\>
@@ -1201,8 +1210,8 @@ Content-Type: application/json
     - On-Behalf-Ofヘッダーが存在する場合、サーバー設定を確認する
 - [ADMIN_16_1：SWORD API TSV/XML](../admin/ADMIN_16_1.md)および[ADMIN_16_2：SWORD API JSON-LD](../admin/ADMIN_16_2.md)の設定、
   ワークフローに削除用フローが設定されているかを確認し、直接削除を行うか、ワークフローを経由して削除するかを決定する。
-- 画面やAPI同士との競合を避けるため、排他制御を行う。排他制御によって更新が拒否された場合は、エラー（[メッセージ:25](#err25)）とする。  
-  一括インポート機能によって更新中である場合、すでにアイテムに対するアクティビティが存在する場合も同様にエラー（[メッセージ:26](#err26)、[メッセージ:27](#err27)）とする。
+- 画面やAPI同士との競合を避けるため、排他制御を行う。排他制御によって更新が拒否された場合は、エラー（[SWORD-2201](#sword-2201)）とする。  
+  一括インポート機能によって更新中である場合、すでにアイテムに対するアクティビティが存在する場合も同様にエラー（[SWORD-2202](#sword-2202)、[SWORD-2203](#sword-2203)）とする。
 - 直接削除の場合、アイテムの削除を行う
 - ワークフロー経由で削除する場合、削除用のアクティビティを作成し、承認アクションがなければアイテムの削除を行う。ある場合はアクティビティを承認アクションまで進めて停止する。
 - 空のレスポンスを返却する
@@ -1232,141 +1241,501 @@ Content-Type: application/json
 
 
 ## エラーメッセージ
-1. OAuthトークンがリクエストに含まれていない場合<span id="err01">
-  ```python
-  "OAuth token is missing in the request."
-  ```
 
-2. ```On-Behalf-Of``` ヘッダーがサポートされていない場合<span id="err02">
-  ```python
-  "Not support On-Behalf-Of but request has it."
-  ```
+エラードキュメントの `error` には、エラーコードを持つエラーでは `"<コード>: <メッセージ>"` の形式で出力する（例: `SWORD-1301: No file part.`）。  
+エラーコードは `SWORD-<大分類><中分類><連番2桁>` の形式で、大分類は千の位（1:クライアント起因、2:境界条件・運用条件、3:サーバー起因）、中分類は百の位、連番は中分類内で01から振る。同一のメッセージを複数の箇所で使う場合は、同じコードを共有する。  
+エラーIDはレスポンスに含まれない。
 
-3. リクエストにファイルが含まれていない場合<span id="err03">
-  ```python
-  "No file part."
-  ```
+次のエラーにはコードを付与しない。
 
-4. ファイルが選択されていない場合<span id="err05">
-  ```python
-  "No selected file."
-  ```
+- 認証系（`SWORD-11xx`）
+- MethodNotAllowed（405）
+- ETag・Segment・By-Reference 系
 
-5. ```Content-Length``` が最大アップロードサイズを超える場合<span id="err05">
-  ```python
-  "Content size is too large. (request:[Content-Lengthの値], maxUploadSize:[最大アップロードサイズ])"
-  ```
+### クライアント起因
 
-6. サポートされていない ```Content-Type``` がリクエストに含まれている場合<span id="err06">
-  ```python
-  "Not accept Content-Type: [サポートされていないContent-Type]"
-  ```
+#### 認可 (SWORD-12xx)
 
-7. サポートされていないパッケージング形式がリクエストに含まれている場合<span id="err07">
-  ```python
-  "Not accept packaging: [サポートされていないパッケージング形式]"
-  ```
+##### SWORD-1201: アクティビティ用スコープ不足
 
-8. ```Content-Disposition``` ヘッダーからファイル名を取得できない場合<span id="err08">
-  ```python
-  "Cannot get filename by Content-Disposition."
-  ```
+<a id="sword-1201"></a>
 
-9. リクエストボディにファイルが見つからない場合<span id="err09">
-  ```python
-  "Not found [ファイル名] in request body."
-  ```
+- エラーID: `ACTIVITY_SCOPE_INSUFFICIENT`
+- @type / HTTP: Forbidden / 403
+- 対応主体: クライアント管理者・運用者
+- メッセージ: `Not allowed operation in your token scope.`
 
-10. リクエストボディとダイジェストの検証に失敗した場合<span id="err10">
-  ```python
-  "Failed to verify request body and digest."
-  ```
+##### SWORD-1202: On-Behalf-Of 未サポート
 
-11. インポートアイテムのチェック中にエラーが発生した場合<span id="err11">
-  ```python
-  "Item check error: [エラーメッセージ]"
-  ```
-  当該アイテムに警告（warnings）が存在する場合は、エラーメッセージに `, 'warnings': [...]` を連結して併記する（`weko_swordserver/views.py` の `post_service_document` / `put_object`）。
+<a id="sword-1202"></a>
 
-12. アイテムが既に登録されている場合<span id="err12">
-  ```python
-  "This item is already registered: [アイテムのタイトル]"
-  ```
+- エラーID: `ON_BEHALF_OF_NOT_ALLOWED`
+- @type / HTTP: OnBehalfOfNotAllowed / 412
+- 対応主体: クライアント
+- メッセージ: `Not support On-Behalf-Of.`
 
-13. アイテムの重複を検知した場合<span id="err13">
-  ```python
-  "New item appears to be a duplicate: [重複が疑われるアイテムIDのリスト]"
-  ```
+##### SWORD-1203: On-Behalf-Of ユーザー未検出
 
-14. アイテムのシステムへのインポート中にエラーが発生した場合<span id="err14">
-  ```python
-  "Failed to import item; [エラーメッセージ]"
-  ```
+<a id="sword-1203"></a>
 
-15. 管理者による設定で特定のメタデータ形式によるアイテム登録が無効な場合<span id="err15">
-  ```python
-  "[メタデータ形式] metadata import is not enabled."
-  ```
+- エラーID: `ON_BEHALF_OF_USER_NOT_FOUND`
+- @type / HTTP: BadRequest / 400
+- 対応主体: クライアント
+- メッセージ: `No user found by On-Behalf-Of.`
 
-16. SWORDBagIt形式で ```metadata/sword.json``` が存在しない場合<span id="err16">
-  ```python
-  "SWORDBagIt requires metadate/sword.json."
-  ```
+##### SWORD-1204: On-Behalf-Of ユーザーのロール不可
 
-17.  RO-Crate+BagIt形式で ```ro-crate-metadata.json``` の位置が誤っている場合<span id="err17">
-  ```python
-  "ro-crate-metadata.json is required in data/ directory."
-  ```
+<a id="sword-1204"></a>
 
-18.   SimpleZip形式で ```metadata/sword.json``` が存在する場合<span id="err18">
-  ```python
-  "packaging format is SimpleZip, but sword.json is found."
-  ```
+- エラーID: `ON_BEHALF_OF_USER_ROLE_FORBIDDEN`
+- @type / HTTP: Forbidden / 403
+- 対応主体: クライアント管理者・運用者
+- メッセージ: `On-Behalf-Of user is not allowed by role.`
 
-19.  ```On-Behalf-Of``` ヘッダーでユーザーが見つからない場合<span id="err19">
-  ```python
-  "No user found by On-Behalf-Of."
-  ```
+#### 入力値・ヘッダ (SWORD-13xx)
 
-20.  ```On-Behalf-Of``` ヘッダーでユーザー検索中にエラーが発生した場合<span id="err20">
-  ```python
-  "Failed to get shared ID from On-Behalf-Of."
-  ```
+##### SWORD-1301: ファイルパートなし・未選択
 
-21.   クライアントに対する設定がされていない場合<span id="err21">
-  ```python
-  "No SWORD API setting found for client ID that you are using."
-  ```
+<a id="sword-1301"></a>
 
-22.   ワークフローが見つからない、または削除されている場合<span id="err22">
-  ```python
-  "Workflow is not for item registration."
-  ```
+- エラーID: `FILE_PART_MISSING`
+- @type / HTTP: ContentMalformed / 400
+- 対応主体: クライアント
+- メッセージ: `No file part.`
 
-23.   マッピング定義設定のアイテムタイプIDとワークフローのアイテムタイプIDが一致しない場合<span id="err23">
-  ```python
-  "Item type and workflow do not match. ItemType ID must be [マッピング定義設定のアイテムタイプID], but the workflow's ItemType ID was [ワークフローのアイテムタイプID]."
-  ```
+##### SWORD-1302: ファイルパートなし・未選択
 
-24.  Bagの検証に失敗した場合<span id="err24">
-  ```python
-  "Failed to validate import bagit file."
-  ```
+<a id="sword-1302"></a>
 
-25. アイテムの更新や削除処理が排他制御によって拒否された場合<span id="err25">
-  ```python
-  "Item [アイテムID] will be edited by another process."
-  ```
+- エラーID: `FILE_NOT_SELECTED`
+- @type / HTTP: ContentMalformed / 400
+- 対応主体: クライアント
+- メッセージ: `No selected file.`
 
-26. 更新、削除対象のアイテムが一括インポートによる更新中である場合<span id="err26">
-    ```python
-    "Item [アイテムID] is in import progress."
-    ```
+##### SWORD-1303: ファイル名取得不可・ファイルなし
 
-27. アイテムに更新や削除のためのアクティビティが存在する場合<span id="err27">
-  ```python
-  "Item [アイテムID] is being edited."
-  ```
+<a id="sword-1303"></a>
+
+- エラーID: `FILENAME_UNRESOLVABLE`
+- @type / HTTP: BadRequest / 400
+- 対応主体: クライアント
+- メッセージ: `Cannot get filename by Content-Disposition.`
+
+##### SWORD-1304: ファイル名取得不可・ファイルなし
+
+<a id="sword-1304"></a>
+
+- エラーID: `FILE_NOT_FOUND_IN_BODY`
+- @type / HTTP: BadRequest / 400
+- 対応主体: クライアント
+- メッセージ: `Not found {filename} in request body.`
+
+##### SWORD-1305: アップロードサイズ超過
+
+<a id="sword-1305"></a>
+
+- エラーID: `UPLOAD_SIZE_EXCEEDED`
+- @type / HTTP: MaxUploadSizeExceeded / 413
+- 対応主体: クライアント
+- メッセージ: `Content size is too large. (request:{content_length}, maxUploadSize:{max_upload_size})`
+
+##### SWORD-1306: Digest 不一致
+
+<a id="sword-1306"></a>
+
+- エラーID: `DIGEST_MISMATCH`
+- @type / HTTP: DigestMismatch / 412
+- 対応主体: クライアント
+- メッセージ: `Failed to verify request body and digest.`
+
+#### コンテンツ形式 (SWORD-14xx)
+
+##### SWORD-1401: Content-Type 非対応
+
+<a id="sword-1401"></a>
+
+- エラーID: `CONTENT_TYPE_NOT_ACCEPTABLE`
+- @type / HTTP: ContentTypeNotAcceptable / 415
+- 対応主体: クライアント
+- メッセージ: `Not accept Content-Type: {failed_content_type}`
+
+##### SWORD-1402: Packaging 非対応・構成不正
+
+<a id="sword-1402"></a>
+
+- エラーID: `PACKAGING_NOT_ACCEPTABLE`
+- @type / HTTP: PackagingFormatNotAcceptable / 415
+- 対応主体: クライアント
+- メッセージ: `Not accept packaging: {packaging}`
+
+##### SWORD-1403: Packaging 非対応・構成不正
+
+<a id="sword-1403"></a>
+
+- エラーID: `PACKAGING_REQUIRED`
+- @type / HTTP: PackagingFormatNotAcceptable / 415
+- 対応主体: クライアント
+- メッセージ: `Packaging is required.`
+
+##### SWORD-1404: Packaging 非対応・構成不正
+
+<a id="sword-1404"></a>
+
+- エラーID: `SWORDBAGIT_METADATA_MISSING`
+- @type / HTTP: MetadataFormatNotAcceptable / 415
+- 対応主体: クライアント
+- メッセージ: `SWORDBagIt requires metadate/sword.json.`
+
+##### SWORD-1405: Packaging 非対応・構成不正
+
+<a id="sword-1405"></a>
+
+- エラーID: `SIMPLEZIP_UNEXPECTED_SWORD_JSON`
+- @type / HTTP: MetadataFormatNotAcceptable / 415
+- 対応主体: クライアント
+- メッセージ: `packaging format is SimpleZip, but sword.json is found.`
+
+##### SWORD-1406: Packaging 非対応・構成不正
+
+<a id="sword-1406"></a>
+
+- エラーID: `ROCRATE_METADATA_MISSING`
+- @type / HTTP: MetadataFormatNotAcceptable / 415
+- 対応主体: クライアント
+- メッセージ: `ro-crate-metadata.json is required in data/ directory.`
+
+##### SWORD-1407: Packaging 非対応・構成不正
+
+<a id="sword-1407"></a>
+
+- エラーID: `SIMPLEZIP_METADATA_FILE_MISSING`
+- @type / HTTP: ContentMalformed / 400
+- 対応主体: クライアント
+- メッセージ: `SimpleZip requires ro-crate-metadata.json or other metadata file.`
+
+##### SWORD-1408: Packaging 非対応・構成不正
+
+<a id="sword-1408"></a>
+
+- エラーID: `PACKAGING_FORMAT_NOT_ACCEPTABLE`
+- @type / HTTP: PackagingFormatNotAcceptable / 415
+- 対応主体: クライアント
+- メッセージ: `Not accept packaging format: {packaging}`
+
+##### SWORD-1409: メタデータ形式を受け付けない設定
+
+<a id="sword-1409"></a>
+
+- エラーID: `METADATA_IMPORT_DISABLED`
+- @type / HTTP: MetadataFormatNotAcceptable / 415
+- 対応主体: クライアント／リポジトリ管理者
+- メッセージ: `{file_format} metadata import is not enabled.`
+
+##### SWORD-1410: メタデータ形式を受け付けない設定
+
+<a id="sword-1410"></a>
+
+- エラーID: `XML_DIRECT_REGISTRATION_NOT_ALLOWED`
+- @type / HTTP: MetadataFormatNotAcceptable / 415
+- 対応主体: クライアント／リポジトリ管理者
+- メッセージ: `Direct registration is not allowed for XML metadata yet.`
+
+##### SWORD-1411: メタデータ形式を受け付けない設定
+
+<a id="sword-1411"></a>
+
+- エラーID: `UNSUPPORTED_FILE_FORMAT`
+- @type / HTTP: MetadataFormatNotAcceptable / 415
+- 対応主体: クライアント／リポジトリ管理者
+- メッセージ: `Unsupported file format: {file_format}`
+
+#### データ検証 (SWORD-15xx)
+
+##### SWORD-1501: アイテムチェックエラー
+
+<a id="sword-1501"></a>
+
+- エラーID: `ITEM_CHECK_ERROR`
+- @type / HTTP: ContentMalformed / 400
+- 対応主体: クライアント
+- メッセージ: `Item check error: {detail}`
+
+##### SWORD-1502: 登録済み
+
+<a id="sword-1502"></a>
+
+- エラーID: `ITEM_ALREADY_REGISTERED`
+- @type / HTTP: BadRequest / 400
+- 対応主体: クライアント
+- メッセージ: `This item is already registered: {item_title}.`
+
+##### SWORD-1503: 類似アイテム重複
+
+<a id="sword-1503"></a>
+
+- エラーID: `ITEM_DUPLICATE_SUSPECTED`
+- @type / HTTP: BadRequest / 400
+- 対応主体: クライアント
+- メッセージ: `Some similar items are already registered: {list_url}.`
+
+##### SWORD-1504: PUT で複数アイテム
+
+<a id="sword-1504"></a>
+
+- エラーID: `MULTIPLE_ITEMS_IN_PUT`
+- @type / HTTP: ContentMalformed / 400
+- 対応主体: クライアント
+- メッセージ: `Multiple items found in import file. Only one item is allowed for PUT requests.`
+
+##### SWORD-1505: 未登録アイテムへの PUT
+
+<a id="sword-1505"></a>
+
+- エラーID: `ITEM_NOT_REGISTERED_FOR_PUT`
+- @type / HTTP: BadRequest / 400
+- 対応主体: クライアント
+- メッセージ: `This item is not registered yet: {item_title}`
+
+##### SWORD-1506: アイテム ID 不一致
+
+<a id="sword-1506"></a>
+
+- エラーID: `ITEM_ID_MISMATCH`
+- @type / HTTP: BadRequest / 400
+- 対応主体: クライアント
+- メッセージ: `Item id does not match. item: {item_id}, request: {recid}`
+
+### 境界条件・運用条件
+
+#### リソース状態 (SWORD-21xx)
+
+##### SWORD-2101: recid 不存在
+
+<a id="sword-2101"></a>
+
+- エラーID: `ITEM_NOT_FOUND`
+- @type / HTTP: NotFound / 404
+- 対応主体: クライアント
+- メッセージ: `Item not found. (recid={recid})`
+
+##### SWORD-2102: recid 不存在
+
+<a id="sword-2102"></a>
+
+- エラーID: `RECORD_NOT_FOUND`
+- @type / HTTP: NotFound / 404
+- 対応主体: クライアント
+- メッセージ: `Record not found.`
+
+##### SWORD-2103: SWORD クライアント未登録・無効
+
+<a id="sword-2103"></a>
+
+- エラーID: `SWORD_CLIENT_NOT_CONFIGURED`
+- @type / HTTP: BadRequest / 400
+- 対応主体: リポジトリ管理者
+- メッセージ: `No SWORD API setting found for client ID that you are using.`
+
+##### SWORD-2104: ワークフロー未設定・不適合
+
+<a id="sword-2104"></a>
+
+- エラーID: `WORKFLOW_NOT_FOUND`
+- @type / HTTP: BadRequest / 400
+- 対応主体: リポジトリ管理者
+- メッセージ: `Workflow not found for registration your item.`
+
+##### SWORD-2105: ワークフロー未設定・不適合
+
+<a id="sword-2105"></a>
+
+- エラーID: `WORKFLOW_NOT_FOR_REGISTRATION`
+- @type / HTTP: BadRequest / 400
+- 対応主体: リポジトリ管理者
+- メッセージ: `Workflow is not for item registration.`
+
+##### SWORD-2106: DOI 付与済みのため削除不可
+
+<a id="sword-2106"></a>
+
+- エラーID: `ITEM_HAS_DOI`
+- @type / HTTP: BadRequest / 400
+- 対応主体: クライアント
+- メッセージ: `Cannot delete item with DOI.`
+
+#### 同時実行・ロック (SWORD-22xx)
+
+##### SWORD-2201: 他処理が編集予定（ロック）
+
+<a id="sword-2201"></a>
+
+- エラーID: `ITEM_LOCKED`
+- @type / HTTP: Conflict / 409
+- 対応主体: クライアント
+- メッセージ: `Item {recid} will be edited by another process.`
+
+##### SWORD-2202: 一括インポート中
+
+<a id="sword-2202"></a>
+
+- エラーID: `ITEM_IMPORT_IN_PROGRESS`
+- @type / HTTP: Conflict / 409
+- 対応主体: クライアント
+- メッセージ: `Item cannot be deleted because it is in import progress.`
+
+##### SWORD-2203: 編集中
+
+<a id="sword-2203"></a>
+
+- エラーID: `ITEM_BEING_EDITED`
+- @type / HTTP: Conflict / 409
+- 対応主体: クライアント
+- メッセージ: `Item cannot be deleted because it is being edited.`
+
+#### レート制限 (SWORD-23xx)
+
+##### SWORD-2301: レート制限
+
+<a id="sword-2301"></a>
+
+- エラーID: `RATE_LIMIT_EXCEEDED`
+- @type / HTTP: TooManyRequests / 429
+- 対応主体: クライアント管理者・運用者
+- メッセージ: `Too many requests.`
+
+#### 処理未完了 (SWORD-24xx)
+
+##### SWORD-2401: 処理未完了（Workflow部分完了・要継続操作）
+
+<a id="sword-2401"></a>
+
+- エラーID: `REGISTRATION_PENDING_COMPLETION`
+- @type / HTTP: BadRequest / 400
+- 対応主体: クライアント
+- メッセージ: `Registration of item is pending completion. Please open the following URL to continue with the remaining operations: {url}.`
+
+##### SWORD-2402: 処理未完了（Workflow部分完了・要継続操作）
+
+<a id="sword-2402"></a>
+
+- エラーID: `UPDATE_PENDING_COMPLETION`
+- @type / HTTP: BadRequest / 400
+- 対応主体: クライアント
+- メッセージ: `Update of item {recid} is pending completion. Please open the following URL to continue with the remaining operations: {url}.`
+
+### サーバー起因
+
+#### 内部処理 (SWORD-31xx)
+
+##### SWORD-3101: DB アクセス失敗
+
+<a id="sword-3101"></a>
+
+- エラーID: `DB_ACCESS_FAILURE`
+- @type / HTTP: ServiceUnavailable / 503
+- 対応主体: サーバー管理者・運用者
+- メッセージ: `Failed to get shared ID from On-Behalf-Of.`
+
+##### SWORD-3102: サーバー側の設定不整合
+
+<a id="sword-3102"></a>
+
+- エラーID: `INVALID_REGISTRATION_TYPE`
+- @type / HTTP: ServerError / 500
+- 対応主体: リポジトリ管理者
+- メッセージ: `Invalid registration type: {register_type}`
+
+##### SWORD-3103: サーバー側の設定不整合
+
+<a id="sword-3103"></a>
+
+- エラーID: `INVALID_REGISTER_FORMAT`
+- @type / HTTP: ServerError / 500
+- 対応主体: リポジトリ管理者
+- メッセージ: `Invalid register format has been set for admin setting`
+
+##### SWORD-3104: 登録・更新・削除処理の失敗
+
+<a id="sword-3104"></a>
+
+- エラーID: `IMPORT_FAILURE`
+- @type / HTTP: ServerError / 500
+- 対応主体: サーバー管理者・運用者
+- メッセージ: `Failed to import item due to a server error. Please contact the administrator.`
+
+##### SWORD-3105: 登録・更新・削除処理の失敗
+
+<a id="sword-3105"></a>
+
+- エラーID: `UPDATE_FAILURE`
+- @type / HTTP: ServerError / 500
+- 対応主体: サーバー管理者・運用者
+- メッセージ: `Failed to update item {recid} due to a server error. Please contact the administrator.`
+
+##### SWORD-3106: 登録・更新・削除処理の失敗
+
+<a id="sword-3106"></a>
+
+- エラーID: `DELETE_FAILURE`
+- @type / HTTP: ServerError / 500
+- 対応主体: サーバー管理者・運用者
+- メッセージ: `Failed to delete item {recid} due to a server error. Please contact the administrator.`
+
+##### SWORD-3107: アクティビティ作成後に見つからない
+
+<a id="sword-3107"></a>
+
+- エラーID: `ACTIVITY_NOT_FOUND_AFTER_CREATE`
+- @type / HTTP: ServerError / 500
+- 対応主体: サーバー管理者・運用者
+- メッセージ: `Activity created, but not found.`
+
+##### SWORD-3108: DB 接続不可
+
+<a id="sword-3108"></a>
+
+- エラーID: `DATABASE_UNAVAILABLE`
+- @type / HTTP: ServiceUnavailable / 503
+- 対応主体: サーバー管理者・運用者
+- メッセージ: `Failed to access the database. Please retry later or contact the administrator.`
+
+##### SWORD-3109: Redis 接続不可
+
+<a id="sword-3109"></a>
+
+- エラーID: `REDIS_UNAVAILABLE`
+- @type / HTTP: ServiceUnavailable / 503
+- 対応主体: サーバー管理者・運用者
+- メッセージ: `Failed to access the cache server. Please retry later or contact the administrator.`
+
+##### SWORD-3110: 検索基盤接続不可
+
+<a id="sword-3110"></a>
+
+- エラーID: `SEARCH_ENGINE_UNAVAILABLE`
+- @type / HTTP: ServiceUnavailable / 503
+- 対応主体: サーバー管理者・運用者
+- メッセージ: `Failed to access the search service. Please retry later or contact the administrator.`
+
+#### 想定外 (SWORD-32xx)
+
+##### SWORD-3201: 想定外
+
+<a id="sword-3201"></a>
+
+- エラーID: `INTERNAL_SERVER_ERROR`
+- @type / HTTP: ServerError / 500
+- 対応主体: サーバー管理者・運用者
+- メッセージ: `Internal Server Error`
+
+##### SWORD-3202: 想定外
+
+<a id="sword-3202"></a>
+
+- エラーID: `UNEXPECTED_DURING_DELETION`
+- @type / HTTP: ServerError / 500
+- 対応主体: サーバー管理者・運用者
+- メッセージ: `Unexpected error occurred during deletion.`
 
 ## サーバー設定値
 
@@ -1565,3 +1934,4 @@ Content-Type: application/json
 | 2026/07/14 |                                            | 本文を実装準拠に修正（サービスドキュメントのacceptPackaging/acceptArchiveFormat、利用可能ロール）           |
 | 2026/07/17 |                                            | v2.1.0差分反映：`wk:researchmapLinkage`連携（`cris_linkage.researchmap`）・checkエラー時warnings併記、ステータスドキュメントの`links`（fileSetFile/derivedFrom・複数登録時Activityリンク/log）・`state`のinWorkflow・設定値conf24（`WEKO_SWORDSERVER_FILE_SET_FILE`）を追記 |
 | 2026/07/28 |                                            | 「ワークフロー有無によるレスポンスの違い」を追加（直接登録／ワークフロー登録の差分一覧、POST・DELETEのレスポンス例、ワークフロー承認後のレスポンスの挙動とGETの承認前後比較）。レスポンス例はv2.1.0実装に対する実測値を採録                                                     |
+| 2026/10/01 |                                            | SWORDエラーコード導入に伴い、エラーコード一覧・エラータイプ（Conflict/ServiceUnavailable）・レスポンスコードを更新 |
