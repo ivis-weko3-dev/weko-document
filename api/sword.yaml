@@ -67,8 +67,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDocument"
-        "500":
-          description: サーバー内部エラーが発生した場合
+        "501":
+          description: データ不整合などを起因とした、再試行でも直らないサーバー側の障害が発生した場合（未捕捉の想定外例外を含む）
           content:
             application/json:
               schema:
@@ -198,7 +198,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorDocument"
         "500":
-          description: 想定されていないサーバー内部エラーが発生した場合
+          description: 設定不整合など、501・503に該当しないサーバー内部処理の失敗が発生した場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDocument"
+        "501":
+          description: データ不整合などを起因とした、再試行でも直らないサーバー側の障害が発生した場合（未捕捉の想定外例外を含む）
           content:
             application/json:
               schema:
@@ -281,8 +287,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDocument"
-        "500":
-          description: サーバー内部エラーが発生した場合
+        "501":
+          description: データ不整合などを起因とした、再試行でも直らないサーバー側の障害が発生した場合（未捕捉の想定外例外を含む）
           content:
             application/json:
               schema:
@@ -425,7 +431,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorDocument"
         "500":
-          description: 想定されていないサーバー内部エラーが発生した場合
+          description: 設定不整合など、501・503に該当しないサーバー内部処理の失敗が発生した場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDocument"
+        "501":
+          description: データ不整合などを起因とした、再試行でも直らないサーバー側の障害が発生した場合（未捕捉の想定外例外を含む）
           content:
             application/json:
               schema:
@@ -524,7 +536,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorDocument"
         "500":
-          description: 想定されていないサーバー内部エラーが発生した場合
+          description: 設定不整合など、501・503に該当しないサーバー内部処理の失敗が発生した場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDocument"
+        "501":
+          description: データ不整合などを起因とした、再試行でも直らないサーバー側の障害が発生した場合（未捕捉の想定外例外を含む）
           content:
             application/json:
               schema:
@@ -787,6 +805,7 @@ components:
             - Conflict
             - TooManyRequests
             - ServerError
+            - NotImplemented
             - ServiceUnavailable
         error:
           type: string
