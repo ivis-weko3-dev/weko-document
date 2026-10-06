@@ -8,7 +8,7 @@ tags:
   - name: deposit
     description: SWORD
 paths:
-  /api/service-document:
+  /sword/service-document:
     get:
       tags:
         - service_document
@@ -67,8 +67,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDocument"
-        "500":
-          description: サーバー内部エラーが発生した場合
+        "501":
+          description: データ不整合などを起因とした、再試行でも直らないサーバー側の障害が発生した場合（未捕捉の想定外例外を含む）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDocument"
+        "503":
+          description: DB・Redis・Elasticsearchの接続障害・一時障害の場合
           content:
             application/json:
               schema:
@@ -192,12 +198,24 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorDocument"
         "500":
-          description: サーバー内部エラーが発生した場合
+          description: 設定不整合など、501・503に該当しないサーバー内部処理の失敗が発生した場合
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDocument"
-  /api/deposit/{recid}:
+        "501":
+          description: データ不整合などを起因とした、再試行でも直らないサーバー側の障害が発生した場合（未捕捉の想定外例外を含む）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDocument"
+        "503":
+          description: DB・Redis・Elasticsearchの接続障害・一時障害の場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDocument"
+  /sword/deposit/{recid}:
     get:
       tags:
         - deposit
@@ -269,13 +287,19 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDocument"
-        "500":
-          description: サーバー内部エラーが発生した場合
+        "501":
+          description: データ不整合などを起因とした、再試行でも直らないサーバー側の障害が発生した場合（未捕捉の想定外例外を含む）
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDocument"
-    post:
+        "503":
+          description: DB・Redis・Elasticsearchの接続障害・一時障害の場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDocument"
+    put:
       tags:
         - deposit
       summary: アイテム更新機能
@@ -302,6 +326,13 @@ paths:
           description: 代理投稿ユーザーのメールアドレスまたはePPN
           schema:
             type: string
+        - name: recid
+          in: path
+          required: true
+          description: レコードID
+          schema:
+            type: integer
+          example: 20000021
         - name: Content-Disposition
           in: header
           required: true
@@ -375,6 +406,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDocument"
+        "409":
+          description: 他の処理との競合により、リクエストを受け付けられない場合。<br>対象アイテムが別の処理で編集予定の場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDocument"
         "412":
           description: サーバー側がOn-Behalf-Of をサポートしていないにもかかわらず、リクエストでOn-Behalf-Of ヘッダーーが提供された場合
           content:
@@ -394,7 +431,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorDocument"
         "500":
-          description: サーバー内部エラーが発生した場合
+          description: 設定不整合など、501・503に該当しないサーバー内部処理の失敗が発生した場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDocument"
+        "501":
+          description: データ不整合などを起因とした、再試行でも直らないサーバー側の障害が発生した場合（未捕捉の想定外例外を含む）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDocument"
+        "503":
+          description: DB・Redis・Elasticsearchの接続障害・一時障害の場合
           content:
             application/json:
               schema:
@@ -463,13 +512,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorDocument"
         "403":
-          description: 認証に失敗した場合
+          description: 認証に失敗した場合、認証したOAuthトークンに必要なスコープが与えられていない場合
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorDocument"
         "404":
           description: 指定したrecidに該当するアイテムが存在しない（削除されている）場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDocument"
+        "409":
+          description: 他の処理との競合により、リクエストを受け付けられない場合。<br>対象アイテムが別の処理で編集予定、一括インポート中、または編集中の場合
           content:
             application/json:
               schema:
@@ -481,7 +536,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorDocument"
         "500":
-          description: サーバー内部エラーが発生した場合
+          description: 設定不整合など、501・503に該当しないサーバー内部処理の失敗が発生した場合
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDocument"
+        "501":
+          description: データ不整合などを起因とした、再試行でも直らないサーバー側の障害が発生した場合（未捕捉の想定外例外を含む）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDocument"
+        "503":
+          description: DB・Redis・Elasticsearchの接続障害・一時障害の場合
           content:
             application/json:
               schema:
@@ -711,8 +778,38 @@ components:
           enum: ["https://swordapp.github.io/swordv3/swordv3.jsonld"]
         "@type":
           type: string
+          enum:
+            - AuthenticationFailed
+            - AuthenticationRequired
+            - BadRequest
+            - ByReferenceFileSizeExceeded
+            - ByReferenceNotAllowed
+            - ContentMalformed
+            - ContentTypeNotAcceptable
+            - DigestMismatch
+            - ETagNotMatched
+            - ETagRequired
+            - Forbidden
+            - FormatHeaderMismatch
+            - InvalidSegmentSize
+            - MaxAssembledSizeExceeded
+            - MaxUploadSizeExceeded
+            - MetadataFormatNotAcceptable
+            - MethodNotAllowed
+            - OnBehalfOfNotAllowed
+            - PackagingFormatNotAcceptable
+            - SegmentedUploadTimedOut
+            - SegmentLimitExceeded
+            - UnexpectedSegment
+            - NotFound
+            - Conflict
+            - TooManyRequests
+            - ServerError
+            - NotImplemented
+            - ServiceUnavailable
         error:
           type: string
+          description: 'エラー内容の説明。"<コード>: <メッセージ>" の形式で出力する'
         log:
           type: string
         timestamp:
